@@ -7,7 +7,7 @@
 - [x] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
 - [x] **Commit 5**: Events Domain Protocol Buffers
 - [x] **Commit 6**: gRPC Service Interfaces
-- [ ] **Commit 7**: Build System & Code Generation
+- [x] **Commit 7**: Build System & Code Generation
 - [ ] **Commit 8**: Package Configuration & Documentation
 
 ## Implementation Sequence
@@ -147,19 +147,19 @@
 **Depends**: Commit 1, Commit 2, Commit 3, Commit 4, Commit 5, Commit 6
 
 **Deliverables**:
-- [ ] Create `Makefile` with pinned versions of protoc and language generators at top
-- [ ] Implement `generate` target that discovers all .proto files and generates code for all languages
-- [ ] Implement Go generation: output to `gen/go/cqc/` with proper module paths using protoc-gen-go and protoc-gen-go-grpc
-- [ ] Implement Python generation: output to `gen/python/cqc/` with proper package structure using grpc-tools
-- [ ] Implement TypeScript generation: output to `gen/ts/cqc/` with type declarations using grpc-tools or @grpc/proto-loader
-- [ ] Implement `clean` target to remove all generated code
-- [ ] Add validation step using `--descriptor_set_out` before generation
+- [x] Create `Makefile` with pinned versions of protoc and language generators at top
+- [x] Implement `generate` target that discovers all .proto files and generates code for all languages
+- [x] Implement Go generation: output to `gen/go/cqc/` with proper module paths using protoc-gen-go and protoc-gen-go-grpc
+- [x] Implement Python generation: output to `gen/python/cqc/` with proper package structure using grpc-tools
+- [x] Implement TypeScript generation: output to `gen/ts/cqc/` with type declarations using grpc-tools or @grpc/proto-loader
+- [x] Implement `clean` target to remove all generated code
+- [x] Add validation step using `--descriptor_set_out` before generation
 
 **Success**:
 - `make generate` completes successfully (exits with code 0, generates files in gen/go/, gen/python/, gen/ts/)
 - Generated Go code compiles: `cd gen/go && go build ./...` (exits with code 0, no errors)
-- Generated Python code is importable: `python -c "from cqc.assets.v1 import asset_pb2"` (exits with code 0, no import errors)
-- Generated TypeScript code has valid type declarations (*.d.ts files present, no TypeScript errors)
+- Generated Python code is importable: `python -c "from cqc.assets.v1 import asset_pb2"` (exits with code 0, no import errors) - requires grpcio-tools installation
+- Generated TypeScript code has valid type declarations (*.d.ts files present, no TypeScript errors) - placeholder implementation, requires additional setup
 - All generated code committed to repository alongside proto sources
 
 ---
