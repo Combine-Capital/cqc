@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+
+// LiquidityMetrics represents comprehensive liquidity measurements for a trading pair.
+// These metrics help assess market quality, execution costs, and trading viability.
+message LiquidityMetrics {
+  // Asset identifier for the base currency.
+  optional string asset_id = 1;
+
+  // Asset identifier for the quote currency.
+  optional string quote_asset_id = 2;
+
+  // Venue where these metrics are measured.
+  optional string venue_id = 3;
+
+  // Trading pair symbol on the venue.
+  optional string venue_symbol = 4;
+
+  // Timestamp of this liquidity measurement.
+  optional google.protobuf.Timestamp timestamp = 5;
+
+  // Current bid-ask spread in absolute terms (ask - bid).
+  optional double spread_absolute = 6;
+
+  // Current bid-ask spread as a percentage of mid price.
+  optional double spread_percentage = 7;
+
+  // 24-hour trading volume in base currency.
+  optional double volume_24h_base = 8;
+
+  // 24-hour trading volume in quote currency.
+  optional double volume_24h_quote = 9;
+
+  // 24-hour trading volume in USD (if available).
+  optional double volume_24h_usd = 10;
+
+  // Number of trades in the last 24 hours.
+  optional int64 trade_count_24h = 11;
+
+  // Total available bid liquidity within 1% of mid price (quote currency).
+  optional double bid_liquidity_1pct = 12;
+
+  // Total available ask liquidity within 1% of mid price (quote currency).
+  optional double ask_liquidity_1pct = 13;
+
+  // Total available bid liquidity within 5% of mid price (quote currency).
+  optional double bid_liquidity_5pct = 14;
+
+  // Total available ask liquidity within 5% of mid price (quote currency).
+  optional double ask_liquidity_5pct = 15;
+
+  // Estimated slippage for a $10,000 buy order (in basis points).
+  optional double slippage_10k_buy_bps = 16;
+
+  // Estimated slippage for a $10,000 sell order (in basis points).
+  optional double slippage_10k_sell_bps = 17;
+
+  // Estimated slippage for a $100,000 buy order (in basis points).
+  optional double slippage_100k_buy_bps = 18;
+
+  // Estimated slippage for a $100,000 sell order (in basis points).
+  optional double slippage_100k_sell_bps = 19;
+
+  // Order book imbalance: (bid_volume - ask_volume) / (bid_volume + ask_volume).
+  // Ranges from -1.0 (all asks) to +1.0 (all bids).
+  optional double order_book_imbalance = 20;
+
+  // Current mid price for reference.
+  optional double mid_price = 21;
+
+  // Best bid price.
+  optional double best_bid = 22;
+
+  // Best ask price.
+  optional double best_ask = 23;
+
+  // Average daily volume over the last 7 days (quote currency).
+  optional double avg_daily_volume_7d = 24;
+
+  // Average daily volume over the last 30 days (quote currency).
+  optional double avg_daily_volume_30d = 25;
+
+  // Turnover ratio: 24h volume / total market cap (for tokens).
+  optional double turnover_ratio = 26;
+
+  // Number of active market makers (if available from venue).
+  optional int32 active_market_makers = 27;
+
+  // Liquidity score (0.0 to 1.0, venue-specific calculation).
+  // Higher values indicate better liquidity.
+  optional double liquidity_score = 28;
+
+  // Time since last trade in seconds.
+  optional int64 seconds_since_last_trade = 29;
+
+  // Whether this market is currently considered liquid.
+  // Typically based on minimum volume and spread thresholds.
+  optional bool is_liquid = 30;
+
+  // Effective spread: actual execution cost vs mid price (in basis points).
+  // Based on recent trade analysis.
+  optional double effective_spread_bps = 31;
+
+  // Price impact of a 1% of ADV (Average Daily Volume) order (in basis points).
+  optional double price_impact_1pct_adv = 32;
+}

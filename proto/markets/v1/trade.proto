@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+
+// TradeSide represents the side of a trade from the taker's perspective.
+enum TradeSide {
+  TRADE_SIDE_UNSPECIFIED = 0;
+  TRADE_SIDE_BUY = 1;   // Taker bought (aggressor removed liquidity from asks)
+  TRADE_SIDE_SELL = 2;  // Taker sold (aggressor removed liquidity from bids)
+}
+
+// Trade represents a single executed trade on a venue.
+message Trade {
+  // Unique trade identifier from the venue (if available).
+  optional string trade_id = 1;
+
+  // Asset identifier for the base currency.
+  optional string asset_id = 2;
+
+  // Asset identifier for the quote currency.
+  optional string quote_asset_id = 3;
+
+  // Venue where this trade occurred.
+  optional string venue_id = 4;
+
+  // Trading pair symbol on the venue (e.g., "BTCUSDT").
+  optional string venue_symbol = 5;
+
+  // Timestamp when the trade was executed.
+  optional google.protobuf.Timestamp timestamp = 6;
+
+  // Execution price of the trade.
+  optional double price = 7;
+
+  // Quantity traded in base currency.
+  optional double quantity = 8;
+
+  // Side of the trade (buy or sell from taker's perspective).
+  optional TradeSide side = 9;
+
+  // Total value of the trade in quote currency (price * quantity).
+  optional double value = 10;
+
+  // Transaction hash (for on-chain DEX trades).
+  optional string tx_hash = 11;
+
+  // Block number (for on-chain trades).
+  optional int64 block_number = 12;
+
+  // Whether this trade was a liquidation.
+  optional bool is_liquidation = 13;
+
+  // Maker order ID (if available).
+  optional string maker_order_id = 14;
+
+  // Taker order ID (if available).
+  optional string taker_order_id = 15;
+}
+
+// CandleInterval represents the time period for a candle/OHLCV bar.
+enum CandleInterval {
+  CANDLE_INTERVAL_UNSPECIFIED = 0;
+  CANDLE_INTERVAL_1MIN = 1;
+  CANDLE_INTERVAL_5MIN = 2;
+  CANDLE_INTERVAL_15MIN = 3;
+  CANDLE_INTERVAL_30MIN = 4;
+  CANDLE_INTERVAL_1HOUR = 5;
+  CANDLE_INTERVAL_4HOUR = 6;
+  CANDLE_INTERVAL_1DAY = 7;
+  CANDLE_INTERVAL_1WEEK = 8;
+  CANDLE_INTERVAL_1MONTH = 9;
+}
+
+// Candle represents OHLCV (Open, High, Low, Close, Volume) data for a time period.
+// Candles are used for charting and technical analysis.
+message Candle {
+  // Asset identifier for the base currency.
+  optional string asset_id = 1;
+
+  // Asset identifier for the quote currency.
+  optional string quote_asset_id = 2;
+
+  // Venue where this candle data is from.
+  optional string venue_id = 3;
+
+  // Trading pair symbol on the venue.
+  optional string venue_symbol = 4;
+
+  // Start timestamp of the candle period.
+  optional google.protobuf.Timestamp timestamp = 5;
+
+  // Candle interval/timeframe.
+  optional CandleInterval interval = 6;
+
+  // Opening price (first trade in the period).
+  optional double open = 7;
+
+  // Highest price during the period.
+  optional double high = 8;
+
+  // Lowest price during the period.
+  optional double low = 9;
+
+  // Closing price (last trade in the period).
+  optional double close = 10;
+
+  // Total volume traded during the period (base currency).
+  optional double volume = 11;
+
+  // Total value traded during the period (quote currency).
+  optional double quote_volume = 12;
+
+  // Number of trades during the period.
+  optional int64 trade_count = 13;
+
+  // Volume-weighted average price for this period.
+  optional double vwap = 14;
+
+  // Whether this candle is closed/complete.
+  // False indicates the candle is still accumulating (real-time data).
+  optional bool is_closed = 15;
+
+  // Buy volume (volume from buy-side trades).
+  optional double buy_volume = 16;
+
+  // Sell volume (volume from sell-side trades).
+  optional double sell_volume = 17;
+}

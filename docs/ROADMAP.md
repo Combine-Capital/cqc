@@ -3,7 +3,7 @@
 ## Progress Checklist
 - [x] **Commit 1**: Project Foundation & Configuration
 - [x] **Commit 2**: Assets Domain Protocol Buffers
-- [ ] **Commit 3**: Markets Domain Protocol Buffers
+- [x] **Commit 3**: Markets Domain Protocol Buffers
 - [ ] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
 - [ ] **Commit 5**: Events Domain Protocol Buffers
 - [ ] **Commit 6**: gRPC Service Interfaces
@@ -61,11 +61,11 @@
 **Depends**: Commit 1, Commit 2 (may reference AssetID)
 
 **Deliverables**:
-- [ ] Create `proto/markets/v1/price.proto` with Price, VWAP message definitions
-- [ ] Create `proto/markets/v1/orderbook.proto` with OrderBook, MarketDepth message definitions
-- [ ] Create `proto/markets/v1/trade.proto` with Trade, Candle message definitions
-- [ ] Create `proto/markets/v1/liquidity.proto` with LiquidityMetrics message definition
-- [ ] Define package as `cqc.markets.v1` with appropriate language-specific options
+- [x] Create `proto/markets/v1/price.proto` with Price, VWAP message definitions
+- [x] Create `proto/markets/v1/orderbook.proto` with OrderBook, MarketDepth message definitions
+- [x] Create `proto/markets/v1/trade.proto` with Trade, Candle message definitions
+- [x] Create `proto/markets/v1/liquidity.proto` with LiquidityMetrics message definition
+- [x] Define package as `cqc.markets.v1` with appropriate language-specific options
 
 **Success**:
 - All .proto files validate with `protoc --descriptor_set_out=/tmp/descriptor.pb proto/markets/v1/*.proto` (exits with code 0, no errors)

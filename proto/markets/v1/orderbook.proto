@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+
+// OrderBookLevel represents a single price level in an order book.
+message OrderBookLevel {
+  // Price at this level.
+  optional double price = 1;
+
+  // Total quantity available at this price level.
+  optional double quantity = 2;
+
+  // Number of individual orders at this level (if available).
+  optional int32 order_count = 3;
+}
+
+// OrderBook represents a snapshot of the order book (bid/ask levels) for a trading pair.
+// Order books show the current buy and sell orders at different price levels.
+message OrderBook {
+  // Asset identifier for the base currency in the trading pair.
+  optional string asset_id = 1;
+
+  // Asset identifier for the quote currency in the trading pair.
+  optional string quote_asset_id = 2;
+
+  // Venue where this order book is from.
+  optional string venue_id = 3;
+
+  // Trading pair symbol on the venue (e.g., "BTCUSDT").
+  optional string venue_symbol = 4;
+
+  // Timestamp of this order book snapshot.
+  optional google.protobuf.Timestamp timestamp = 5;
+
+  // Sequence number for ordering snapshots (if provided by venue).
+  // Higher sequence numbers represent more recent snapshots.
+  optional int64 sequence = 6;
+
+  // Bid levels (buy orders), sorted by price descending (highest first).
+  repeated OrderBookLevel bids = 7;
+
+  // Ask levels (sell orders), sorted by price ascending (lowest first).
+  repeated OrderBookLevel asks = 8;
+
+  // Best bid price (highest buy order).
+  optional double best_bid = 9;
+
+  // Best ask price (lowest sell order).
+  optional double best_ask = 10;
+
+  // Bid-ask spread (ask - bid).
+  optional double spread = 11;
+
+  // Mid price ((best_bid + best_ask) / 2).
+  optional double mid_price = 12;
+}
+
+// MarketDepth represents aggregated liquidity depth at various price distances from mid-market.
+// This provides a view of how much volume can be executed at different price levels.
+message MarketDepth {
+  // Asset identifier for the base currency.
+  optional string asset_id = 1;
+
+  // Asset identifier for the quote currency.
+  optional string quote_asset_id = 2;
+
+  // Venue where this depth data is from.
+  optional string venue_id = 3;
+
+  // Trading pair symbol on the venue.
+  optional string venue_symbol = 4;
+
+  // Timestamp of this market depth snapshot.
+  optional google.protobuf.Timestamp timestamp = 5;
+
+  // Current mid price (reference point for depth calculations).
+  optional double mid_price = 6;
+
+  // Total bid liquidity within 1% of mid price (quote currency).
+  optional double bid_depth_1pct = 7;
+
+  // Total ask liquidity within 1% of mid price (quote currency).
+  optional double ask_depth_1pct = 8;
+
+  // Total bid liquidity within 5% of mid price (quote currency).
+  optional double bid_depth_5pct = 9;
+
+  // Total ask liquidity within 5% of mid price (quote currency).
+  optional double ask_depth_5pct = 10;
+
+  // Total bid liquidity within 10% of mid price (quote currency).
+  optional double bid_depth_10pct = 11;
+
+  // Total ask liquidity within 10% of mid price (quote currency).
+  optional double ask_depth_10pct = 12;
+
+  // Cumulative bid volume in base currency.
+  optional double total_bid_volume = 13;
+
+  // Cumulative ask volume in base currency.
+  optional double total_ask_volume = 14;
+
+  // Number of bid levels in the order book.
+  optional int32 bid_level_count = 15;
+
+  // Number of ask levels in the order book.
+  optional int32 ask_level_count = 16;
+
+  // Imbalance ratio: (bid_volume - ask_volume) / (bid_volume + ask_volume).
+  // Ranges from -1.0 (all asks) to +1.0 (all bids).
+  optional double imbalance_ratio = 17;
+}

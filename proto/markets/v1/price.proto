@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+
+// Price represents a point-in-time price observation for an asset.
+// Prices can come from various venues (exchanges, AMMs, oracles) and sources.
+message Price {
+  // Asset identifier (UUID) for which this price is reported.
+  // References the canonical asset from the assets domain.
+  optional string asset_id = 1;
+
+  // Numeric price value in the quote currency.
+  // For pairs like BTC-USD, this is the USD price of 1 BTC.
+  optional double value = 2;
+
+  // Quote currency asset identifier (e.g., USD, USDT, ETH).
+  // If null, assumed to be USD.
+  optional string quote_asset_id = 3;
+
+  // Timestamp when this price was observed or generated.
+  optional google.protobuf.Timestamp timestamp = 4;
+
+  // Venue where this price was observed (e.g., "binance", "uniswap-v3-eth").
+  // NULL for aggregated/oracle prices.
+  optional string venue_id = 5;
+
+  // Trading pair symbol as represented on the venue (e.g., "BTCUSDT", "BTC-USD").
+  // NULL for oracle or aggregated prices.
+  optional string venue_symbol = 6;
+
+  // Data source for this price (e.g., "exchange_api", "chainlink_oracle", "internal_calc").
+  optional string source = 7;
+
+  // Volume traded at this price level (for trade prices).
+  // NULL for non-trade price types.
+  optional double volume = 8;
+
+  // Bid price (highest buy order).
+  // Only populated for bid-ask spread data.
+  optional double bid = 9;
+
+  // Ask price (lowest sell order).
+  // Only populated for bid-ask spread data.
+  optional double ask = 10;
+
+  // Confidence or quality score for this price (0.0 to 1.0).
+  // Higher values indicate more reliable prices.
+  optional double confidence = 11;
+}
+
+// VWAP represents a Volume-Weighted Average Price over a time period.
+// VWAP is calculated as the sum of (price * volume) divided by total volume.
+message VWAP {
+  // Asset identifier for which this VWAP is calculated.
+  optional string asset_id = 1;
+
+  // Quote currency asset identifier.
+  optional string quote_asset_id = 2;
+
+  // Volume-weighted average price value.
+  optional double value = 3;
+
+  // Start timestamp of the VWAP calculation period.
+  optional google.protobuf.Timestamp period_start = 4;
+
+  // End timestamp of the VWAP calculation period.
+  optional google.protobuf.Timestamp period_end = 5;
+
+  // Total volume traded during the period (in base currency).
+  optional double total_volume = 6;
+
+  // Number of trades included in the calculation.
+  optional int64 trade_count = 7;
+
+  // Venue where trades occurred (NULL for cross-venue VWAP).
+  optional string venue_id = 8;
+
+  // Source of the VWAP calculation.
+  optional string source = 9;
+
+  // Standard deviation of prices during the period.
+  optional double price_std_dev = 10;
+
+  // Highest price during the period.
+  optional double high = 11;
+
+  // Lowest price during the period.
+  optional double low = 12;
+}
