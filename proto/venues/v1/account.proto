@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package cqc.venues.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1;venuesv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// AccountStatus represents the current state of a venue account.
+enum AccountStatus {
+  ACCOUNT_STATUS_UNSPECIFIED = 0;
+  ACCOUNT_STATUS_ACTIVE = 1;       // Account is active and operational
+  ACCOUNT_STATUS_INACTIVE = 2;     // Account exists but not in use
+  ACCOUNT_STATUS_SUSPENDED = 3;    // Account suspended by venue or user
+  ACCOUNT_STATUS_RESTRICTED = 4;   // Account has trading restrictions
+  ACCOUNT_STATUS_PENDING_KYC = 5;  // Awaiting KYC verification
+  ACCOUNT_STATUS_CLOSED = 6;       // Account has been closed
+}
+
+// AccountType represents the category of venue account.
+enum AccountType {
+  ACCOUNT_TYPE_UNSPECIFIED = 0;
+  ACCOUNT_TYPE_SPOT = 1;           // Spot trading account
+  ACCOUNT_TYPE_MARGIN = 2;         // Margin trading account
+  ACCOUNT_TYPE_FUTURES = 3;        // Futures trading account
+  ACCOUNT_TYPE_OPTIONS = 4;        // Options trading account
+  ACCOUNT_TYPE_LENDING = 5;        // Lending/borrowing account
+  ACCOUNT_TYPE_STAKING = 6;        // Staking account
+  ACCOUNT_TYPE_WALLET = 7;         // On-chain wallet (for DEX)
+  ACCOUNT_TYPE_SUBACCOUNT = 8;     // Sub-account under master account
+}
+
+// VenueAccount represents an account or connection to a trading venue.
+// Contains authentication details and account-level information.
+message VenueAccount {
+  // Unique venue account identifier.
+  optional string account_id = 1;
+
+  // Venue identifier (e.g., "binance", "coinbase", "uniswap-v3-eth").
+  optional string venue_id = 2;
+
+  // Human-readable account name or label.
+  optional string name = 3;
+
+  // Account type/category.
+  optional AccountType account_type = 4;
+
+  // Current account status.
+  optional AccountStatus status = 5;
+
+  // Portfolio identifier that owns this account.
+  optional string portfolio_id = 6;
+
+  // Owner/user identifier.
+  optional string owner_id = 7;
+
+  // Venue-specific account identifier (exchange account ID, sub-account ID).
+  optional string venue_account_id = 8;
+
+  // API key identifier (not the secret key itself).
+  // Actual secrets should be stored securely outside of proto messages.
+  optional string api_key_id = 9;
+
+  // Whether API credentials are configured and valid.
+  optional bool has_credentials = 10;
+
+  // Timestamp when credentials were last verified.
+  optional google.protobuf.Timestamp credentials_verified_at = 11;
+
+  // Trading permissions enabled for this account.
+  repeated string permissions = 12;
+
+  // Whether spot trading is enabled.
+  optional bool spot_enabled = 13;
+
+  // Whether margin trading is enabled.
+  optional bool margin_enabled = 14;
+
+  // Whether futures trading is enabled.
+  optional bool futures_enabled = 15;
+
+  // Whether withdrawals are enabled.
+  optional bool withdrawals_enabled = 16;
+
+  // Maximum leverage allowed (1.0 for no leverage).
+  optional double max_leverage = 17;
+
+  // Maker fee rate (as decimal, e.g., 0.001 for 0.1%).
+  optional double maker_fee_rate = 18;
+
+  // Taker fee rate (as decimal).
+  optional double taker_fee_rate = 19;
+
+  // VIP tier or fee tier on the venue.
+  optional string fee_tier = 20;
+
+  // Timestamp when account was created.
+  optional google.protobuf.Timestamp created_at = 21;
+
+  // Timestamp of last account update.
+  optional google.protobuf.Timestamp updated_at = 22;
+
+  // Timestamp of last successful connection/ping.
+  optional google.protobuf.Timestamp last_connected_at = 23;
+
+  // Whether this account is actively being used for trading.
+  optional bool is_active = 24;
+
+  // Notes or description for this account.
+  optional string notes = 25;
+
+  // Blockchain address (for DEX/on-chain venues).
+  optional string wallet_address = 26;
+
+  // Chain identifier for wallet (for DEX accounts).
+  optional string chain_id = 27;
+
+  // Rate limit constraints (requests per second, etc).
+  optional google.protobuf.Struct rate_limits = 28;
+
+  // Additional venue-specific metadata.
+  optional google.protobuf.Struct metadata = 29;
+
+  // Whether account is in sandbox/testnet mode.
+  optional bool is_sandbox = 30;
+}

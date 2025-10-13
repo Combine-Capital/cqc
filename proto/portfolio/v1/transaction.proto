@@ -1,0 +1,208 @@
+syntax = "proto3";
+
+package cqc.portfolio.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/portfolio/v1;portfoliov1";
+
+import "google/protobuf/timestamp.proto";
+
+// TransactionType represents the type of portfolio transaction.
+enum TransactionType {
+  TRANSACTION_TYPE_UNSPECIFIED = 0;
+  TRANSACTION_TYPE_BUY = 1;          // Purchase of an asset
+  TRANSACTION_TYPE_SELL = 2;         // Sale of an asset
+  TRANSACTION_TYPE_DEPOSIT = 3;      // Deposit funds into portfolio
+  TRANSACTION_TYPE_WITHDRAWAL = 4;   // Withdraw funds from portfolio
+  TRANSACTION_TYPE_TRANSFER_IN = 5;  // Transfer in from another portfolio/account
+  TRANSACTION_TYPE_TRANSFER_OUT = 6; // Transfer out to another portfolio/account
+  TRANSACTION_TYPE_FEE = 7;          // Fee deduction
+  TRANSACTION_TYPE_DIVIDEND = 8;     // Dividend or interest received
+  TRANSACTION_TYPE_LIQUIDATION = 9;  // Liquidation event
+  TRANSACTION_TYPE_AIRDROP = 10;     // Airdrop received
+  TRANSACTION_TYPE_STAKE = 11;       // Staking deposit
+  TRANSACTION_TYPE_UNSTAKE = 12;     // Staking withdrawal
+}
+
+// TransactionStatus represents the current state of a transaction.
+enum TransactionStatus {
+  TRANSACTION_STATUS_UNSPECIFIED = 0;
+  TRANSACTION_STATUS_PENDING = 1;    // Transaction initiated but not complete
+  TRANSACTION_STATUS_CONFIRMED = 2;  // Transaction completed successfully
+  TRANSACTION_STATUS_FAILED = 3;     // Transaction failed
+  TRANSACTION_STATUS_CANCELLED = 4;  // Transaction was cancelled
+  TRANSACTION_STATUS_PROCESSING = 5; // Transaction is being processed
+}
+
+// Transaction represents a change to portfolio holdings (buy, sell, deposit, etc).
+message Transaction {
+  // Unique transaction identifier.
+  optional string transaction_id = 1;
+
+  // Portfolio identifier.
+  optional string portfolio_id = 2;
+
+  // Position identifier affected by this transaction.
+  optional string position_id = 3;
+
+  // Type of transaction.
+  optional TransactionType type = 4;
+
+  // Current transaction status.
+  optional TransactionStatus status = 5;
+
+  // Asset identifier being transacted.
+  optional string asset_id = 6;
+
+  // Venue where transaction occurred.
+  optional string venue_id = 7;
+
+  // Quantity of asset (positive for inflows, negative for outflows).
+  optional double quantity = 8;
+
+  // Price per unit at which transaction occurred.
+  optional double price = 9;
+
+  // Quote currency for price and values.
+  optional string quote_asset_id = 10;
+
+  // Total value of transaction (quantity * price).
+  optional double value = 11;
+
+  // Transaction fee amount.
+  optional double fee = 12;
+
+  // Asset in which fee is denominated.
+  optional string fee_asset_id = 13;
+
+  // Net amount after fees (value - fee).
+  optional double net_value = 14;
+
+  // Timestamp when transaction was initiated.
+  optional google.protobuf.Timestamp timestamp = 15;
+
+  // Timestamp when transaction was confirmed/completed.
+  optional google.protobuf.Timestamp confirmed_at = 16;
+
+  // Order identifier that generated this transaction (if from an order).
+  optional string order_id = 17;
+
+  // Trade identifier (if from a trade execution).
+  optional string trade_id = 18;
+
+  // Transaction hash (for on-chain transactions).
+  optional string tx_hash = 19;
+
+  // Block number (for on-chain transactions).
+  optional int64 block_number = 20;
+
+  // Related transaction ID (e.g., for transfers, the counterpart transaction).
+  optional string related_transaction_id = 21;
+
+  // Notes or description for this transaction.
+  optional string notes = 22;
+
+  // Source of the transaction (e.g., "manual", "api", "bot", "exchange").
+  optional string source = 23;
+
+  // Whether this transaction affects realized P&L.
+  optional bool affects_realized_pnl = 24;
+
+  // Realized P&L from this transaction (for sells/closes).
+  optional double realized_pnl = 25;
+}
+
+// PnL (Profit and Loss) represents performance metrics over a time period.
+message PnL {
+  // Unique P&L record identifier.
+  optional string pnl_id = 1;
+
+  // Portfolio identifier.
+  optional string portfolio_id = 2;
+
+  // Position identifier (NULL for portfolio-level P&L).
+  optional string position_id = 3;
+
+  // Asset identifier (NULL for portfolio-level P&L).
+  optional string asset_id = 4;
+
+  // Start timestamp of the P&L period.
+  optional google.protobuf.Timestamp period_start = 5;
+
+  // End timestamp of the P&L period.
+  optional google.protobuf.Timestamp period_end = 6;
+
+  // Quote currency for all P&L values.
+  optional string quote_asset_id = 7;
+
+  // Value at start of period.
+  optional double starting_value = 8;
+
+  // Value at end of period.
+  optional double ending_value = 9;
+
+  // Net deposits during the period (positive = money in).
+  optional double net_deposits = 10;
+
+  // Net withdrawals during the period (positive = money out).
+  optional double net_withdrawals = 11;
+
+  // Realized profit/loss during the period (from closed positions).
+  optional double realized_pnl = 12;
+
+  // Unrealized profit/loss at end of period (from open positions).
+  optional double unrealized_pnl = 13;
+
+  // Total P&L (realized + unrealized).
+  optional double total_pnl = 14;
+
+  // Total return as percentage ((ending_value - starting_value - net_deposits + net_withdrawals) / starting_value).
+  optional double return_percent = 15;
+
+  // Time-weighted return (accounts for cash flows timing).
+  optional double time_weighted_return = 16;
+
+  // Money-weighted return (internal rate of return).
+  optional double money_weighted_return = 17;
+
+  // Fees paid during the period.
+  optional double total_fees = 18;
+
+  // Number of transactions during the period.
+  optional int64 transaction_count = 19;
+
+  // Number of winning trades/positions closed.
+  optional int32 winning_trades = 20;
+
+  // Number of losing trades/positions closed.
+  optional int32 losing_trades = 21;
+
+  // Average profit per winning trade.
+  optional double avg_win = 22;
+
+  // Average loss per losing trade.
+  optional double avg_loss = 23;
+
+  // Win rate (winning_trades / (winning_trades + losing_trades)).
+  optional double win_rate = 24;
+
+  // Profit factor (gross_profit / gross_loss).
+  optional double profit_factor = 25;
+
+  // Maximum drawdown during the period (as percentage).
+  optional double max_drawdown = 26;
+
+  // Sharpe ratio for the period.
+  optional double sharpe_ratio = 27;
+
+  // Volatility (standard deviation of returns).
+  optional double volatility = 28;
+
+  // Benchmark return for comparison (if applicable).
+  optional double benchmark_return = 29;
+
+  // Alpha (excess return vs benchmark).
+  optional double alpha = 30;
+
+  // Beta (correlation with benchmark).
+  optional double beta = 31;
+}

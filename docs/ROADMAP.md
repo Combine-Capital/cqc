@@ -4,7 +4,7 @@
 - [x] **Commit 1**: Project Foundation & Configuration
 - [x] **Commit 2**: Assets Domain Protocol Buffers
 - [x] **Commit 3**: Markets Domain Protocol Buffers
-- [ ] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
+- [x] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
 - [ ] **Commit 5**: Events Domain Protocol Buffers
 - [ ] **Commit 6**: gRPC Service Interfaces
 - [ ] **Commit 7**: Build System & Code Generation

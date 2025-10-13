@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package cqc.portfolio.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/portfolio/v1;portfoliov1";
+
+import "google/protobuf/timestamp.proto";
+
+// PortfolioStatus represents the current state of a portfolio.
+enum PortfolioStatus {
+  PORTFOLIO_STATUS_UNSPECIFIED = 0;
+  PORTFOLIO_STATUS_ACTIVE = 1;      // Portfolio is active and trading
+  PORTFOLIO_STATUS_INACTIVE = 2;    // Portfolio exists but not actively managed
+  PORTFOLIO_STATUS_LIQUIDATING = 3; // Portfolio is being closed out
+  PORTFOLIO_STATUS_CLOSED = 4;      // Portfolio has been fully closed
+  PORTFOLIO_STATUS_SUSPENDED = 5;   // Portfolio operations suspended
+}
+
+// Portfolio represents a collection of positions and associated metadata.
+// Portfolios aggregate holdings across multiple assets and venues.
+message Portfolio {
+  // Unique portfolio identifier.
+  optional string portfolio_id = 1;
+
+  // Human-readable portfolio name.
+  optional string name = 2;
+
+  // Portfolio description or strategy.
+  optional string description = 3;
+
+  // Owner/manager identifier (user ID, account ID).
+  optional string owner_id = 4;
+
+  // Current portfolio status.
+  optional PortfolioStatus status = 5;
+
+  // Quote currency for all portfolio valuations.
+  optional string quote_asset_id = 6;
+
+  // Total current market value of all positions.
+  optional double total_value = 7;
+
+  // Total cost basis of all positions.
+  optional double total_cost_basis = 8;
+
+  // Total unrealized profit/loss across all positions.
+  optional double total_unrealized_pnl = 9;
+
+  // Total realized profit/loss from closed positions.
+  optional double total_realized_pnl = 10;
+
+  // Total P&L (realized + unrealized).
+  optional double total_pnl = 11;
+
+  // Total P&L as percentage of cost basis.
+  optional double total_pnl_percent = 12;
+
+  // Cash/stablecoin balance available for trading.
+  optional double available_cash = 13;
+
+  // Initial portfolio value at creation.
+  optional double initial_value = 14;
+
+  // Timestamp when portfolio was created.
+  optional google.protobuf.Timestamp created_at = 15;
+
+  // Timestamp of last portfolio update.
+  optional google.protobuf.Timestamp updated_at = 16;
+
+  // Number of open positions.
+  optional int32 position_count = 17;
+
+  // Number of assets held.
+  optional int32 asset_count = 18;
+
+  // Number of venues used.
+  optional int32 venue_count = 19;
+
+  // Average leverage across all positions.
+  optional double avg_leverage = 20;
+
+  // Total margin used for leveraged positions.
+  optional double total_margin_used = 21;
+
+  // Maximum drawdown from peak value (as percentage).
+  optional double max_drawdown = 22;
+
+  // Sharpe ratio (risk-adjusted return metric).
+  optional double sharpe_ratio = 23;
+
+  // Portfolio beta relative to a benchmark.
+  optional double beta = 24;
+
+  // Benchmark identifier for performance comparison.
+  optional string benchmark_id = 25;
+
+  // Strategy type or category (e.g., "market_making", "arbitrage", "long_only").
+  optional string strategy = 26;
+
+  // Risk tolerance level (e.g., "conservative", "moderate", "aggressive").
+  optional string risk_tolerance = 27;
+}
+
+// Allocation represents target and actual allocation for an asset or dimension.
+// Used for rebalancing and maintaining desired portfolio composition.
+message Allocation {
+  // Unique allocation identifier.
+  optional string allocation_id = 1;
+
+  // Portfolio identifier.
+  optional string portfolio_id = 2;
+
+  // Allocation dimension (e.g., "asset", "venue", "chain", "sector").
+  optional string dimension = 3;
+
+  // Value within the dimension (e.g., "BTC", "ethereum", "defi").
+  optional string dimension_value = 4;
+
+  // Asset identifier (if dimension is "asset").
+  optional string asset_id = 5;
+
+  // Target allocation as percentage of total portfolio value.
+  optional double target_percent = 6;
+
+  // Target allocation as absolute value in quote currency.
+  optional double target_value = 7;
+
+  // Current actual allocation as percentage.
+  optional double actual_percent = 8;
+
+  // Current actual allocation as absolute value.
+  optional double actual_value = 9;
+
+  // Difference between target and actual (actual - target) in percentage points.
+  optional double deviation_percent = 10;
+
+  // Difference between target and actual in absolute value.
+  optional double deviation_value = 11;
+
+  // Whether current allocation is within acceptable tolerance.
+  optional bool within_tolerance = 12;
+
+  // Acceptable deviation tolerance (percentage points).
+  optional double tolerance_percent = 13;
+
+  // Minimum allocation constraint (percentage).
+  optional double min_percent = 14;
+
+  // Maximum allocation constraint (percentage).
+  optional double max_percent = 15;
+
+  // Quote currency for values.
+  optional string quote_asset_id = 16;
+
+  // Timestamp of this allocation snapshot.
+  optional google.protobuf.Timestamp timestamp = 17;
+
+  // Priority for rebalancing (higher = rebalance first).
+  optional int32 rebalance_priority = 18;
+
+  // Whether this allocation is actively enforced.
+  optional bool is_active = 19;
+
+  // Notes or reasoning for this allocation target.
+  optional string notes = 20;
+}

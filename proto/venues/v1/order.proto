@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package cqc.venues.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1;venuesv1";
+
+import "google/protobuf/timestamp.proto";
+
+// OrderType represents the type of order.
+enum OrderType {
+  ORDER_TYPE_UNSPECIFIED = 0;
+  ORDER_TYPE_MARKET = 1;          // Execute immediately at best available price
+  ORDER_TYPE_LIMIT = 2;           // Execute at specified price or better
+  ORDER_TYPE_STOP_LOSS = 3;       // Market order triggered at stop price
+  ORDER_TYPE_STOP_LIMIT = 4;      // Limit order triggered at stop price
+  ORDER_TYPE_TRAILING_STOP = 5;   // Stop that moves with market price
+  ORDER_TYPE_POST_ONLY = 6;       // Limit order that only adds liquidity
+  ORDER_TYPE_IOC = 7;             // Immediate-or-cancel
+  ORDER_TYPE_FOK = 8;             // Fill-or-kill (complete fill or cancel)
+  ORDER_TYPE_GTC = 9;             // Good-til-cancelled
+}
+
+// OrderSide represents whether the order is a buy or sell.
+enum OrderSide {
+  ORDER_SIDE_UNSPECIFIED = 0;
+  ORDER_SIDE_BUY = 1;   // Buy order (long)
+  ORDER_SIDE_SELL = 2;  // Sell order (short)
+}
+
+// OrderStatus represents the current state of an order.
+enum OrderStatus {
+  ORDER_STATUS_UNSPECIFIED = 0;
+  ORDER_STATUS_PENDING = 1;        // Order created but not yet submitted
+  ORDER_STATUS_SUBMITTED = 2;      // Order submitted to venue
+  ORDER_STATUS_OPEN = 3;           // Order active on venue order book
+  ORDER_STATUS_PARTIALLY_FILLED = 4; // Order partially executed
+  ORDER_STATUS_FILLED = 5;         // Order fully executed
+  ORDER_STATUS_CANCELLED = 6;      // Order cancelled by user
+  ORDER_STATUS_REJECTED = 7;       // Order rejected by venue
+  ORDER_STATUS_EXPIRED = 8;        // Order expired (time-based orders)
+  ORDER_STATUS_FAILED = 9;         // Order failed due to error
+}
+
+// TimeInForce represents how long an order remains active.
+enum TimeInForce {
+  TIME_IN_FORCE_UNSPECIFIED = 0;
+  TIME_IN_FORCE_GTC = 1;   // Good-til-cancelled
+  TIME_IN_FORCE_IOC = 2;   // Immediate-or-cancel
+  TIME_IN_FORCE_FOK = 3;   // Fill-or-kill
+  TIME_IN_FORCE_GTD = 4;   // Good-til-date
+  TIME_IN_FORCE_DAY = 5;   // Day order (expires at end of trading day)
+}
+
+// Order represents a trading order placed on a venue.
+message Order {
+  // Unique order identifier (internal system ID).
+  optional string order_id = 1;
+
+  // Venue-assigned order identifier.
+  optional string venue_order_id = 2;
+
+  // Client-provided order identifier for tracking.
+  optional string client_order_id = 3;
+
+  // Portfolio identifier.
+  optional string portfolio_id = 4;
+
+  // Position identifier (for position-based orders).
+  optional string position_id = 5;
+
+  // Venue account identifier.
+  optional string account_id = 6;
+
+  // Venue where order is placed.
+  optional string venue_id = 7;
+
+  // Trading pair symbol on the venue.
+  optional string venue_symbol = 8;
+
+  // Asset identifier for base currency.
+  optional string asset_id = 9;
+
+  // Asset identifier for quote currency.
+  optional string quote_asset_id = 10;
+
+  // Order type.
+  optional OrderType order_type = 11;
+
+  // Order side (buy or sell).
+  optional OrderSide side = 12;
+
+  // Current order status.
+  optional OrderStatus status = 13;
+
+  // Time in force policy.
+  optional TimeInForce time_in_force = 14;
+
+  // Requested order quantity (base currency).
+  optional double quantity = 15;
+
+  // Filled quantity so far.
+  optional double filled_quantity = 16;
+
+  // Remaining unfilled quantity.
+  optional double remaining_quantity = 17;
+
+  // Limit price (for limit orders).
+  optional double price = 18;
+
+  // Stop price (for stop orders).
+  optional double stop_price = 19;
+
+  // Average fill price across all executions.
+  optional double average_fill_price = 20;
+
+  // Total value of order (quantity * price for limit, approximate for market).
+  optional double value = 21;
+
+  // Total fees paid for executions.
+  optional double total_fees = 22;
+
+  // Asset in which fees are paid.
+  optional string fee_asset_id = 23;
+
+  // Timestamp when order was created.
+  optional google.protobuf.Timestamp created_at = 24;
+
+  // Timestamp when order was submitted to venue.
+  optional google.protobuf.Timestamp submitted_at = 25;
+
+  // Timestamp when order was last updated.
+  optional google.protobuf.Timestamp updated_at = 26;
+
+  // Timestamp when order was filled or cancelled.
+  optional google.protobuf.Timestamp closed_at = 27;
+
+  // Expiration timestamp (for GTD orders).
+  optional google.protobuf.Timestamp expires_at = 28;
+
+  // Reduce-only flag (only reduces position, doesn't increase).
+  optional bool reduce_only = 29;
+
+  // Post-only flag (only adds liquidity, never takes).
+  optional bool post_only = 30;
+
+  // Leverage used for this order (for margin/futures).
+  optional double leverage = 31;
+
+  // Rejection reason (if status is REJECTED).
+  optional string rejection_reason = 32;
+
+  // Strategy or bot identifier that placed this order.
+  optional string strategy_id = 33;
+
+  // Notes or tags for this order.
+  optional string notes = 34;
+
+  // Parent order ID (for multi-leg orders or OCO orders).
+  optional string parent_order_id = 35;
+
+  // Whether this is a simulated/paper trade.
+  optional bool is_simulated = 36;
+}

@@ -1,0 +1,196 @@
+syntax = "proto3";
+
+package cqc.venues.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1;venuesv1";
+
+import "google/protobuf/timestamp.proto";
+
+// BalanceType represents the category of balance.
+enum BalanceType {
+  BALANCE_TYPE_UNSPECIFIED = 0;
+  BALANCE_TYPE_SPOT = 1;        // Spot trading balance
+  BALANCE_TYPE_MARGIN = 2;      // Margin account balance
+  BALANCE_TYPE_FUTURES = 3;     // Futures account balance
+  BALANCE_TYPE_LENDING = 4;     // Lending balance (supplied)
+  BALANCE_TYPE_BORROWING = 5;   // Borrowed balance (debt)
+  BALANCE_TYPE_STAKED = 6;      // Staked balance
+  BALANCE_TYPE_LOCKED = 7;      // Locked/vesting balance
+  BALANCE_TYPE_REWARDS = 8;     // Unclaimed rewards
+}
+
+// Balance represents the amount of an asset held in a venue account.
+message Balance {
+  // Unique balance identifier.
+  optional string balance_id = 1;
+
+  // Venue account identifier.
+  optional string account_id = 2;
+
+  // Venue identifier.
+  optional string venue_id = 3;
+
+  // Asset identifier.
+  optional string asset_id = 4;
+
+  // Balance type/category.
+  optional BalanceType balance_type = 5;
+
+  // Total balance amount.
+  optional double total = 6;
+
+  // Available balance (can be used for trading/withdrawal).
+  optional double available = 7;
+
+  // Locked balance (in orders or pending operations).
+  optional double locked = 8;
+
+  // Balance reserved for margin requirements.
+  optional double reserved = 9;
+
+  // Borrowed amount (for margin accounts).
+  optional double borrowed = 10;
+
+  // Interest accrued on borrowed amount.
+  optional double interest = 11;
+
+  // Current USD value of the balance (if available).
+  optional double usd_value = 12;
+
+  // Timestamp of this balance snapshot.
+  optional google.protobuf.Timestamp timestamp = 13;
+
+  // Timestamp when balance was last updated.
+  optional google.protobuf.Timestamp updated_at = 14;
+
+  // On-chain address holding this balance (for wallets/DEX).
+  optional string wallet_address = 15;
+
+  // Chain identifier (for on-chain balances).
+  optional string chain_id = 16;
+
+  // Whether this balance can be withdrawn.
+  optional bool withdrawable = 17;
+
+  // Whether this balance can be used for trading.
+  optional bool tradeable = 18;
+
+  // Staking lock period end time (for staked balances).
+  optional google.protobuf.Timestamp unlock_time = 19;
+
+  // Annual percentage rate for lending/staking.
+  optional double apr = 20;
+
+  // Annual percentage yield for lending/staking.
+  optional double apy = 21;
+}
+
+// ExecutionType represents how an order was executed.
+enum ExecutionType {
+  EXECUTION_TYPE_UNSPECIFIED = 0;
+  EXECUTION_TYPE_NEW = 1;           // Order newly placed
+  EXECUTION_TYPE_PARTIAL_FILL = 2;  // Order partially filled
+  EXECUTION_TYPE_FILL = 3;          // Order completely filled
+  EXECUTION_TYPE_CANCELLED = 4;     // Order cancelled
+  EXECUTION_TYPE_REPLACED = 5;      // Order amended/replaced
+  EXECUTION_TYPE_REJECTED = 6;      // Order rejected
+  EXECUTION_TYPE_EXPIRED = 7;       // Order expired
+  EXECUTION_TYPE_TRADE = 8;         // Trade execution report
+}
+
+// ExecutionReport represents a fill or status update for an order.
+// These are typically received from venue APIs or websocket feeds.
+message ExecutionReport {
+  // Unique execution report identifier.
+  optional string execution_id = 1;
+
+  // Order identifier.
+  optional string order_id = 2;
+
+  // Venue-assigned order ID.
+  optional string venue_order_id = 3;
+
+  // Client order ID.
+  optional string client_order_id = 4;
+
+  // Venue account identifier.
+  optional string account_id = 5;
+
+  // Venue identifier.
+  optional string venue_id = 6;
+
+  // Trading pair symbol.
+  optional string venue_symbol = 7;
+
+  // Asset identifier for base currency.
+  optional string asset_id = 8;
+
+  // Asset identifier for quote currency.
+  optional string quote_asset_id = 9;
+
+  // Execution type.
+  optional ExecutionType execution_type = 10;
+
+  // Order status after this execution.
+  optional string order_status = 11;
+
+  // Order side (buy/sell).
+  optional string side = 12;
+
+  // Order type (market/limit).
+  optional string order_type = 13;
+
+  // Timestamp of this execution.
+  optional google.protobuf.Timestamp timestamp = 14;
+
+  // Execution price for this fill.
+  optional double price = 15;
+
+  // Quantity executed in this fill.
+  optional double quantity = 16;
+
+  // Cumulative quantity filled so far.
+  optional double cumulative_quantity = 17;
+
+  // Remaining quantity unfilled.
+  optional double remaining_quantity = 18;
+
+  // Fee for this execution.
+  optional double fee = 19;
+
+  // Asset in which fee is denominated.
+  optional string fee_asset_id = 20;
+
+  // Commission rate applied.
+  optional double commission_rate = 21;
+
+  // Trade identifier from venue.
+  optional string trade_id = 22;
+
+  // Whether this is a maker or taker execution.
+  optional bool is_maker = 23;
+
+  // Transaction hash (for on-chain executions).
+  optional string tx_hash = 24;
+
+  // Block number (for on-chain executions).
+  optional int64 block_number = 25;
+
+  // Liquidity indicator (added/removed liquidity).
+  optional string liquidity = 26;
+
+  // Venue-provided execution ID.
+  optional string venue_execution_id = 27;
+
+  // Total value of this execution (price * quantity).
+  optional double value = 28;
+
+  // Average fill price across all executions for this order.
+  optional double average_fill_price = 29;
+
+  // Rejection reason (if execution_type is REJECTED).
+  optional string rejection_reason = 30;
+
+  // Last update timestamp for the order.
+  optional google.protobuf.Timestamp order_updated_at = 31;
+}

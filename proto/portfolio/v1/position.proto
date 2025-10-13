@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package cqc.portfolio.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/portfolio/v1;portfoliov1";
+
+import "google/protobuf/timestamp.proto";
+
+// Position represents a holding of a specific asset in a portfolio.
+// Positions track quantity, cost basis, current value, and P&L.
+message Position {
+  // Unique position identifier.
+  optional string position_id = 1;
+
+  // Portfolio identifier that owns this position.
+  optional string portfolio_id = 2;
+
+  // Asset identifier for the held asset.
+  optional string asset_id = 3;
+
+  // Venue where this position is held (e.g., "binance", "uniswap-v3-eth").
+  // NULL for aggregated cross-venue positions.
+  optional string venue_id = 4;
+
+  // Quantity of the asset held (positive for long, negative for short).
+  optional double quantity = 5;
+
+  // Available quantity (not locked in orders).
+  optional double available_quantity = 6;
+
+  // Locked quantity (in pending orders).
+  optional double locked_quantity = 7;
+
+  // Average entry price (cost basis per unit).
+  optional double entry_price = 8;
+
+  // Quote currency for entry price and valuations.
+  optional string quote_asset_id = 9;
+
+  // Current market price of the asset.
+  optional double current_price = 10;
+
+  // Current market value (quantity * current_price).
+  optional double current_value = 11;
+
+  // Total cost basis (quantity * entry_price).
+  optional double cost_basis = 12;
+
+  // Unrealized profit/loss (current_value - cost_basis).
+  optional double unrealized_pnl = 13;
+
+  // Unrealized P&L as a percentage of cost basis.
+  optional double unrealized_pnl_percent = 14;
+
+  // Realized profit/loss from closed portions of this position.
+  optional double realized_pnl = 15;
+
+  // Timestamp when the position was first opened.
+  optional google.protobuf.Timestamp opened_at = 16;
+
+  // Timestamp of last position update (trade, price update).
+  optional google.protobuf.Timestamp updated_at = 17;
+
+  // Timestamp when position was fully closed (NULL if still open).
+  optional google.protobuf.Timestamp closed_at = 18;
+
+  // Whether this is a long position (true) or short position (false).
+  optional bool is_long = 19;
+
+  // Leverage ratio (1.0 for no leverage, 2.0 for 2x leverage).
+  optional double leverage = 20;
+
+  // Liquidation price (for leveraged positions).
+  optional double liquidation_price = 21;
+
+  // Margin used for this position (for leveraged positions).
+  optional double margin = 22;
+
+  // Asset deployment identifier if position is on a specific chain.
+  optional string deployment_id = 23;
+}
+
+// Exposure represents aggregate risk exposure across assets, venues, or dimensions.
+// Used for risk management and portfolio analysis.
+message Exposure {
+  // Unique exposure identifier.
+  optional string exposure_id = 1;
+
+  // Portfolio identifier.
+  optional string portfolio_id = 2;
+
+  // Dimension of exposure (e.g., "asset", "venue", "chain", "sector").
+  optional string dimension = 3;
+
+  // Value within the dimension (e.g., "BTC", "binance", "ethereum").
+  optional string dimension_value = 4;
+
+  // Total gross exposure (sum of absolute values of all positions).
+  optional double gross_exposure = 5;
+
+  // Total net exposure (sum of signed position values, accounts for longs/shorts).
+  optional double net_exposure = 6;
+
+  // Long exposure (sum of long position values).
+  optional double long_exposure = 7;
+
+  // Short exposure (absolute value of short position values).
+  optional double short_exposure = 8;
+
+  // Quote currency for exposure values.
+  optional string quote_asset_id = 9;
+
+  // Percentage of total portfolio value.
+  optional double portfolio_weight = 10;
+
+  // Number of positions contributing to this exposure.
+  optional int32 position_count = 11;
+
+  // Timestamp of this exposure calculation.
+  optional google.protobuf.Timestamp timestamp = 12;
+
+  // Beta (systematic risk) relative to a benchmark (if applicable).
+  optional double beta = 13;
+
+  // Value at Risk (VaR) for this exposure at a confidence level.
+  optional double value_at_risk = 14;
+
+  // VaR confidence level (e.g., 0.95 for 95%).
+  optional double var_confidence_level = 15;
+
+  // Expected shortfall (Conditional VaR) beyond the VaR threshold.
+  optional double expected_shortfall = 16;
+}
