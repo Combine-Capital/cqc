@@ -1,0 +1,444 @@
+syntax = "proto3";
+
+package cqc.services.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/services/v1;servicesv1";
+
+import "proto/venues/v1/account.proto";
+import "proto/venues/v1/order.proto";
+import "proto/venues/v1/execution.proto";
+import "google/protobuf/timestamp.proto";
+
+// VenueGateway service provides a unified interface for interacting with
+// trading venues (exchanges, AMMs, lending protocols). It abstracts venue-specific
+// APIs into a consistent interface for order management, balance checking, and execution tracking.
+service VenueGateway {
+  // CreateAccount registers a new venue account with credentials.
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
+
+  // GetAccount retrieves a specific venue account.
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse);
+
+  // UpdateAccount updates account settings and credentials.
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse);
+
+  // DeleteAccount removes a venue account.
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
+
+  // ListAccounts retrieves all venue accounts for a portfolio or owner.
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse);
+
+  // VerifyCredentials tests venue API credentials.
+  rpc VerifyCredentials(VerifyCredentialsRequest) returns (VerifyCredentialsResponse);
+
+  // GetBalance retrieves the balance for a specific asset in an account.
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
+
+  // ListBalances retrieves all balances for a venue account.
+  rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
+
+  // StreamBalances streams real-time balance updates for an account.
+  rpc StreamBalances(StreamBalancesRequest) returns (stream StreamBalancesResponse);
+
+  // PlaceOrder submits a new order to a venue.
+  rpc PlaceOrder(PlaceOrderRequest) returns (PlaceOrderResponse);
+
+  // CancelOrder cancels an existing order.
+  rpc CancelOrder(CancelOrderRequest) returns (CancelOrderResponse);
+
+  // CancelAllOrders cancels all open orders for an account or trading pair.
+  rpc CancelAllOrders(CancelAllOrdersRequest) returns (CancelAllOrdersResponse);
+
+  // ModifyOrder modifies an existing order (price, quantity, etc.).
+  rpc ModifyOrder(ModifyOrderRequest) returns (ModifyOrderResponse);
+
+  // GetOrder retrieves a specific order by ID.
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+
+  // ListOrders retrieves orders for an account with filtering.
+  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+
+  // StreamOrders streams real-time order status updates.
+  rpc StreamOrders(StreamOrdersRequest) returns (stream StreamOrdersResponse);
+
+  // GetExecutionReport retrieves a specific execution report.
+  rpc GetExecutionReport(GetExecutionReportRequest) returns (GetExecutionReportResponse);
+
+  // ListExecutionReports retrieves execution reports for orders.
+  rpc ListExecutionReports(ListExecutionReportsRequest) returns (ListExecutionReportsResponse);
+
+  // StreamExecutionReports streams real-time execution reports.
+  rpc StreamExecutionReports(StreamExecutionReportsRequest) returns (stream StreamExecutionReportsResponse);
+
+  // Deposit initiates a deposit to a venue account.
+  rpc Deposit(DepositRequest) returns (DepositResponse);
+
+  // Withdraw initiates a withdrawal from a venue account.
+  rpc Withdraw(WithdrawRequest) returns (WithdrawResponse);
+
+  // GetDepositAddress retrieves the deposit address for an asset.
+  rpc GetDepositAddress(GetDepositAddressRequest) returns (GetDepositAddressResponse);
+
+  // ListDeposits retrieves deposit history.
+  rpc ListDeposits(ListDepositsRequest) returns (ListDepositsResponse);
+
+  // ListWithdrawals retrieves withdrawal history.
+  rpc ListWithdrawals(ListWithdrawalsRequest) returns (ListWithdrawalsResponse);
+
+  // GetTradingLimits retrieves trading limits and restrictions for an account.
+  rpc GetTradingLimits(GetTradingLimitsRequest) returns (GetTradingLimitsResponse);
+
+  // GetAccountHealth retrieves account health metrics (margin, liquidation risk).
+  rpc GetAccountHealth(GetAccountHealthRequest) returns (GetAccountHealthResponse);
+}
+
+// CreateAccountRequest
+message CreateAccountRequest {
+  optional string venue_id = 1;
+  optional string name = 2;
+  optional cqc.venues.v1.AccountType account_type = 3;
+  optional string portfolio_id = 4;
+  optional string owner_id = 5;
+  optional string venue_account_id = 6;
+  optional string api_key = 7;
+  optional string api_secret = 8;
+  optional string api_passphrase = 9;
+}
+
+message CreateAccountResponse {
+  optional cqc.venues.v1.VenueAccount account = 1;
+}
+
+// GetAccountRequest
+message GetAccountRequest {
+  optional string account_id = 1;
+}
+
+message GetAccountResponse {
+  optional cqc.venues.v1.VenueAccount account = 1;
+}
+
+// UpdateAccountRequest
+message UpdateAccountRequest {
+  optional string account_id = 1;
+  optional string name = 2;
+  optional cqc.venues.v1.AccountStatus status = 3;
+  optional string api_key = 4;
+  optional string api_secret = 5;
+  optional string api_passphrase = 6;
+}
+
+message UpdateAccountResponse {
+  optional cqc.venues.v1.VenueAccount account = 1;
+}
+
+// DeleteAccountRequest
+message DeleteAccountRequest {
+  optional string account_id = 1;
+}
+
+message DeleteAccountResponse {
+  optional bool success = 1;
+}
+
+// ListAccountsRequest
+message ListAccountsRequest {
+  optional string portfolio_id = 1;
+  optional string owner_id = 2;
+  optional string venue_id = 3;
+  optional cqc.venues.v1.AccountStatus status = 4;
+}
+
+message ListAccountsResponse {
+  repeated cqc.venues.v1.VenueAccount accounts = 1;
+}
+
+// VerifyCredentialsRequest
+message VerifyCredentialsRequest {
+  optional string account_id = 1;
+}
+
+message VerifyCredentialsResponse {
+  optional bool valid = 1;
+  optional string message = 2;
+  optional google.protobuf.Timestamp verified_at = 3;
+}
+
+// GetBalanceRequest
+message GetBalanceRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional cqc.venues.v1.BalanceType balance_type = 3;
+}
+
+message GetBalanceResponse {
+  optional cqc.venues.v1.Balance balance = 1;
+}
+
+// ListBalancesRequest
+message ListBalancesRequest {
+  optional string account_id = 1;
+  optional cqc.venues.v1.BalanceType balance_type = 2;
+  optional double min_balance = 3;
+}
+
+message ListBalancesResponse {
+  repeated cqc.venues.v1.Balance balances = 1;
+  optional double total_usd_value = 2;
+}
+
+// StreamBalancesRequest
+message StreamBalancesRequest {
+  optional string account_id = 1;
+}
+
+message StreamBalancesResponse {
+  optional cqc.venues.v1.Balance balance = 1;
+}
+
+// PlaceOrderRequest
+message PlaceOrderRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional string quote_asset_id = 3;
+  optional cqc.venues.v1.OrderType order_type = 4;
+  optional cqc.venues.v1.OrderSide side = 5;
+  optional double quantity = 6;
+  optional double price = 7;
+  optional double stop_price = 8;
+  optional cqc.venues.v1.TimeInForce time_in_force = 9;
+  optional string client_order_id = 10;
+  optional bool reduce_only = 11;
+  optional bool post_only = 12;
+}
+
+message PlaceOrderResponse {
+  optional cqc.venues.v1.Order order = 1;
+}
+
+// CancelOrderRequest
+message CancelOrderRequest {
+  optional string account_id = 1;
+  optional string order_id = 2;
+  optional string client_order_id = 3;
+}
+
+message CancelOrderResponse {
+  optional cqc.venues.v1.Order order = 1;
+}
+
+// CancelAllOrdersRequest
+message CancelAllOrdersRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional string quote_asset_id = 3;
+  optional cqc.venues.v1.OrderSide side = 4;
+}
+
+message CancelAllOrdersResponse {
+  repeated cqc.venues.v1.Order cancelled_orders = 1;
+  optional int32 cancelled_count = 2;
+}
+
+// ModifyOrderRequest
+message ModifyOrderRequest {
+  optional string account_id = 1;
+  optional string order_id = 2;
+  optional double new_quantity = 3;
+  optional double new_price = 4;
+  optional double new_stop_price = 5;
+}
+
+message ModifyOrderResponse {
+  optional cqc.venues.v1.Order order = 1;
+}
+
+// GetOrderRequest
+message GetOrderRequest {
+  optional string account_id = 1;
+  optional string order_id = 2;
+  optional string client_order_id = 3;
+}
+
+message GetOrderResponse {
+  optional cqc.venues.v1.Order order = 1;
+}
+
+// ListOrdersRequest
+message ListOrdersRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional string quote_asset_id = 3;
+  optional cqc.venues.v1.OrderStatus status = 4;
+  optional cqc.venues.v1.OrderSide side = 5;
+  optional google.protobuf.Timestamp start_time = 6;
+  optional google.protobuf.Timestamp end_time = 7;
+  optional int32 limit = 8;
+}
+
+message ListOrdersResponse {
+  repeated cqc.venues.v1.Order orders = 1;
+}
+
+// StreamOrdersRequest
+message StreamOrdersRequest {
+  optional string account_id = 1;
+  repeated string asset_ids = 2;
+}
+
+message StreamOrdersResponse {
+  optional cqc.venues.v1.Order order = 1;
+}
+
+// GetExecutionReportRequest
+message GetExecutionReportRequest {
+  optional string execution_id = 1;
+  optional string account_id = 2;
+}
+
+message GetExecutionReportResponse {
+  optional cqc.venues.v1.ExecutionReport execution = 1;
+}
+
+// ListExecutionReportsRequest
+message ListExecutionReportsRequest {
+  optional string account_id = 1;
+  optional string order_id = 2;
+  optional google.protobuf.Timestamp start_time = 3;
+  optional google.protobuf.Timestamp end_time = 4;
+  optional int32 limit = 5;
+}
+
+message ListExecutionReportsResponse {
+  repeated cqc.venues.v1.ExecutionReport executions = 1;
+}
+
+// StreamExecutionReportsRequest
+message StreamExecutionReportsRequest {
+  optional string account_id = 1;
+}
+
+message StreamExecutionReportsResponse {
+  optional cqc.venues.v1.ExecutionReport execution = 1;
+}
+
+// DepositRequest
+message DepositRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional double amount = 3;
+  optional string from_address = 4;
+  optional string chain_id = 5;
+}
+
+message DepositResponse {
+  optional string deposit_id = 1;
+  optional string deposit_address = 2;
+  optional string status = 3;
+}
+
+// WithdrawRequest
+message WithdrawRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional double amount = 3;
+  optional string to_address = 4;
+  optional string chain_id = 5;
+  optional string memo = 6;
+}
+
+message WithdrawResponse {
+  optional string withdrawal_id = 1;
+  optional string status = 2;
+  optional string tx_hash = 3;
+}
+
+// GetDepositAddressRequest
+message GetDepositAddressRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional string chain_id = 3;
+}
+
+message GetDepositAddressResponse {
+  optional string address = 1;
+  optional string memo = 2;
+  optional string chain_id = 3;
+}
+
+// ListDepositsRequest
+message ListDepositsRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional google.protobuf.Timestamp start_time = 3;
+  optional google.protobuf.Timestamp end_time = 4;
+  optional int32 limit = 5;
+}
+
+message ListDepositsResponse {
+  repeated DepositRecord deposits = 1;
+}
+
+message DepositRecord {
+  optional string deposit_id = 1;
+  optional string asset_id = 2;
+  optional double amount = 3;
+  optional string status = 4;
+  optional string tx_hash = 5;
+  optional google.protobuf.Timestamp timestamp = 6;
+}
+
+// ListWithdrawalsRequest
+message ListWithdrawalsRequest {
+  optional string account_id = 1;
+  optional string asset_id = 2;
+  optional google.protobuf.Timestamp start_time = 3;
+  optional google.protobuf.Timestamp end_time = 4;
+  optional int32 limit = 5;
+}
+
+message ListWithdrawalsResponse {
+  repeated WithdrawalRecord withdrawals = 1;
+}
+
+message WithdrawalRecord {
+  optional string withdrawal_id = 1;
+  optional string asset_id = 2;
+  optional double amount = 3;
+  optional string to_address = 4;
+  optional string status = 5;
+  optional string tx_hash = 6;
+  optional google.protobuf.Timestamp timestamp = 7;
+}
+
+// GetTradingLimitsRequest
+message GetTradingLimitsRequest {
+  optional string account_id = 1;
+}
+
+message GetTradingLimitsResponse {
+  optional double daily_withdrawal_limit = 1;
+  optional double daily_withdrawal_used = 2;
+  optional double max_order_size = 3;
+  optional double min_order_size = 4;
+  optional double max_position_size = 5;
+  optional int32 max_open_orders = 6;
+  optional int32 current_open_orders = 7;
+}
+
+// GetAccountHealthRequest
+message GetAccountHealthRequest {
+  optional string account_id = 1;
+}
+
+message GetAccountHealthResponse {
+  optional double total_equity = 1;
+  optional double total_margin_used = 2;
+  optional double available_margin = 3;
+  optional double margin_ratio = 4;
+  optional double liquidation_price = 5;
+  optional double maintenance_margin = 6;
+  optional double unrealized_pnl = 7;
+  optional string health_status = 8;
+  optional double leverage = 9;
+}

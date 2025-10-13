@@ -1,0 +1,250 @@
+syntax = "proto3";
+
+package cqc.services.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/services/v1;servicesv1";
+
+import "proto/markets/v1/price.proto";
+import "proto/markets/v1/orderbook.proto";
+import "proto/markets/v1/trade.proto";
+import "proto/markets/v1/liquidity.proto";
+import "google/protobuf/timestamp.proto";
+
+// MarketData service provides methods for retrieving real-time and historical
+// market data including prices, order books, trades, candles, and liquidity metrics.
+service MarketData {
+  // GetPrice retrieves the current price for an asset.
+  rpc GetPrice(GetPriceRequest) returns (GetPriceResponse);
+
+  // StreamPrices streams real-time price updates for specified assets.
+  rpc StreamPrices(StreamPricesRequest) returns (stream StreamPricesResponse);
+
+  // GetPriceHistory retrieves historical prices for an asset within a time range.
+  rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
+
+  // GetVWAP retrieves the Volume-Weighted Average Price for an asset.
+  rpc GetVWAP(GetVWAPRequest) returns (GetVWAPResponse);
+
+  // GetOrderBook retrieves the current order book snapshot for a trading pair.
+  rpc GetOrderBook(GetOrderBookRequest) returns (GetOrderBookResponse);
+
+  // StreamOrderBook streams real-time order book updates for a trading pair.
+  rpc StreamOrderBook(StreamOrderBookRequest) returns (stream StreamOrderBookResponse);
+
+  // GetMarketDepth retrieves liquidity depth metrics for a trading pair.
+  rpc GetMarketDepth(GetMarketDepthRequest) returns (GetMarketDepthResponse);
+
+  // GetTrade retrieves a specific trade by ID.
+  rpc GetTrade(GetTradeRequest) returns (GetTradeResponse);
+
+  // ListTrades retrieves recent trades for a trading pair.
+  rpc ListTrades(ListTradesRequest) returns (ListTradesResponse);
+
+  // StreamTrades streams real-time trade executions for specified trading pairs.
+  rpc StreamTrades(StreamTradesRequest) returns (stream StreamTradesResponse);
+
+  // GetCandle retrieves a specific candle for a trading pair at a given time.
+  rpc GetCandle(GetCandleRequest) returns (GetCandleResponse);
+
+  // ListCandles retrieves historical candle data for charting and analysis.
+  rpc ListCandles(ListCandlesRequest) returns (ListCandlesResponse);
+
+  // GetLiquidityMetrics retrieves liquidity metrics for a trading pair or venue.
+  rpc GetLiquidityMetrics(GetLiquidityMetricsRequest) returns (GetLiquidityMetricsResponse);
+
+  // GetMultiVenuePrice retrieves and aggregates prices across multiple venues.
+  rpc GetMultiVenuePrice(GetMultiVenuePriceRequest) returns (GetMultiVenuePriceResponse);
+
+  // GetMarketSummary retrieves a comprehensive market summary for an asset.
+  rpc GetMarketSummary(GetMarketSummaryRequest) returns (GetMarketSummaryResponse);
+}
+
+// GetPriceRequest
+message GetPriceRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+}
+
+message GetPriceResponse {
+  optional cqc.markets.v1.Price price = 1;
+}
+
+// StreamPricesRequest
+message StreamPricesRequest {
+  repeated string asset_ids = 1;
+  optional string quote_asset_id = 2;
+  repeated string venue_ids = 3;
+}
+
+message StreamPricesResponse {
+  optional cqc.markets.v1.Price price = 1;
+}
+
+// GetPriceHistoryRequest
+message GetPriceHistoryRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+  optional google.protobuf.Timestamp start_time = 4;
+  optional google.protobuf.Timestamp end_time = 5;
+  optional int32 limit = 6;
+}
+
+message GetPriceHistoryResponse {
+  repeated cqc.markets.v1.Price prices = 1;
+}
+
+// GetVWAPRequest
+message GetVWAPRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+  optional google.protobuf.Timestamp start_time = 4;
+  optional google.protobuf.Timestamp end_time = 5;
+}
+
+message GetVWAPResponse {
+  optional cqc.markets.v1.VWAP vwap = 1;
+}
+
+// GetOrderBookRequest
+message GetOrderBookRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+  optional int32 depth = 4;
+}
+
+message GetOrderBookResponse {
+  optional cqc.markets.v1.OrderBook order_book = 1;
+}
+
+// StreamOrderBookRequest
+message StreamOrderBookRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+  optional int32 depth = 4;
+}
+
+message StreamOrderBookResponse {
+  optional cqc.markets.v1.OrderBook order_book = 1;
+}
+
+// GetMarketDepthRequest
+message GetMarketDepthRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+}
+
+message GetMarketDepthResponse {
+  optional cqc.markets.v1.MarketDepth market_depth = 1;
+}
+
+// GetTradeRequest
+message GetTradeRequest {
+  optional string trade_id = 1;
+  optional string venue_id = 2;
+}
+
+message GetTradeResponse {
+  optional cqc.markets.v1.Trade trade = 1;
+}
+
+// ListTradesRequest
+message ListTradesRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+  optional google.protobuf.Timestamp start_time = 4;
+  optional google.protobuf.Timestamp end_time = 5;
+  optional int32 limit = 6;
+}
+
+message ListTradesResponse {
+  repeated cqc.markets.v1.Trade trades = 1;
+  optional string next_page_token = 2;
+}
+
+// StreamTradesRequest
+message StreamTradesRequest {
+  repeated string asset_ids = 1;
+  optional string quote_asset_id = 2;
+  repeated string venue_ids = 3;
+}
+
+message StreamTradesResponse {
+  optional cqc.markets.v1.Trade trade = 1;
+}
+
+// GetCandleRequest
+message GetCandleRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+  optional cqc.markets.v1.CandleInterval interval = 4;
+  optional google.protobuf.Timestamp timestamp = 5;
+}
+
+message GetCandleResponse {
+  optional cqc.markets.v1.Candle candle = 1;
+}
+
+// ListCandlesRequest
+message ListCandlesRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+  optional cqc.markets.v1.CandleInterval interval = 4;
+  optional google.protobuf.Timestamp start_time = 5;
+  optional google.protobuf.Timestamp end_time = 6;
+  optional int32 limit = 7;
+}
+
+message ListCandlesResponse {
+  repeated cqc.markets.v1.Candle candles = 1;
+}
+
+// GetLiquidityMetricsRequest
+message GetLiquidityMetricsRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+}
+
+message GetLiquidityMetricsResponse {
+  optional cqc.markets.v1.LiquidityMetrics metrics = 1;
+}
+
+// GetMultiVenuePriceRequest
+message GetMultiVenuePriceRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  repeated string venue_ids = 3;
+}
+
+message GetMultiVenuePriceResponse {
+  repeated cqc.markets.v1.Price prices = 1;
+  optional cqc.markets.v1.Price aggregated_price = 2;
+}
+
+// GetMarketSummaryRequest
+message GetMarketSummaryRequest {
+  optional string asset_id = 1;
+  optional string quote_asset_id = 2;
+  optional string venue_id = 3;
+}
+
+message GetMarketSummaryResponse {
+  optional cqc.markets.v1.Price current_price = 1;
+  optional cqc.markets.v1.Price price_24h_ago = 2;
+  optional double price_change_24h = 3;
+  optional double price_change_percent_24h = 4;
+  optional double volume_24h = 5;
+  optional double high_24h = 6;
+  optional double low_24h = 7;
+  optional cqc.markets.v1.OrderBook order_book = 8;
+  optional cqc.markets.v1.LiquidityMetrics liquidity = 9;
+}

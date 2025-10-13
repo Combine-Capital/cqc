@@ -25,3 +25,6 @@ Always use Context7 for current docs on Protocol Buffers, gRPC, and language-spe
 ### Project Conventions
 - Organize protos strictly by domain/version path (assets/v1/, markets/v1/) with one message type per file for granular imports and clear ownership
 - Commit generated code to repository alongside proto sources to avoid generator version mismatches between development and consuming services
+
+### Agentic AI Guidelines
+- Never create "summary" documents; direct action is more valuable than summarization

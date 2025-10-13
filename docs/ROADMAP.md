@@ -6,7 +6,7 @@
 - [x] **Commit 3**: Markets Domain Protocol Buffers
 - [x] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
 - [x] **Commit 5**: Events Domain Protocol Buffers
-- [ ] **Commit 6**: gRPC Service Interfaces
+- [x] **Commit 6**: gRPC Service Interfaces
 - [ ] **Commit 7**: Build System & Code Generation
 - [ ] **Commit 8**: Package Configuration & Documentation
 
@@ -125,13 +125,13 @@
 **Depends**: Commit 2, Commit 3, Commit 4, Commit 5
 
 **Deliverables**:
-- [ ] Create `proto/services/v1/asset_registry.proto` with AssetRegistry service definition
-- [ ] Create `proto/services/v1/market_data.proto` with MarketData service definition
-- [ ] Create `proto/services/v1/portfolio.proto` with Portfolio service definition
-- [ ] Create `proto/services/v1/venue_gateway.proto` with VenueGateway service definition
-- [ ] Create `proto/services/v1/risk_engine.proto` with RiskEngine service definition
-- [ ] Define each service with explicit Request/Response message types (never primitives)
-- [ ] Import relevant domain message types for service method parameters
+- [x] Create `proto/services/v1/asset_registry.proto` with AssetRegistry service definition
+- [x] Create `proto/services/v1/market_data.proto` with MarketData service definition
+- [x] Create `proto/services/v1/portfolio.proto` with Portfolio service definition
+- [x] Create `proto/services/v1/venue_gateway.proto` with VenueGateway service definition
+- [x] Create `proto/services/v1/risk_engine.proto` with RiskEngine service definition
+- [x] Define each service with explicit Request/Response message types (never primitives)
+- [x] Import relevant domain message types for service method parameters
 
 **Success**:
 - All .proto files validate with `protoc --descriptor_set_out=/tmp/descriptor.pb proto/services/v1/*.proto` (exits with code 0, no errors)

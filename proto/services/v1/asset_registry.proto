@@ -1,0 +1,436 @@
+syntax = "proto3";
+
+package cqc.services.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/services/v1;servicesv1";
+
+import "proto/assets/v1/asset.proto";
+import "proto/assets/v1/deployment.proto";
+import "proto/assets/v1/relationship.proto";
+import "proto/assets/v1/quality.proto";
+import "proto/assets/v1/chain.proto";
+import "proto/assets/v1/venue.proto";
+
+// AssetRegistry service provides methods for managing canonical assets,
+// their deployments across chains, identifiers, relationships, and quality flags.
+service AssetRegistry {
+  // CreateAsset creates a new canonical asset in the registry.
+  rpc CreateAsset(CreateAssetRequest) returns (CreateAssetResponse);
+
+  // GetAsset retrieves a specific asset by ID.
+  rpc GetAsset(GetAssetRequest) returns (GetAssetResponse);
+
+  // UpdateAsset updates an existing asset's metadata.
+  rpc UpdateAsset(UpdateAssetRequest) returns (UpdateAssetResponse);
+
+  // DeleteAsset soft-deletes an asset from the registry.
+  rpc DeleteAsset(DeleteAssetRequest) returns (DeleteAssetResponse);
+
+  // ListAssets retrieves a paginated list of assets with optional filtering.
+  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+
+  // SearchAssets searches for assets by symbol, name, or other criteria.
+  rpc SearchAssets(SearchAssetsRequest) returns (SearchAssetsResponse);
+
+  // CreateAssetDeployment registers a new on-chain deployment of an asset.
+  rpc CreateAssetDeployment(CreateAssetDeploymentRequest) returns (CreateAssetDeploymentResponse);
+
+  // GetAssetDeployment retrieves a specific deployment by ID.
+  rpc GetAssetDeployment(GetAssetDeploymentRequest) returns (GetAssetDeploymentResponse);
+
+  // ListAssetDeployments lists all deployments for a given asset.
+  rpc ListAssetDeployments(ListAssetDeploymentsRequest) returns (ListAssetDeploymentsResponse);
+
+  // CreateAssetIdentifier adds an external identifier mapping for an asset.
+  rpc CreateAssetIdentifier(CreateAssetIdentifierRequest) returns (CreateAssetIdentifierResponse);
+
+  // GetAssetIdentifier retrieves an identifier mapping.
+  rpc GetAssetIdentifier(GetAssetIdentifierRequest) returns (GetAssetIdentifierResponse);
+
+  // ListAssetIdentifiers lists all identifier mappings for an asset.
+  rpc ListAssetIdentifiers(ListAssetIdentifiersRequest) returns (ListAssetIdentifiersResponse);
+
+  // CreateAssetRelationship establishes a relationship between two assets.
+  rpc CreateAssetRelationship(CreateAssetRelationshipRequest) returns (CreateAssetRelationshipResponse);
+
+  // ListAssetRelationships lists relationships for a given asset.
+  rpc ListAssetRelationships(ListAssetRelationshipsRequest) returns (ListAssetRelationshipsResponse);
+
+  // CreateAssetGroup creates a new asset group.
+  rpc CreateAssetGroup(CreateAssetGroupRequest) returns (CreateAssetGroupResponse);
+
+  // GetAssetGroup retrieves a specific asset group.
+  rpc GetAssetGroup(GetAssetGroupRequest) returns (GetAssetGroupResponse);
+
+  // AddAssetToGroup adds an asset to an existing group.
+  rpc AddAssetToGroup(AddAssetToGroupRequest) returns (AddAssetToGroupResponse);
+
+  // RemoveAssetFromGroup removes an asset from a group.
+  rpc RemoveAssetFromGroup(RemoveAssetFromGroupRequest) returns (RemoveAssetFromGroupResponse);
+
+  // RaiseQualityFlag creates a quality flag for an asset.
+  rpc RaiseQualityFlag(RaiseQualityFlagRequest) returns (RaiseQualityFlagResponse);
+
+  // ResolveQualityFlag marks a quality flag as resolved.
+  rpc ResolveQualityFlag(ResolveQualityFlagRequest) returns (ResolveQualityFlagResponse);
+
+  // ListQualityFlags lists all quality flags for an asset.
+  rpc ListQualityFlags(ListQualityFlagsRequest) returns (ListQualityFlagsResponse);
+
+  // CreateChain registers a new blockchain network.
+  rpc CreateChain(CreateChainRequest) returns (CreateChainResponse);
+
+  // GetChain retrieves a specific chain by ID.
+  rpc GetChain(GetChainRequest) returns (GetChainResponse);
+
+  // ListChains lists all registered blockchain networks.
+  rpc ListChains(ListChainsRequest) returns (ListChainsResponse);
+
+  // CreateVenue registers a new trading venue.
+  rpc CreateVenue(CreateVenueRequest) returns (CreateVenueResponse);
+
+  // GetVenue retrieves a specific venue by ID.
+  rpc GetVenue(GetVenueRequest) returns (GetVenueResponse);
+
+  // ListVenues lists all registered trading venues.
+  rpc ListVenues(ListVenuesRequest) returns (ListVenuesResponse);
+
+  // CreateVenueSymbol maps a venue's trading symbol to a canonical asset.
+  rpc CreateVenueSymbol(CreateVenueSymbolRequest) returns (CreateVenueSymbolResponse);
+
+  // GetVenueSymbol retrieves a venue symbol mapping.
+  rpc GetVenueSymbol(GetVenueSymbolRequest) returns (GetVenueSymbolResponse);
+
+  // ListVenueSymbols lists all symbol mappings for a venue or asset.
+  rpc ListVenueSymbols(ListVenueSymbolsRequest) returns (ListVenueSymbolsResponse);
+}
+
+// CreateAssetRequest
+message CreateAssetRequest {
+  optional string symbol = 1;
+  optional string name = 2;
+  optional cqc.assets.v1.AssetType asset_type = 3;
+  optional string category = 4;
+  optional string description = 5;
+  optional string logo_url = 6;
+  optional string website_url = 7;
+}
+
+message CreateAssetResponse {
+  optional cqc.assets.v1.Asset asset = 1;
+}
+
+// GetAssetRequest
+message GetAssetRequest {
+  optional string asset_id = 1;
+}
+
+message GetAssetResponse {
+  optional cqc.assets.v1.Asset asset = 1;
+}
+
+// UpdateAssetRequest
+message UpdateAssetRequest {
+  optional string asset_id = 1;
+  optional string symbol = 2;
+  optional string name = 3;
+  optional cqc.assets.v1.AssetType asset_type = 4;
+  optional string category = 5;
+  optional string description = 6;
+  optional string logo_url = 7;
+  optional string website_url = 8;
+}
+
+message UpdateAssetResponse {
+  optional cqc.assets.v1.Asset asset = 1;
+}
+
+// DeleteAssetRequest
+message DeleteAssetRequest {
+  optional string asset_id = 1;
+}
+
+message DeleteAssetResponse {
+  optional bool success = 1;
+}
+
+// ListAssetsRequest
+message ListAssetsRequest {
+  optional int32 page_size = 1;
+  optional string page_token = 2;
+  optional cqc.assets.v1.AssetType asset_type = 3;
+  optional string category = 4;
+}
+
+message ListAssetsResponse {
+  repeated cqc.assets.v1.Asset assets = 1;
+  optional string next_page_token = 2;
+  optional int32 total_count = 3;
+}
+
+// SearchAssetsRequest
+message SearchAssetsRequest {
+  optional string query = 1;
+  optional int32 limit = 2;
+}
+
+message SearchAssetsResponse {
+  repeated cqc.assets.v1.Asset assets = 1;
+}
+
+// CreateAssetDeploymentRequest
+message CreateAssetDeploymentRequest {
+  optional string asset_id = 1;
+  optional string chain_id = 2;
+  optional string contract_address = 3;
+  optional int32 decimals = 4;
+  optional bool is_native = 5;
+}
+
+message CreateAssetDeploymentResponse {
+  optional cqc.assets.v1.AssetDeployment deployment = 1;
+}
+
+// GetAssetDeploymentRequest
+message GetAssetDeploymentRequest {
+  optional string deployment_id = 1;
+}
+
+message GetAssetDeploymentResponse {
+  optional cqc.assets.v1.AssetDeployment deployment = 1;
+}
+
+// ListAssetDeploymentsRequest
+message ListAssetDeploymentsRequest {
+  optional string asset_id = 1;
+  optional string chain_id = 2;
+}
+
+message ListAssetDeploymentsResponse {
+  repeated cqc.assets.v1.AssetDeployment deployments = 1;
+}
+
+// CreateAssetIdentifierRequest
+message CreateAssetIdentifierRequest {
+  optional string asset_id = 1;
+  optional cqc.assets.v1.DataSource source = 2;
+  optional string external_id = 3;
+  optional bool is_primary = 4;
+}
+
+message CreateAssetIdentifierResponse {
+  optional cqc.assets.v1.AssetIdentifier identifier = 1;
+}
+
+// GetAssetIdentifierRequest
+message GetAssetIdentifierRequest {
+  optional string asset_id = 1;
+  optional cqc.assets.v1.DataSource source = 2;
+}
+
+message GetAssetIdentifierResponse {
+  optional cqc.assets.v1.AssetIdentifier identifier = 1;
+}
+
+// ListAssetIdentifiersRequest
+message ListAssetIdentifiersRequest {
+  optional string asset_id = 1;
+}
+
+message ListAssetIdentifiersResponse {
+  repeated cqc.assets.v1.AssetIdentifier identifiers = 1;
+}
+
+// CreateAssetRelationshipRequest
+message CreateAssetRelationshipRequest {
+  optional string source_asset_id = 1;
+  optional string target_asset_id = 2;
+  optional cqc.assets.v1.RelationshipType relationship_type = 3;
+  optional string description = 4;
+}
+
+message CreateAssetRelationshipResponse {
+  optional cqc.assets.v1.AssetRelationship relationship = 1;
+}
+
+// ListAssetRelationshipsRequest
+message ListAssetRelationshipsRequest {
+  optional string asset_id = 1;
+  optional cqc.assets.v1.RelationshipType relationship_type = 2;
+}
+
+message ListAssetRelationshipsResponse {
+  repeated cqc.assets.v1.AssetRelationship relationships = 1;
+}
+
+// CreateAssetGroupRequest
+message CreateAssetGroupRequest {
+  optional string name = 1;
+  optional string description = 2;
+  optional string group_type = 3;
+}
+
+message CreateAssetGroupResponse {
+  optional cqc.assets.v1.AssetGroup group = 1;
+}
+
+// GetAssetGroupRequest
+message GetAssetGroupRequest {
+  optional string group_id = 1;
+}
+
+message GetAssetGroupResponse {
+  optional cqc.assets.v1.AssetGroup group = 1;
+}
+
+// AddAssetToGroupRequest
+message AddAssetToGroupRequest {
+  optional string group_id = 1;
+  optional string asset_id = 2;
+  optional double weight = 3;
+}
+
+message AddAssetToGroupResponse {
+  optional cqc.assets.v1.AssetGroupMember member = 1;
+}
+
+// RemoveAssetFromGroupRequest
+message RemoveAssetFromGroupRequest {
+  optional string group_id = 1;
+  optional string asset_id = 2;
+}
+
+message RemoveAssetFromGroupResponse {
+  optional bool success = 1;
+}
+
+// RaiseQualityFlagRequest
+message RaiseQualityFlagRequest {
+  optional string asset_id = 1;
+  optional cqc.assets.v1.FlagType flag_type = 2;
+  optional cqc.assets.v1.FlagSeverity severity = 3;
+  optional string description = 4;
+  optional string raised_by = 5;
+}
+
+message RaiseQualityFlagResponse {
+  optional cqc.assets.v1.AssetQualityFlag flag = 1;
+}
+
+// ResolveQualityFlagRequest
+message ResolveQualityFlagRequest {
+  optional string flag_id = 1;
+  optional string resolution_notes = 2;
+  optional string resolved_by = 3;
+}
+
+message ResolveQualityFlagResponse {
+  optional cqc.assets.v1.AssetQualityFlag flag = 1;
+}
+
+// ListQualityFlagsRequest
+message ListQualityFlagsRequest {
+  optional string asset_id = 1;
+  optional cqc.assets.v1.FlagSeverity min_severity = 2;
+  optional bool include_resolved = 3;
+}
+
+message ListQualityFlagsResponse {
+  repeated cqc.assets.v1.AssetQualityFlag flags = 1;
+}
+
+// CreateChainRequest
+message CreateChainRequest {
+  optional string name = 1;
+  optional string chain_type = 2;
+  optional int64 chain_id = 3;
+  optional string native_asset_symbol = 4;
+  optional string block_explorer_url = 5;
+}
+
+message CreateChainResponse {
+  optional cqc.assets.v1.Chain chain = 1;
+}
+
+// GetChainRequest
+message GetChainRequest {
+  optional string chain_id = 1;
+}
+
+message GetChainResponse {
+  optional cqc.assets.v1.Chain chain = 1;
+}
+
+// ListChainsRequest
+message ListChainsRequest {
+  optional string chain_type = 1;
+}
+
+message ListChainsResponse {
+  repeated cqc.assets.v1.Chain chains = 1;
+}
+
+// CreateVenueRequest
+message CreateVenueRequest {
+  optional string name = 1;
+  optional cqc.assets.v1.VenueType venue_type = 2;
+  optional string chain_id = 3;
+  optional string api_endpoint = 4;
+  optional string websocket_endpoint = 5;
+}
+
+message CreateVenueResponse {
+  optional cqc.assets.v1.Venue venue = 1;
+}
+
+// GetVenueRequest
+message GetVenueRequest {
+  optional string venue_id = 1;
+}
+
+message GetVenueResponse {
+  optional cqc.assets.v1.Venue venue = 1;
+}
+
+// ListVenuesRequest
+message ListVenuesRequest {
+  optional cqc.assets.v1.VenueType venue_type = 1;
+  optional string chain_id = 2;
+}
+
+message ListVenuesResponse {
+  repeated cqc.assets.v1.Venue venues = 1;
+}
+
+// CreateVenueSymbolRequest
+message CreateVenueSymbolRequest {
+  optional string venue_id = 1;
+  optional string asset_id = 2;
+  optional string venue_symbol = 3;
+  optional string base_asset_id = 4;
+  optional string quote_asset_id = 5;
+}
+
+message CreateVenueSymbolResponse {
+  optional cqc.assets.v1.VenueSymbol venue_symbol = 1;
+}
+
+// GetVenueSymbolRequest
+message GetVenueSymbolRequest {
+  optional string venue_id = 1;
+  optional string venue_symbol = 2;
+}
+
+message GetVenueSymbolResponse {
+  optional cqc.assets.v1.VenueSymbol venue_symbol = 1;
+}
+
+// ListVenueSymbolsRequest
+message ListVenueSymbolsRequest {
+  optional string venue_id = 1;
+  optional string asset_id = 2;
+}
+
+message ListVenueSymbolsResponse {
+  repeated cqc.assets.v1.VenueSymbol venue_symbols = 1;
+}

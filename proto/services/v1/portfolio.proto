@@ -1,0 +1,337 @@
+syntax = "proto3";
+
+package cqc.services.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/services/v1;servicesv1";
+
+import "proto/portfolio/v1/portfolio.proto";
+import "proto/portfolio/v1/position.proto";
+import "proto/portfolio/v1/transaction.proto";
+import "google/protobuf/timestamp.proto";
+
+// Portfolio service provides methods for managing portfolios, positions,
+// transactions, and portfolio analytics.
+service Portfolio {
+  // CreatePortfolio creates a new portfolio.
+  rpc CreatePortfolio(CreatePortfolioRequest) returns (CreatePortfolioResponse);
+
+  // GetPortfolio retrieves a specific portfolio by ID.
+  rpc GetPortfolio(GetPortfolioRequest) returns (GetPortfolioResponse);
+
+  // UpdatePortfolio updates portfolio metadata and settings.
+  rpc UpdatePortfolio(UpdatePortfolioRequest) returns (UpdatePortfolioResponse);
+
+  // DeletePortfolio soft-deletes a portfolio.
+  rpc DeletePortfolio(DeletePortfolioRequest) returns (DeletePortfolioResponse);
+
+  // ListPortfolios retrieves portfolios for a given owner.
+  rpc ListPortfolios(ListPortfoliosRequest) returns (ListPortfoliosResponse);
+
+  // GetPortfolioSummary retrieves comprehensive portfolio statistics and metrics.
+  rpc GetPortfolioSummary(GetPortfolioSummaryRequest) returns (GetPortfolioSummaryResponse);
+
+  // CreatePosition creates a new position in a portfolio.
+  rpc CreatePosition(CreatePositionRequest) returns (CreatePositionResponse);
+
+  // GetPosition retrieves a specific position by ID.
+  rpc GetPosition(GetPositionRequest) returns (GetPositionResponse);
+
+  // UpdatePosition updates position details (used for manual adjustments).
+  rpc UpdatePosition(UpdatePositionRequest) returns (UpdatePositionResponse);
+
+  // ClosePosition closes an existing position.
+  rpc ClosePosition(ClosePositionRequest) returns (ClosePositionResponse);
+
+  // ListPositions retrieves all positions for a portfolio.
+  rpc ListPositions(ListPositionsRequest) returns (ListPositionsResponse);
+
+  // GetExposure retrieves aggregated exposure metrics for a portfolio.
+  rpc GetExposure(GetExposureRequest) returns (GetExposureResponse);
+
+  // CreateTransaction records a new transaction in a portfolio.
+  rpc CreateTransaction(CreateTransactionRequest) returns (CreateTransactionResponse);
+
+  // GetTransaction retrieves a specific transaction by ID.
+  rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse);
+
+  // ListTransactions retrieves transaction history for a portfolio.
+  rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
+
+  // GetPnL retrieves profit/loss metrics for a portfolio or position.
+  rpc GetPnL(GetPnLRequest) returns (GetPnLResponse);
+
+  // GetAllocation retrieves asset allocation breakdown for a portfolio.
+  rpc GetAllocation(GetAllocationRequest) returns (GetAllocationResponse);
+
+  // StreamPortfolioUpdates streams real-time portfolio value updates.
+  rpc StreamPortfolioUpdates(StreamPortfolioUpdatesRequest) returns (stream StreamPortfolioUpdatesResponse);
+
+  // RebalancePortfolio generates rebalancing recommendations.
+  rpc RebalancePortfolio(RebalancePortfolioRequest) returns (RebalancePortfolioResponse);
+
+  // GetPerformanceMetrics retrieves detailed performance analytics.
+  rpc GetPerformanceMetrics(GetPerformanceMetricsRequest) returns (GetPerformanceMetricsResponse);
+}
+
+// CreatePortfolioRequest
+message CreatePortfolioRequest {
+  optional string name = 1;
+  optional string description = 2;
+  optional string owner_id = 3;
+  optional string quote_asset_id = 4;
+  optional double initial_value = 5;
+  optional string strategy = 6;
+  optional string risk_tolerance = 7;
+}
+
+message CreatePortfolioResponse {
+  optional cqc.portfolio.v1.Portfolio portfolio = 1;
+}
+
+// GetPortfolioRequest
+message GetPortfolioRequest {
+  optional string portfolio_id = 1;
+}
+
+message GetPortfolioResponse {
+  optional cqc.portfolio.v1.Portfolio portfolio = 1;
+}
+
+// UpdatePortfolioRequest
+message UpdatePortfolioRequest {
+  optional string portfolio_id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional cqc.portfolio.v1.PortfolioStatus status = 4;
+  optional string strategy = 5;
+  optional string risk_tolerance = 6;
+  optional string benchmark_id = 7;
+}
+
+message UpdatePortfolioResponse {
+  optional cqc.portfolio.v1.Portfolio portfolio = 1;
+}
+
+// DeletePortfolioRequest
+message DeletePortfolioRequest {
+  optional string portfolio_id = 1;
+}
+
+message DeletePortfolioResponse {
+  optional bool success = 1;
+}
+
+// ListPortfoliosRequest
+message ListPortfoliosRequest {
+  optional string owner_id = 1;
+  optional cqc.portfolio.v1.PortfolioStatus status = 2;
+  optional int32 page_size = 3;
+  optional string page_token = 4;
+}
+
+message ListPortfoliosResponse {
+  repeated cqc.portfolio.v1.Portfolio portfolios = 1;
+  optional string next_page_token = 2;
+}
+
+// GetPortfolioSummaryRequest
+message GetPortfolioSummaryRequest {
+  optional string portfolio_id = 1;
+}
+
+message GetPortfolioSummaryResponse {
+  optional cqc.portfolio.v1.Portfolio portfolio = 1;
+  repeated cqc.portfolio.v1.Position positions = 2;
+  optional cqc.portfolio.v1.Exposure exposure = 3;
+  optional cqc.portfolio.v1.Allocation allocation = 4;
+  optional cqc.portfolio.v1.PnL pnl = 5;
+}
+
+// CreatePositionRequest
+message CreatePositionRequest {
+  optional string portfolio_id = 1;
+  optional string asset_id = 2;
+  optional string venue_id = 3;
+  optional double quantity = 4;
+  optional double entry_price = 5;
+  optional string quote_asset_id = 6;
+}
+
+message CreatePositionResponse {
+  optional cqc.portfolio.v1.Position position = 1;
+}
+
+// GetPositionRequest
+message GetPositionRequest {
+  optional string position_id = 1;
+}
+
+message GetPositionResponse {
+  optional cqc.portfolio.v1.Position position = 1;
+}
+
+// UpdatePositionRequest
+message UpdatePositionRequest {
+  optional string position_id = 1;
+  optional double quantity = 2;
+  optional double available_quantity = 3;
+  optional double locked_quantity = 4;
+  optional double entry_price = 5;
+  optional double current_price = 6;
+}
+
+message UpdatePositionResponse {
+  optional cqc.portfolio.v1.Position position = 1;
+}
+
+// ClosePositionRequest
+message ClosePositionRequest {
+  optional string position_id = 1;
+  optional double exit_price = 2;
+  optional string reason = 3;
+}
+
+message ClosePositionResponse {
+  optional cqc.portfolio.v1.Position position = 1;
+  optional cqc.portfolio.v1.Transaction transaction = 2;
+}
+
+// ListPositionsRequest
+message ListPositionsRequest {
+  optional string portfolio_id = 1;
+  optional string asset_id = 2;
+  optional string venue_id = 3;
+  optional bool only_open = 4;
+}
+
+message ListPositionsResponse {
+  repeated cqc.portfolio.v1.Position positions = 1;
+}
+
+// GetExposureRequest
+message GetExposureRequest {
+  optional string portfolio_id = 1;
+  optional string asset_id = 2;
+}
+
+message GetExposureResponse {
+  optional cqc.portfolio.v1.Exposure exposure = 1;
+}
+
+// CreateTransactionRequest
+message CreateTransactionRequest {
+  optional string portfolio_id = 1;
+  optional string position_id = 2;
+  optional cqc.portfolio.v1.TransactionType type = 3;
+  optional string asset_id = 4;
+  optional string venue_id = 5;
+  optional double quantity = 6;
+  optional double price = 7;
+  optional string quote_asset_id = 8;
+  optional double fee = 9;
+  optional string fee_asset_id = 10;
+  optional string order_id = 11;
+  optional string trade_id = 12;
+  optional string tx_hash = 13;
+}
+
+message CreateTransactionResponse {
+  optional cqc.portfolio.v1.Transaction transaction = 1;
+}
+
+// GetTransactionRequest
+message GetTransactionRequest {
+  optional string transaction_id = 1;
+}
+
+message GetTransactionResponse {
+  optional cqc.portfolio.v1.Transaction transaction = 1;
+}
+
+// ListTransactionsRequest
+message ListTransactionsRequest {
+  optional string portfolio_id = 1;
+  optional string position_id = 2;
+  optional cqc.portfolio.v1.TransactionType type = 3;
+  optional google.protobuf.Timestamp start_time = 4;
+  optional google.protobuf.Timestamp end_time = 5;
+  optional int32 page_size = 6;
+  optional string page_token = 7;
+}
+
+message ListTransactionsResponse {
+  repeated cqc.portfolio.v1.Transaction transactions = 1;
+  optional string next_page_token = 2;
+}
+
+// GetPnLRequest
+message GetPnLRequest {
+  optional string portfolio_id = 1;
+  optional string position_id = 2;
+  optional google.protobuf.Timestamp start_time = 3;
+  optional google.protobuf.Timestamp end_time = 4;
+}
+
+message GetPnLResponse {
+  optional cqc.portfolio.v1.PnL pnl = 1;
+}
+
+// GetAllocationRequest
+message GetAllocationRequest {
+  optional string portfolio_id = 1;
+}
+
+message GetAllocationResponse {
+  optional cqc.portfolio.v1.Allocation allocation = 1;
+}
+
+// StreamPortfolioUpdatesRequest
+message StreamPortfolioUpdatesRequest {
+  repeated string portfolio_ids = 1;
+}
+
+message StreamPortfolioUpdatesResponse {
+  optional cqc.portfolio.v1.Portfolio portfolio = 1;
+}
+
+// RebalancePortfolioRequest
+message RebalancePortfolioRequest {
+  optional string portfolio_id = 1;
+  optional cqc.portfolio.v1.Allocation target_allocation = 2;
+  optional double tolerance = 3;
+}
+
+message RebalancePortfolioResponse {
+  repeated RebalanceAction actions = 1;
+  optional double estimated_cost = 2;
+}
+
+message RebalanceAction {
+  optional string asset_id = 1;
+  optional string action_type = 2;
+  optional double quantity = 3;
+  optional double current_weight = 4;
+  optional double target_weight = 5;
+}
+
+// GetPerformanceMetricsRequest
+message GetPerformanceMetricsRequest {
+  optional string portfolio_id = 1;
+  optional google.protobuf.Timestamp start_time = 2;
+  optional google.protobuf.Timestamp end_time = 3;
+}
+
+message GetPerformanceMetricsResponse {
+  optional double total_return = 1;
+  optional double annualized_return = 2;
+  optional double volatility = 3;
+  optional double sharpe_ratio = 4;
+  optional double sortino_ratio = 5;
+  optional double max_drawdown = 6;
+  optional double max_drawdown_duration = 7;
+  optional double win_rate = 8;
+  optional double profit_factor = 9;
+  optional int32 total_trades = 10;
+  optional int32 winning_trades = 11;
+  optional int32 losing_trades = 12;
+}

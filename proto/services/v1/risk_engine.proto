@@ -1,0 +1,412 @@
+syntax = "proto3";
+
+package cqc.services.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/services/v1;servicesv1";
+
+import "proto/events/v1/risk_events.proto";
+import "google/protobuf/timestamp.proto";
+
+// RiskEngine service provides methods for risk monitoring, analysis, and alerting.
+// It evaluates portfolios and positions against risk thresholds and generates alerts.
+service RiskEngine {
+  // EvaluatePortfolioRisk analyzes a portfolio for risk exposures and violations.
+  rpc EvaluatePortfolioRisk(EvaluatePortfolioRiskRequest) returns (EvaluatePortfolioRiskResponse);
+
+  // EvaluatePositionRisk analyzes a specific position for risk.
+  rpc EvaluatePositionRisk(EvaluatePositionRiskRequest) returns (EvaluatePositionRiskResponse);
+
+  // CheckRiskLimits validates if an action would violate risk limits.
+  rpc CheckRiskLimits(CheckRiskLimitsRequest) returns (CheckRiskLimitsResponse);
+
+  // GetRiskMetrics retrieves comprehensive risk metrics for a portfolio.
+  rpc GetRiskMetrics(GetRiskMetricsRequest) returns (GetRiskMetricsResponse);
+
+  // CreateRiskAlert manually creates a risk alert.
+  rpc CreateRiskAlert(CreateRiskAlertRequest) returns (CreateRiskAlertResponse);
+
+  // GetRiskAlert retrieves a specific risk alert by ID.
+  rpc GetRiskAlert(GetRiskAlertRequest) returns (GetRiskAlertResponse);
+
+  // ListRiskAlerts retrieves risk alerts for a portfolio or position.
+  rpc ListRiskAlerts(ListRiskAlertsRequest) returns (ListRiskAlertsResponse);
+
+  // AcknowledgeRiskAlert marks a risk alert as acknowledged.
+  rpc AcknowledgeRiskAlert(AcknowledgeRiskAlertRequest) returns (AcknowledgeRiskAlertResponse);
+
+  // ResolveRiskAlert marks a risk alert as resolved.
+  rpc ResolveRiskAlert(ResolveRiskAlertRequest) returns (ResolveRiskAlertResponse);
+
+  // StreamRiskAlerts streams real-time risk alerts as they are generated.
+  rpc StreamRiskAlerts(StreamRiskAlertsRequest) returns (stream StreamRiskAlertsResponse);
+
+  // SetRiskLimits configures risk limits for a portfolio.
+  rpc SetRiskLimits(SetRiskLimitsRequest) returns (SetRiskLimitsResponse);
+
+  // GetRiskLimits retrieves configured risk limits for a portfolio.
+  rpc GetRiskLimits(GetRiskLimitsRequest) returns (GetRiskLimitsResponse);
+
+  // CalculateVaR calculates Value-at-Risk for a portfolio.
+  rpc CalculateVaR(CalculateVaRRequest) returns (CalculateVaRResponse);
+
+  // CalculateStressTest performs stress testing on a portfolio.
+  rpc CalculateStressTest(CalculateStressTestRequest) returns (CalculateStressTestResponse);
+
+  // GetLiquidationRisk calculates liquidation risk for leveraged positions.
+  rpc GetLiquidationRisk(GetLiquidationRiskRequest) returns (GetLiquidationRiskResponse);
+
+  // GetConcentrationRisk analyzes portfolio concentration risk.
+  rpc GetConcentrationRisk(GetConcentrationRiskRequest) returns (GetConcentrationRiskResponse);
+
+  // GetCorrelationMatrix retrieves correlation matrix for portfolio assets.
+  rpc GetCorrelationMatrix(GetCorrelationMatrixRequest) returns (GetCorrelationMatrixResponse);
+
+  // SimulateTrade simulates the risk impact of a proposed trade.
+  rpc SimulateTrade(SimulateTradeRequest) returns (SimulateTradeResponse);
+
+  // GetHistoricalRisk retrieves historical risk metrics over time.
+  rpc GetHistoricalRisk(GetHistoricalRiskRequest) returns (GetHistoricalRiskResponse);
+}
+
+// EvaluatePortfolioRiskRequest
+message EvaluatePortfolioRiskRequest {
+  optional string portfolio_id = 1;
+}
+
+message EvaluatePortfolioRiskResponse {
+  optional double overall_risk_score = 1;
+  repeated RiskViolation violations = 2;
+  repeated RiskWarning warnings = 3;
+  optional RiskSummary summary = 4;
+}
+
+message RiskViolation {
+  optional cqc.events.v1.RiskAlertType type = 1;
+  optional cqc.events.v1.RiskAlertSeverity severity = 2;
+  optional string message = 3;
+  optional double threshold = 4;
+  optional double current_value = 5;
+}
+
+message RiskWarning {
+  optional string message = 1;
+  optional string recommendation = 2;
+}
+
+message RiskSummary {
+  optional double total_exposure = 1;
+  optional double max_single_position = 2;
+  optional double leverage = 3;
+  optional double var_95 = 4;
+  optional double max_drawdown = 5;
+}
+
+// EvaluatePositionRiskRequest
+message EvaluatePositionRiskRequest {
+  optional string position_id = 1;
+}
+
+message EvaluatePositionRiskResponse {
+  optional double position_risk_score = 1;
+  optional double liquidation_price = 2;
+  optional double distance_to_liquidation = 3;
+  repeated RiskViolation violations = 4;
+}
+
+// CheckRiskLimitsRequest
+message CheckRiskLimitsRequest {
+  optional string portfolio_id = 1;
+  optional string asset_id = 2;
+  optional double quantity = 3;
+  optional double price = 4;
+  optional string action = 5;
+}
+
+message CheckRiskLimitsResponse {
+  optional bool allowed = 1;
+  repeated string violations = 2;
+  optional string denial_reason = 3;
+  optional RiskSummary projected_risk = 4;
+}
+
+// GetRiskMetricsRequest
+message GetRiskMetricsRequest {
+  optional string portfolio_id = 1;
+}
+
+message GetRiskMetricsResponse {
+  optional double value_at_risk_95 = 1;
+  optional double value_at_risk_99 = 2;
+  optional double conditional_var = 3;
+  optional double beta = 4;
+  optional double sharpe_ratio = 5;
+  optional double sortino_ratio = 6;
+  optional double max_drawdown = 7;
+  optional double volatility = 8;
+  optional double leverage = 9;
+  optional double margin_utilization = 10;
+  optional double concentration_risk = 11;
+  optional double liquidity_score = 12;
+  optional google.protobuf.Timestamp calculated_at = 13;
+}
+
+// CreateRiskAlertRequest
+message CreateRiskAlertRequest {
+  optional cqc.events.v1.RiskAlertType alert_type = 1;
+  optional cqc.events.v1.RiskAlertSeverity severity = 2;
+  optional string message = 3;
+  optional string portfolio_id = 4;
+  optional string position_id = 5;
+  optional string asset_id = 6;
+  optional string venue_id = 7;
+  optional double threshold_value = 8;
+  optional double current_value = 9;
+  optional string recommended_action = 10;
+}
+
+message CreateRiskAlertResponse {
+  optional cqc.events.v1.RiskAlert alert = 1;
+}
+
+// GetRiskAlertRequest
+message GetRiskAlertRequest {
+  optional string event_id = 1;
+}
+
+message GetRiskAlertResponse {
+  optional cqc.events.v1.RiskAlert alert = 1;
+}
+
+// ListRiskAlertsRequest
+message ListRiskAlertsRequest {
+  optional string portfolio_id = 1;
+  optional string position_id = 2;
+  optional string asset_id = 3;
+  optional cqc.events.v1.RiskAlertType alert_type = 4;
+  optional cqc.events.v1.RiskAlertSeverity min_severity = 5;
+  optional bool include_resolved = 6;
+  optional google.protobuf.Timestamp start_time = 7;
+  optional google.protobuf.Timestamp end_time = 8;
+  optional int32 limit = 9;
+}
+
+message ListRiskAlertsResponse {
+  repeated cqc.events.v1.RiskAlert alerts = 1;
+  optional int32 total_count = 2;
+}
+
+// AcknowledgeRiskAlertRequest
+message AcknowledgeRiskAlertRequest {
+  optional string event_id = 1;
+  optional string acknowledged_by = 2;
+  optional string notes = 3;
+}
+
+message AcknowledgeRiskAlertResponse {
+  optional bool success = 1;
+  optional google.protobuf.Timestamp acknowledged_at = 2;
+}
+
+// ResolveRiskAlertRequest
+message ResolveRiskAlertRequest {
+  optional string event_id = 1;
+  optional string resolved_by = 2;
+  optional string resolution_notes = 3;
+}
+
+message ResolveRiskAlertResponse {
+  optional bool success = 1;
+  optional google.protobuf.Timestamp resolved_at = 2;
+}
+
+// StreamRiskAlertsRequest
+message StreamRiskAlertsRequest {
+  repeated string portfolio_ids = 1;
+  optional cqc.events.v1.RiskAlertSeverity min_severity = 2;
+}
+
+message StreamRiskAlertsResponse {
+  optional cqc.events.v1.RiskAlert alert = 1;
+}
+
+// SetRiskLimitsRequest
+message SetRiskLimitsRequest {
+  optional string portfolio_id = 1;
+  optional RiskLimits limits = 2;
+}
+
+message SetRiskLimitsResponse {
+  optional RiskLimits limits = 1;
+}
+
+message RiskLimits {
+  optional double max_position_size = 1;
+  optional double max_concentration = 2;
+  optional double max_leverage = 3;
+  optional double max_var = 4;
+  optional double max_drawdown = 5;
+  optional double min_liquidity = 6;
+  optional double stop_loss_pct = 7;
+  optional double take_profit_pct = 8;
+}
+
+// GetRiskLimitsRequest
+message GetRiskLimitsRequest {
+  optional string portfolio_id = 1;
+}
+
+message GetRiskLimitsResponse {
+  optional RiskLimits limits = 1;
+}
+
+// CalculateVaRRequest
+message CalculateVaRRequest {
+  optional string portfolio_id = 1;
+  optional double confidence_level = 2;
+  optional int32 time_horizon_days = 3;
+  optional string method = 4;
+}
+
+message CalculateVaRResponse {
+  optional double value_at_risk = 1;
+  optional double conditional_var = 2;
+  optional double confidence_level = 3;
+  optional int32 time_horizon_days = 4;
+  optional string method = 5;
+  optional google.protobuf.Timestamp calculated_at = 6;
+}
+
+// CalculateStressTestRequest
+message CalculateStressTestRequest {
+  optional string portfolio_id = 1;
+  repeated StressScenario scenarios = 2;
+}
+
+message CalculateStressTestResponse {
+  repeated StressTestResult results = 1;
+}
+
+message StressScenario {
+  optional string name = 1;
+  optional string description = 2;
+  repeated AssetShock shocks = 3;
+}
+
+message AssetShock {
+  optional string asset_id = 1;
+  optional double price_change_pct = 2;
+}
+
+message StressTestResult {
+  optional string scenario_name = 1;
+  optional double portfolio_value_change = 2;
+  optional double portfolio_value_change_pct = 3;
+  optional double new_portfolio_value = 4;
+  repeated PositionImpact position_impacts = 5;
+}
+
+message PositionImpact {
+  optional string position_id = 1;
+  optional string asset_id = 2;
+  optional double value_change = 3;
+  optional double value_change_pct = 4;
+}
+
+// GetLiquidationRiskRequest
+message GetLiquidationRiskRequest {
+  optional string portfolio_id = 1;
+  optional string position_id = 2;
+}
+
+message GetLiquidationRiskResponse {
+  repeated LiquidationRisk positions = 1;
+  optional double portfolio_liquidation_risk = 2;
+}
+
+message LiquidationRisk {
+  optional string position_id = 1;
+  optional string asset_id = 2;
+  optional double liquidation_price = 3;
+  optional double current_price = 4;
+  optional double distance_to_liquidation_pct = 5;
+  optional double margin_ratio = 6;
+  optional string risk_level = 7;
+}
+
+// GetConcentrationRiskRequest
+message GetConcentrationRiskRequest {
+  optional string portfolio_id = 1;
+}
+
+message GetConcentrationRiskResponse {
+  repeated AssetConcentration asset_concentrations = 1;
+  repeated VenueConcentration venue_concentrations = 2;
+  optional double herfindahl_index = 3;
+  optional double max_concentration = 4;
+}
+
+message AssetConcentration {
+  optional string asset_id = 1;
+  optional double value = 2;
+  optional double percentage = 3;
+}
+
+message VenueConcentration {
+  optional string venue_id = 1;
+  optional double value = 2;
+  optional double percentage = 3;
+}
+
+// GetCorrelationMatrixRequest
+message GetCorrelationMatrixRequest {
+  optional string portfolio_id = 1;
+  optional int32 lookback_days = 2;
+}
+
+message GetCorrelationMatrixResponse {
+  repeated string asset_ids = 1;
+  repeated CorrelationRow correlations = 2;
+  optional google.protobuf.Timestamp calculated_at = 3;
+}
+
+message CorrelationRow {
+  repeated double values = 1;
+}
+
+// SimulateTradeRequest
+message SimulateTradeRequest {
+  optional string portfolio_id = 1;
+  optional string asset_id = 2;
+  optional double quantity = 3;
+  optional double price = 4;
+  optional string side = 5;
+}
+
+message SimulateTradeResponse {
+  optional RiskSummary current_risk = 1;
+  optional RiskSummary projected_risk = 2;
+  repeated RiskViolation violations = 3;
+  optional bool trade_allowed = 4;
+  optional string recommendation = 5;
+}
+
+// GetHistoricalRiskRequest
+message GetHistoricalRiskRequest {
+  optional string portfolio_id = 1;
+  optional google.protobuf.Timestamp start_time = 2;
+  optional google.protobuf.Timestamp end_time = 3;
+  optional string interval = 4;
+}
+
+message GetHistoricalRiskResponse {
+  repeated HistoricalRiskPoint data_points = 1;
+}
+
+message HistoricalRiskPoint {
+  optional google.protobuf.Timestamp timestamp = 1;
+  optional double value_at_risk = 2;
+  optional double leverage = 3;
+  optional double volatility = 4;
+  optional double max_drawdown = 5;
+  optional double concentration_risk = 6;
+}
