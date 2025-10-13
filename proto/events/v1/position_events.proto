@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package cqc.events.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/events/v1;eventsv1";
+
+import "google/protobuf/timestamp.proto";
+import "proto/portfolio/v1/position.proto";
+
+// PositionChangeType represents the nature of the position change.
+enum PositionChangeType {
+  POSITION_CHANGE_TYPE_UNSPECIFIED = 0;
+  POSITION_CHANGE_TYPE_OPENED = 1;           // New position opened
+  POSITION_CHANGE_TYPE_INCREASED = 2;        // Position size increased
+  POSITION_CHANGE_TYPE_DECREASED = 3;        // Position size decreased
+  POSITION_CHANGE_TYPE_CLOSED = 4;           // Position fully closed
+  POSITION_CHANGE_TYPE_PRICE_UPDATE = 5;     // P&L changed due to price update
+  POSITION_CHANGE_TYPE_TRANSFER = 6;         // Position transferred between accounts
+  POSITION_CHANGE_TYPE_LIQUIDATED = 7;       // Position liquidated (leveraged positions)
+  POSITION_CHANGE_TYPE_REBALANCED = 8;       // Position adjusted during portfolio rebalancing
+}
+
+// PositionChanged event is published when a position is created, modified, or closed.
+// This event notifies services of portfolio changes for risk monitoring, P&L tracking, and reporting.
+message PositionChanged {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that triggered the position change.
+  // Format: "user:{uuid}", "service:{service_name}", or "system".
+  optional string actor_id = 3;
+
+  // The current state of the position after the change.
+  optional cqc.portfolio.v1.Position current_position = 4;
+
+  // The previous state of the position before the change.
+  // NULL/unset for newly opened positions.
+  optional cqc.portfolio.v1.Position previous_position = 5;
+
+  // Type of change that occurred.
+  optional PositionChangeType change_type = 6;
+
+  // Portfolio identifier.
+  // Duplicated from position for event filtering purposes.
+  optional string portfolio_id = 7;
+
+  // Asset identifier.
+  // Duplicated from position for event filtering purposes.
+  optional string asset_id = 8;
+
+  // Venue identifier where the position is held.
+  // Duplicated from position for event filtering purposes.
+  optional string venue_id = 9;
+
+  // Change in quantity (positive for increases, negative for decreases).
+  optional double quantity_delta = 10;
+
+  // Change in value (current_value - previous_value).
+  optional double value_delta = 11;
+
+  // Change in unrealized P&L.
+  optional double pnl_delta = 12;
+
+  // Realized P&L from this change (for partial/full closes).
+  // Zero for price updates or position increases.
+  optional double realized_pnl = 13;
+
+  // Order ID that caused this position change (if applicable).
+  // NULL for non-order-based changes (price updates, transfers, etc.).
+  optional string order_id = 14;
+
+  // Transaction ID that caused this position change (if applicable).
+  optional string transaction_id = 15;
+
+  // Whether this position is now closed.
+  optional bool is_closed = 16;
+
+  // Reason for the position change (e.g., "trade_execution", "price_update", "manual_adjustment", "liquidation").
+  optional string reason = 17;
+}

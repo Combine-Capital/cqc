@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package cqc.events.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/events/v1;eventsv1";
+
+import "google/protobuf/timestamp.proto";
+import "proto/assets/v1/quality.proto";
+
+// RiskAlertType represents the category of risk alert.
+enum RiskAlertType {
+  RISK_ALERT_TYPE_UNSPECIFIED = 0;
+  RISK_ALERT_TYPE_POSITION_LIMIT = 1;         // Position size exceeds limits
+  RISK_ALERT_TYPE_CONCENTRATION = 2;          // Portfolio concentration risk
+  RISK_ALERT_TYPE_LEVERAGE = 3;               // Leverage exceeds thresholds
+  RISK_ALERT_TYPE_MARGIN_CALL = 4;            // Margin call triggered
+  RISK_ALERT_TYPE_LIQUIDATION_RISK = 5;       // Position approaching liquidation
+  RISK_ALERT_TYPE_VOLATILITY = 6;             // High volatility detected
+  RISK_ALERT_TYPE_CORRELATION = 7;            // Correlation risk identified
+  RISK_ALERT_TYPE_LIQUIDITY = 8;              // Insufficient liquidity
+  RISK_ALERT_TYPE_EXPOSURE = 9;               // Excessive exposure to asset/venue/chain
+  RISK_ALERT_TYPE_DRAWDOWN = 10;              // Drawdown threshold exceeded
+  RISK_ALERT_TYPE_VAR_BREACH = 11;            // Value-at-Risk threshold breached
+  RISK_ALERT_TYPE_COUNTERPARTY = 12;          // Counterparty risk concern
+}
+
+// RiskAlertSeverity represents the criticality of the risk alert.
+enum RiskAlertSeverity {
+  RISK_ALERT_SEVERITY_UNSPECIFIED = 0;
+  RISK_ALERT_SEVERITY_INFO = 1;        // Informational alert
+  RISK_ALERT_SEVERITY_LOW = 2;         // Low severity - monitor
+  RISK_ALERT_SEVERITY_MEDIUM = 3;      // Medium severity - review required
+  RISK_ALERT_SEVERITY_HIGH = 4;        // High severity - action recommended
+  RISK_ALERT_SEVERITY_CRITICAL = 5;    // Critical severity - immediate action required
+}
+
+// RiskAlert event is published when a risk threshold is breached or a risk condition is detected.
+// This event notifies services and users of potential risks requiring attention or action.
+message RiskAlert {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the service or system that detected the risk.
+  // Format: "service:{service_name}" (typically "service:risk_engine").
+  optional string actor_id = 3;
+
+  // Type of risk alert.
+  optional RiskAlertType alert_type = 4;
+
+  // Severity level of this alert.
+  optional RiskAlertSeverity severity = 5;
+
+  // Human-readable message describing the risk.
+  optional string message = 6;
+
+  // Portfolio identifier affected by this risk (if applicable).
+  optional string portfolio_id = 7;
+
+  // Position identifier affected by this risk (if applicable).
+  optional string position_id = 8;
+
+  // Asset identifier affected by this risk (if applicable).
+  optional string asset_id = 9;
+
+  // Venue identifier affected by this risk (if applicable).
+  optional string venue_id = 10;
+
+  // Threshold value that triggered this alert.
+  // Example: 0.25 for 25% concentration threshold.
+  optional double threshold_value = 11;
+
+  // Current value that exceeded the threshold.
+  // Example: 0.32 for 32% actual concentration.
+  optional double current_value = 12;
+
+  // Recommended action to mitigate the risk.
+  optional string recommended_action = 13;
+
+  // Risk score or metric associated with this alert (0.0 to 1.0 or unbounded).
+  optional double risk_score = 14;
+
+  // Whether this alert requires immediate action.
+  optional bool requires_immediate_action = 15;
+
+  // Timestamp when this alert should be considered resolved (auto-expiry).
+  // NULL/unset if the alert remains active until manually resolved.
+  optional google.protobuf.Timestamp expires_at = 16;
+
+  // Additional alert-specific context or metadata.
+  // Can include detailed calculations, affected entities, etc.
+  optional string context = 17;
+}
+
+// QualityFlagRaised event is published when a quality or safety flag is raised for an asset.
+// This event notifies services of potential issues with assets (scams, exploits, low liquidity, etc.).
+message QualityFlagRaised {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the service or system that raised the flag.
+  // Format: "service:{service_name}" or "system".
+  optional string actor_id = 3;
+
+  // The quality flag that was raised.
+  optional cqc.assets.v1.AssetQualityFlag flag = 4;
+
+  // Asset identifier affected by this flag.
+  // Duplicated from flag for event filtering purposes.
+  optional string asset_id = 5;
+
+  // Type of flag raised.
+  // Duplicated from flag for event filtering purposes.
+  optional cqc.assets.v1.FlagType flag_type = 6;
+
+  // Severity level of this flag.
+  // Duplicated from flag for event filtering purposes.
+  optional cqc.assets.v1.FlagSeverity severity = 7;
+
+  // Source of the flag (e.g., "certik", "tokensniffer", "manual", "coingecko").
+  // Duplicated from flag for event filtering purposes.
+  optional string source = 8;
+
+  // Whether trading should be automatically suspended for this asset.
+  optional bool suspend_trading = 9;
+
+  // Whether existing positions should be automatically closed.
+  optional bool force_close_positions = 10;
+
+  // Human-readable alert message for users.
+  optional string alert_message = 11;
+}

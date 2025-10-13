@@ -5,7 +5,7 @@
 - [x] **Commit 2**: Assets Domain Protocol Buffers
 - [x] **Commit 3**: Markets Domain Protocol Buffers
 - [x] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
-- [ ] **Commit 5**: Events Domain Protocol Buffers
+- [x] **Commit 5**: Events Domain Protocol Buffers
 - [ ] **Commit 6**: gRPC Service Interfaces
 - [ ] **Commit 7**: Build System & Code Generation
 - [ ] **Commit 8**: Package Configuration & Documentation
@@ -104,12 +104,12 @@
 **Depends**: Commit 2, Commit 3, Commit 4
 
 **Deliverables**:
-- [ ] Create `proto/events/v1/asset_events.proto` with AssetCreated event message
-- [ ] Create `proto/events/v1/market_events.proto` with PriceUpdated event message
-- [ ] Create `proto/events/v1/order_events.proto` with OrderPlaced event message
-- [ ] Create `proto/events/v1/position_events.proto` with PositionChanged event message
-- [ ] Create `proto/events/v1/risk_events.proto` with RiskAlert event message
-- [ ] Define package as `cqc.events.v1`, import message types from other domains as needed
+- [x] Create `proto/events/v1/asset_events.proto` with AssetCreated event message
+- [x] Create `proto/events/v1/market_events.proto` with PriceUpdated event message
+- [x] Create `proto/events/v1/order_events.proto` with OrderPlaced event message
+- [x] Create `proto/events/v1/position_events.proto` with PositionChanged event message
+- [x] Create `proto/events/v1/risk_events.proto` with RiskAlert event message
+- [x] Define package as `cqc.events.v1`, import message types from other domains as needed
 
 **Success**:
 - All .proto files validate with `protoc --descriptor_set_out=/tmp/descriptor.pb proto/events/v1/*.proto` (exits with code 0, no errors)

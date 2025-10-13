@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package cqc.events.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/events/v1;eventsv1";
+
+import "google/protobuf/timestamp.proto";
+import "proto/assets/v1/asset.proto";
+import "proto/assets/v1/deployment.proto";
+import "proto/assets/v1/relationship.proto";
+
+// AssetCreated event is published when a new canonical asset is created in the system.
+// This event notifies other services that a new asset is available for trading, pricing, etc.
+message AssetCreated {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that created the asset.
+  // Format: "user:{uuid}", "service:{service_name}", or "system".
+  optional string actor_id = 3;
+
+  // The newly created asset.
+  optional cqc.assets.v1.Asset asset = 4;
+
+  // Source of the asset creation (e.g., "manual", "coingecko_sync", "api_request").
+  optional string source = 5;
+}
+
+// AssetDeploymentCreated event is published when a new on-chain deployment is registered.
+// This event indicates that an asset is now available on a specific blockchain.
+message AssetDeploymentCreated {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that created the deployment.
+  // Format: "user:{uuid}", "service:{service_name}", or "system".
+  optional string actor_id = 3;
+
+  // The newly created asset deployment.
+  optional cqc.assets.v1.AssetDeployment deployment = 4;
+
+  // Source of the deployment creation (e.g., "manual", "chain_scanner", "api_request").
+  optional string source = 5;
+
+  // Whether this deployment was automatically detected (true) or manually added (false).
+  optional bool auto_detected = 6;
+}
+
+// RelationshipEstablished event is published when a relationship between two assets is created.
+// Examples: WETH wraps ETH, stETH stakes ETH, bridged USDC relates to native USDC.
+message RelationshipEstablished {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that established the relationship.
+  // Format: "user:{uuid}", "service:{service_name}", or "system".
+  optional string actor_id = 3;
+
+  // The newly established asset relationship.
+  optional cqc.assets.v1.AssetRelationship relationship = 4;
+
+  // Source of the relationship (e.g., "manual", "protocol_scan", "api_request").
+  optional string source = 5;
+
+  // Protocol facilitating this relationship (e.g., "Lido", "Aave", "Uniswap", "Wormhole").
+  // Duplicated from relationship for event filtering purposes.
+  optional string protocol = 6;
+}

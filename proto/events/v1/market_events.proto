@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package cqc.events.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/events/v1;eventsv1";
+
+import "google/protobuf/timestamp.proto";
+import "proto/markets/v1/price.proto";
+
+// PriceUpdated event is published when a new price observation is recorded.
+// This event notifies services of price changes for real-time market data, risk calculations, and portfolio valuations.
+message PriceUpdated {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that updated the price.
+  // Format: "service:{service_name}" (e.g., "service:cqmd"), or "system".
+  optional string actor_id = 3;
+
+  // The new price observation.
+  optional cqc.markets.v1.Price price = 4;
+
+  // Previous price value for this asset (if available).
+  // NULL/unset if this is the first price observation.
+  optional double previous_value = 5;
+
+  // Percentage change from previous price.
+  // NULL/unset if this is the first price observation.
+  optional double change_percent = 6;
+
+  // Source of the price update (e.g., "exchange_api", "chainlink_oracle", "aggregator").
+  // Duplicated from price for event filtering purposes.
+  optional string source = 7;
+
+  // Venue where this price was observed.
+  // NULL for aggregated/oracle prices.
+  // Duplicated from price for event filtering purposes.
+  optional string venue_id = 8;
+
+  // Whether this is a significant price change (threshold-based trigger).
+  // Can be used for alerting or filtering important updates.
+  optional bool is_significant = 9;
+
+  // Threshold percentage that triggered this event (if applicable).
+  // Example: 5.0 for a 5% change threshold.
+  optional double trigger_threshold = 10;
+}
