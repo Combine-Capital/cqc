@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package cqc.assets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1;assetsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// FlagType represents the category of quality flag raised for an asset.
+enum FlagType {
+  FLAG_TYPE_UNSPECIFIED = 0;
+  FLAG_TYPE_SCAM = 1;           // Known scam or fraudulent token
+  FLAG_TYPE_RUGPULL = 2;        // Project executed a rug pull
+  FLAG_TYPE_EXPLOITED = 3;      // Contract has been exploited
+  FLAG_TYPE_DEPRECATED = 4;     // Token deprecated by issuer
+  FLAG_TYPE_PAUSED = 5;         // Contract functionality paused
+  FLAG_TYPE_UNVERIFIED = 6;     // Contract not verified on explorer
+  FLAG_TYPE_LOW_LIQUIDITY = 7;  // Insufficient liquidity for trading
+  FLAG_TYPE_HONEYPOT = 8;       // Cannot sell after buying
+  FLAG_TYPE_TAX_TOKEN = 9;      // Buy/sell tax mechanism present
+}
+
+// FlagSeverity indicates the criticality of a quality flag.
+enum FlagSeverity {
+  FLAG_SEVERITY_UNSPECIFIED = 0;
+  FLAG_SEVERITY_INFO = 1;       // Informational flag
+  FLAG_SEVERITY_LOW = 2;        // Low severity issue
+  FLAG_SEVERITY_MEDIUM = 3;     // Medium severity issue
+  FLAG_SEVERITY_HIGH = 4;       // High severity issue
+  FLAG_SEVERITY_CRITICAL = 5;   // Critical issue - avoid trading
+}
+
+// AssetQualityFlag represents a quality or safety flag raised for an asset.
+// Flags indicate potential risks or issues with an asset (scams, exploits, low liquidity, etc.).
+message AssetQualityFlag {
+  // Asset UUID this flag applies to.
+  optional string asset_id = 1;
+
+  // Type of flag raised.
+  optional FlagType flag_type = 2;
+
+  // Severity level of this flag.
+  optional FlagSeverity severity = 3;
+
+  // Source of this flag (e.g., "certik", "tokensniffer", "manual", "coingecko").
+  optional string source = 4;
+
+  // Timestamp when this flag was raised.
+  optional google.protobuf.Timestamp flagged_at = 5;
+
+  // Timestamp when this flag was cleared/resolved, if applicable.
+  // NULL/unset if flag is still active.
+  optional google.protobuf.Timestamp cleared_at = 6;
+
+  // Additional notes or details about this flag.
+  optional string notes = 7;
+
+  // URL to evidence or documentation supporting this flag.
+  optional string evidence_url = 8;
+
+  // Additional flag-specific metadata.
+  optional google.protobuf.Struct metadata = 9;
+}

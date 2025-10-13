@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package cqc.assets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1;assetsv1";
+
+import "google/protobuf/struct.proto";
+
+// Chain represents a blockchain network.
+message Chain {
+  // Unique chain identifier (e.g., "ethereum", "polygon", "arbitrum", "solana", "bitcoin").
+  optional string chain_id = 1;
+
+  // Human-readable chain name (e.g., "Ethereum", "Polygon", "Arbitrum", "Solana", "Bitcoin").
+  optional string chain_name = 2;
+
+  // Asset UUID of the native token for this chain.
+  // Example: ETH asset UUID for Ethereum, SOL asset UUID for Solana.
+  optional string native_asset_id = 3;
+
+  // Chain type/architecture (e.g., "evm", "solana", "bitcoin", "cosmos").
+  optional string chain_type = 4;
+
+  // Network ID or chain ID for transaction signing (e.g., 1 for Ethereum mainnet, 137 for Polygon).
+  // Used primarily for EVM chains.
+  optional int64 network_id = 5;
+
+  // Block explorer URL for this chain (e.g., "https://etherscan.io", "https://solscan.io").
+  optional string explorer_url = 6;
+
+  // Primary RPC endpoint URL for connecting to this chain.
+  optional string rpc_url = 7;
+
+  // Whether this is a testnet (true) or mainnet (false).
+  optional bool is_testnet = 8;
+
+  // Additional chain-specific metadata.
+  optional google.protobuf.Struct metadata = 9;
+}

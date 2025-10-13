@@ -17,14 +17,15 @@ Central contract repository providing Protocol Buffer definitions, OpenAPI specs
 - **Success:** Generate service implementations with correct data types and successful inter-service communication
 
 ## Core Requirements
-- [MVP] Define protobuf messages for assets domain (Asset, Token, AssetMapping, AssetMetadata, Chain, AssetID)
+- [MVP] Define protobuf messages for assets domain (Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain)
+- [MVP] Define protobuf enums for assets domain (AssetType, RelationshipType, DataSource, FlagType, FlagSeverity)
+- [MVP] Define protobuf messages for venues domain (Venue, VenueSymbol, VenueType enum)
 - [MVP] Define protobuf messages for markets domain (Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics)
 - [MVP] Define protobuf messages for portfolio domain (Position, Portfolio, Allocation, Exposure, Transaction, PnL)
-- [MVP] Define protobuf messages for venues domain (Venue, VenueAccount, Order, OrderStatus, Balance, ExecutionReport)
-- [MVP] Define protobuf messages for events domain (AssetCreated, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert)
+- [MVP] Define protobuf messages for events domain (AssetCreated, AssetDeploymentCreated, RelationshipEstablished, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert)
 - [MVP] Define gRPC service interfaces for AssetRegistry, MarketData, Portfolio, VenueGateway, RiskEngine
 - [MVP] Provide Makefile with code generation targets for Go, Python, TypeScript from protobuf definitions
-- [MVP] Organize protos by versioned domain structure (assets/v1/, markets/v1/, venues/v1/, portfolio/v1/, events/v1/)
+- [MVP] Organize protos by versioned domain structure (assets/v1/, venues/v1/, markets/v1/, portfolio/v1/, events/v1/)
 - [Post MVP] Define OpenAPI 3.0 specifications for REST endpoints per service
 - [Post MVP] Provide JSON Schema definitions for service configuration files
 - [Post MVP] Include usage examples and integration tests for generated code in all target languages

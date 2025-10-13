@@ -2,7 +2,7 @@
 
 ## Progress Checklist
 - [x] **Commit 1**: Project Foundation & Configuration
-- [ ] **Commit 2**: Assets Domain Protocol Buffers
+- [x] **Commit 2**: Assets Domain Protocol Buffers
 - [ ] **Commit 3**: Markets Domain Protocol Buffers
 - [ ] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
 - [ ] **Commit 5**: Events Domain Protocol Buffers
@@ -34,20 +34,24 @@
 
 ### Commit 2: Assets Domain Protocol Buffers
 
-**Goal**: Define all protobuf messages for asset representation and identification
+**Goal**: Define all protobuf messages for asset representation, identification, and venue metadata
 **Depends**: Commit 1
 
 **Deliverables**:
-- [ ] Create `proto/assets/v1/asset.proto` with Asset, Token, Chain message definitions
-- [ ] Create `proto/assets/v1/mapping.proto` with AssetMapping, AssetID message definitions
-- [ ] Create `proto/assets/v1/metadata.proto` with AssetMetadata message definition
-- [ ] Define package as `cqc.assets.v1` with Go package option for generated code path
-- [ ] Include field numbers sequentially from 1, mark all fields as optional
+- [x] Create `proto/assets/v1/asset.proto` with Asset, AssetIdentifier messages and AssetType, DataSource enums
+- [x] Create `proto/assets/v1/deployment.proto` with AssetDeployment message for chain-specific asset deployments
+- [x] Create `proto/assets/v1/relationship.proto` with AssetRelationship, AssetGroup, AssetGroupMember messages and RelationshipType enum
+- [x] Create `proto/assets/v1/quality.proto` with AssetQualityFlag message and FlagType, FlagSeverity enums
+- [x] Create `proto/assets/v1/chain.proto` with Chain message for blockchain network metadata
+- [x] Create `proto/assets/v1/venue.proto` with Venue, VenueSymbol messages and VenueType enum (for venue metadata and symbol mapping)
+- [x] Define package as `cqc.assets.v1` with Go package option for generated code path
+- [x] Include field numbers sequentially from 1, mark all fields as optional
 
 **Success**:
-- All .proto files compile with `protoc --descriptor_set_out=/tmp/descriptor.pb proto/assets/v1/*.proto` (exits with code 0, no errors)
+- All .proto files compile with `protoc --experimental_allow_proto3_optional --descriptor_set_out=/tmp/descriptor.pb proto/assets/v1/*.proto` (exits with code 0, no errors)
 - Package declarations use consistent naming: `cqc.assets.v1`
-- Message definitions include all types specified in BRIEF (Asset, Token, AssetMapping, AssetMetadata, Chain, AssetID)
+- Message definitions include all required types: Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain, Venue, VenueSymbol
+- All enum types are defined: AssetType (9 values), RelationshipType (8 values), DataSource (5 values), VenueType (5 values), FlagType (9 values), FlagSeverity (5 values)
 
 ---
 
@@ -72,23 +76,25 @@
 
 ### Commit 4: Portfolio & Venues Domain Protocol Buffers
 
-**Goal**: Define protobuf messages for portfolio management and venue integration
+**Goal**: Define protobuf messages for portfolio management and venue trading operations
 **Depends**: Commit 1, Commit 2, Commit 3
 
 **Deliverables**:
 - [ ] Create `proto/portfolio/v1/position.proto` with Position, Exposure message definitions
 - [ ] Create `proto/portfolio/v1/portfolio.proto` with Portfolio, Allocation message definitions
 - [ ] Create `proto/portfolio/v1/transaction.proto` with Transaction, PnL message definitions
-- [ ] Create `proto/venues/v1/venue.proto` with Venue, VenueAccount message definitions
+- [ ] Create `proto/venues/v1/account.proto` with VenueAccount message definition
 - [ ] Create `proto/venues/v1/order.proto` with Order, OrderStatus message definitions
 - [ ] Create `proto/venues/v1/execution.proto` with Balance, ExecutionReport message definitions
 - [ ] Define packages as `cqc.portfolio.v1` and `cqc.venues.v1`
+- [ ] Import `proto/assets/v1/venue.proto` where needed to reference Venue and VenueSymbol
 
 **Success**:
-- All .proto files validate with `protoc --descriptor_set_out=/tmp/descriptor.pb proto/portfolio/v1/*.proto proto/venues/v1/*.proto` (exits with code 0, no errors)
+- All .proto files validate with `protoc --experimental_allow_proto3_optional --descriptor_set_out=/tmp/descriptor.pb proto/portfolio/v1/*.proto proto/venues/v1/*.proto` (exits with code 0, no errors)
 - Portfolio domain includes all types from BRIEF (Position, Portfolio, Allocation, Exposure, Transaction, PnL)
-- Venues domain includes all types from BRIEF (Venue, VenueAccount, Order, OrderStatus, Balance, ExecutionReport)
-- Cross-domain imports resolve correctly (portfolio may reference assets/markets, venues may reference assets)
+- Venues domain includes all types for trading operations (VenueAccount, Order, OrderStatus, Balance, ExecutionReport)
+- Note: Venue and VenueSymbol are already defined in `proto/assets/v1/venue.proto` (Commit 2)
+- Cross-domain imports resolve correctly (portfolio may reference assets/markets, venues may reference assets for Venue/VenueSymbol)
 
 ---
 

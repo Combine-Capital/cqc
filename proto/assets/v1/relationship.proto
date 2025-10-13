@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package cqc.assets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1;assetsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// RelationshipType defines the nature of relationships between assets.
+enum RelationshipType {
+  RELATIONSHIP_TYPE_UNSPECIFIED = 0;
+  RELATIONSHIP_TYPE_WRAPS = 1;            // Wraps an underlying asset (WETH wraps ETH)
+  RELATIONSHIP_TYPE_BRIDGES = 2;          // Bridged to another chain
+  RELATIONSHIP_TYPE_STAKES = 3;           // Liquid staking derivative (stETH stakes ETH)
+  RELATIONSHIP_TYPE_SYNTHETIC_OF = 4;     // Synthetic representation of an asset
+  RELATIONSHIP_TYPE_LIQUIDITY_PAIR = 5;   // LP token containing multiple assets
+  RELATIONSHIP_TYPE_MIGRATES_TO = 6;      // Token migration path (old -> new)
+  RELATIONSHIP_TYPE_FORKS_FROM = 7;       // Blockchain fork (ETH -> ETC)
+  RELATIONSHIP_TYPE_REBASES_WITH = 8;     // Rebasing token variant
+}
+
+// AssetRelationship represents a relationship between two assets.
+// Examples: WETH wraps ETH, stETH stakes ETH, bridged USDC relates to native USDC.
+message AssetRelationship {
+  // Parent asset UUID (the underlying or source asset).
+  // Example: ETH is the parent when WETH wraps it.
+  optional string parent_asset_id = 1;
+
+  // Child asset UUID (the derivative or resulting asset).
+  // Example: WETH is the child when it wraps ETH.
+  optional string child_asset_id = 2;
+
+  // Type of relationship between parent and child.
+  optional RelationshipType relationship_type = 3;
+
+  // Conversion rate between assets, if fixed.
+  // Represented as string to preserve precision.
+  // NULL/empty for non-1:1 conversions (e.g., stETH to ETH is variable).
+  // Example: "1.000000000000000000" for 1:1 wrapping.
+  optional string conversion_rate = 4;
+
+  // Protocol facilitating this relationship (e.g., "Lido", "Aave", "Uniswap", "Wormhole").
+  optional string protocol = 5;
+
+  // Additional relationship-specific metadata.
+  optional google.protobuf.Struct metadata = 6;
+
+  // Timestamp when this relationship was established.
+  optional google.protobuf.Timestamp created_at = 7;
+}
+
+// AssetGroup represents a logical grouping of related assets.
+// Examples: All USDC variants across chains, all native ETH versions.
+message AssetGroup {
+  // Unique group identifier (e.g., "usdc-circle", "eth-native", "btc-native").
+  optional string group_id = 1;
+
+  // Canonical symbol for this group (e.g., "USDC", "ETH", "BTC").
+  optional string canonical_symbol = 2;
+
+  // Issuer or controlling entity (e.g., "circle", "ethereum-foundation").
+  optional string issuer = 3;
+
+  // Description of what this group represents.
+  optional string description = 4;
+
+  // Additional group metadata.
+  optional google.protobuf.Struct metadata = 5;
+}
+
+// AssetGroupMember represents membership of an asset in a group.
+message AssetGroupMember {
+  // Group identifier this membership belongs to.
+  optional string group_id = 1;
+
+  // Asset UUID that is a member of this group.
+  optional string asset_id = 2;
+
+  // Whether this asset is the canonical representative of the group.
+  // Example: USDC on Ethereum is canonical for the USDC group.
+  optional bool is_canonical = 3;
+}

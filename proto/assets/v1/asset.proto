@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package cqc.assets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1;assetsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// AssetType represents the classification of an asset based on its technical implementation.
+enum AssetType {
+  ASSET_TYPE_UNSPECIFIED = 0;
+  ASSET_TYPE_NATIVE = 1;           // Native blockchain token (ETH, SOL, BTC)
+  ASSET_TYPE_ERC20 = 2;            // Fungible token standard on EVM chains
+  ASSET_TYPE_SPL = 3;              // Solana Program Library token
+  ASSET_TYPE_ERC721 = 4;           // Non-fungible token
+  ASSET_TYPE_ERC1155 = 5;          // Multi-token standard
+  ASSET_TYPE_SYNTHETIC = 6;        // Synthetic/derivative representation
+  ASSET_TYPE_LP_TOKEN = 7;         // Liquidity provider token
+  ASSET_TYPE_RECEIPT_TOKEN = 8;    // Receipt for deposited assets (aTokens, cTokens)
+  ASSET_TYPE_WRAPPED = 9;          // Wrapped version of native asset
+}
+
+// DataSource represents external data providers for asset metadata.
+enum DataSource {
+  DATA_SOURCE_UNSPECIFIED = 0;
+  DATA_SOURCE_COINGECKO = 1;       // CoinGecko API
+  DATA_SOURCE_COINMARKETCAP = 2;   // CoinMarketCap API
+  DATA_SOURCE_DEFILLAMA = 3;       // DefiLlama API
+  DATA_SOURCE_MESSARI = 4;         // Messari API
+  DATA_SOURCE_INTERNAL = 5;        // Internal/manual data
+}
+
+// Asset represents a canonical cross-chain asset in the system.
+// Assets represent the logical/conceptual asset (e.g., "USDC") while deployments
+// represent specific on-chain instances (e.g., USDC on Ethereum, USDC on Polygon).
+message Asset {
+  // Unique UUID identifier for the asset.
+  // Represented as string in UUID format (e.g., "550e8400-e29b-41d4-a716-446655440000").
+  optional string asset_id = 1;
+
+  // Trading symbol (e.g., "BTC", "ETH", "USDC").
+  optional string symbol = 2;
+
+  // Full human-readable name (e.g., "Bitcoin", "Ethereum", "USD Coin").
+  optional string name = 3;
+
+  // Classification of the asset type.
+  optional AssetType asset_type = 4;
+
+  // Category or classification (e.g., "stablecoin", "governance", "blue_chip", "meme").
+  optional string category = 5;
+
+  // Detailed description of the asset and its purpose.
+  optional string description = 6;
+
+  // URL to asset logo image.
+  optional string logo_url = 7;
+
+  // Official website URL.
+  optional string website_url = 8;
+
+  // Timestamp when this asset record was created.
+  optional google.protobuf.Timestamp created_at = 9;
+
+  // Additional metadata as structured data.
+  optional google.protobuf.Struct metadata = 10;
+}
+
+// AssetIdentifier maps canonical assets to external data provider identifiers.
+// This enables lookups by CoinGecko ID, CoinMarketCap ID, etc.
+message AssetIdentifier {
+  // Asset UUID this identifier belongs to.
+  optional string asset_id = 1;
+
+  // Data provider/source of this identifier.
+  optional DataSource source = 2;
+
+  // External identifier from the data provider (e.g., "bitcoin" for CoinGecko, "1" for CMC).
+  optional string external_id = 3;
+
+  // Whether this is the primary identifier for this source.
+  optional bool is_primary = 4;
+
+  // Additional metadata specific to this identifier mapping.
+  optional google.protobuf.Struct metadata = 5;
+}

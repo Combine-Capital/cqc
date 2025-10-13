@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package cqc.assets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1;assetsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// VenueType represents the category of trading venue.
+enum VenueType {
+  VENUE_TYPE_UNSPECIFIED = 0;
+  VENUE_TYPE_CEX = 1;              // Centralized cryptocurrency exchange
+  VENUE_TYPE_DEX = 2;              // Decentralized exchange/AMM
+  VENUE_TYPE_DEX_AGGREGATOR = 3;   // DEX aggregator (1inch, Paraswap)
+  VENUE_TYPE_BRIDGE = 4;           // Cross-chain bridge
+  VENUE_TYPE_LENDING = 5;          // DeFi lending protocol
+}
+
+// Venue represents a trading venue, exchange, or protocol.
+message Venue {
+  // Unique venue identifier (e.g., "binance", "coinbase", "uniswap-v3-eth", "curve-eth").
+  optional string venue_id = 1;
+
+  // Human-readable venue name (e.g., "Binance", "Coinbase", "Uniswap V3", "Curve").
+  optional string name = 2;
+
+  // Type/category of this venue.
+  optional VenueType venue_type = 3;
+
+  // Chain identifier for DEXs, NULL for centralized exchanges.
+  // Example: "ethereum" for Uniswap V3 on Ethereum.
+  optional string chain_id = 4;
+
+  // Smart contract address for DEX protocols.
+  // NULL for centralized exchanges.
+  optional string protocol_address = 5;
+
+  // Official website URL.
+  optional string website_url = 6;
+
+  // API endpoint base URL for programmatic access.
+  optional string api_endpoint = 7;
+
+  // Whether this venue is currently active and operational.
+  optional bool is_active = 8;
+
+  // Additional venue-specific metadata.
+  optional google.protobuf.Struct metadata = 9;
+}
+
+// VenueSymbol maps venue-specific trading symbols to canonical assets.
+// Resolves symbol collisions across venues (e.g., "BTC" means different things on different exchanges).
+message VenueSymbol {
+  // Venue identifier this symbol belongs to.
+  optional string venue_id = 1;
+
+  // Venue-specific trading symbol (e.g., "BTCUSDT" on Binance, "BTC-USD" on Coinbase, "WBTC" on Uniswap).
+  optional string venue_symbol = 2;
+
+  // Canonical asset UUID this venue symbol represents.
+  optional string asset_id = 3;
+
+  // Specific deployment ID if this symbol refers to a particular on-chain deployment.
+  // Example: Uniswap V3 WBTC refers to specific WBTC deployment on Ethereum.
+  optional string deployment_id = 4;
+
+  // Quote asset UUID for trading pairs (e.g., USDT in BTC/USDT).
+  // NULL for spot assets that aren't trading pairs.
+  optional string quote_asset_id = 5;
+
+  // Timestamp when this asset was listed on the venue.
+  optional google.protobuf.Timestamp listed_at = 6;
+
+  // Timestamp when this asset was delisted from the venue, if applicable.
+  // NULL/unset if still listed.
+  optional google.protobuf.Timestamp delisted_at = 7;
+
+  // Additional symbol-specific metadata.
+  optional google.protobuf.Struct metadata = 8;
+}

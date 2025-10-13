@@ -5,14 +5,15 @@
 ## Core Requirements (from Brief)
 
 ### MVP Scope
-- Define protobuf messages for assets domain (Asset, Token, AssetMapping, AssetMetadata, Chain, AssetID)
+- Define protobuf messages for assets domain (Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain)
+- Define protobuf enums for assets domain (AssetType, RelationshipType, DataSource, FlagType, FlagSeverity)
+- Define protobuf messages for venues domain (Venue, VenueSymbol, VenueType enum)
 - Define protobuf messages for markets domain (Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics)
 - Define protobuf messages for portfolio domain (Position, Portfolio, Allocation, Exposure, Transaction, PnL)
-- Define protobuf messages for venues domain (Venue, VenueAccount, Order, OrderStatus, Balance, ExecutionReport)
-- Define protobuf messages for events domain (AssetCreated, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert)
+- Define protobuf messages for events domain (AssetCreated, AssetDeploymentCreated, RelationshipEstablished, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert)
 - Define gRPC service interfaces for AssetRegistry, MarketData, Portfolio, VenueGateway, RiskEngine
 - Provide Makefile with code generation targets for Go, Python, TypeScript from protobuf definitions
-- Organize protos by versioned domain structure (assets/v1/, markets/v1/, venues/v1/, portfolio/v1/, events/v1/)
+- Organize protos by versioned domain structure (assets/v1/, venues/v1/, markets/v1/, portfolio/v1/, events/v1/)
 
 ### Post-MVP Scope
 - Define OpenAPI 3.0 specifications for REST endpoints per service
@@ -123,11 +124,12 @@
 - gRPC service definition conventions
 
 **Key Responsibilities:**
-- Define message structure for assets domain (Asset, Token, AssetMapping, AssetMetadata, Chain, AssetID)
+- Define message structure for assets domain (Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain, Venue, VenueSymbol)
+- Define enum types for reference data (AssetType, RelationshipType, DataSource, FlagType, FlagSeverity, VenueType)
 - Define message structure for markets domain (Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics)
 - Define message structure for portfolio domain (Position, Portfolio, Allocation, Exposure, Transaction, PnL)
-- Define message structure for venues domain (Venue, VenueAccount, Order, OrderStatus, Balance, ExecutionReport)
-- Define message structure for events domain (AssetCreated, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert)
+- Define message structure for venues domain for trading operations (Order, OrderStatus, Balance, ExecutionReport, VenueAccount)
+- Define message structure for events domain (AssetCreated, AssetDeploymentCreated, RelationshipEstablished, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert, QualityFlagRaised)
 - Define gRPC service interfaces (AssetRegistry, MarketData, Portfolio, VenueGateway, RiskEngine)
 - Maintain backward compatibility through proper versioning
 - Include field-level documentation and validation constraints
@@ -208,9 +210,12 @@ cqc/
 ├── proto/                          # Protocol Buffer definitions
 │   ├── assets/
 │   │   └── v1/
-│   │       ├── asset.proto         # Asset, Token, Chain types
-│   │       ├── mapping.proto       # AssetMapping, AssetID
-│   │       └── metadata.proto      # AssetMetadata
+│   │       ├── asset.proto         # Asset, AssetIdentifier, AssetType enum, DataSource enum
+│   │       ├── deployment.proto    # AssetDeployment
+│   │       ├── relationship.proto  # AssetRelationship, AssetGroup, AssetGroupMember, RelationshipType enum
+│   │       ├── quality.proto       # AssetQualityFlag, FlagType enum, FlagSeverity enum
+│   │       ├── chain.proto         # Chain
+│   │       └── venue.proto         # Venue, VenueSymbol, VenueType enum
 │   ├── markets/
 │   │   └── v1/
 │   │       ├── price.proto         # Price, VWAP
@@ -224,16 +229,16 @@ cqc/
 │   │       └── transaction.proto   # Transaction, PnL
 │   ├── venues/
 │   │   └── v1/
-│   │       ├── venue.proto         # Venue, VenueAccount
 │   │       ├── order.proto         # Order, OrderStatus
-│   │       └── execution.proto     # Balance, ExecutionReport
+│   │       ├── execution.proto     # Balance, ExecutionReport
+│   │       └── account.proto       # VenueAccount
 │   ├── events/
 │   │   └── v1/
-│   │       ├── asset_events.proto  # AssetCreated
+│   │       ├── asset_events.proto  # AssetCreated, AssetDeploymentCreated, RelationshipEstablished
 │   │       ├── market_events.proto # PriceUpdated
 │   │       ├── order_events.proto  # OrderPlaced
 │   │       ├── position_events.proto # PositionChanged
-│   │       └── risk_events.proto   # RiskAlert
+│   │       └── risk_events.proto   # RiskAlert, QualityFlagRaised
 │   └── services/
 │       └── v1/
 │           ├── asset_registry.proto   # AssetRegistry service
