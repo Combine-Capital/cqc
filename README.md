@@ -45,17 +45,26 @@ cqc/
 
 #### Go
 ```bash
-go get github.com/Combine-Capital/cqc/gen/go/cqc
+# Latest version
+go get github.com/Combine-Capital/cqc/gen/go@latest
+
+# Specific version (recommended)
+go get github.com/Combine-Capital/cqc/gen/go@v0.1.0
+```
+
+Or add to your `go.mod`:
+```go
+require github.com/Combine-Capital/cqc/gen/go v0.1.0
 ```
 
 #### Python
 ```bash
-pip install cqc
+pip install cqc==0.1.0
 ```
 
 #### TypeScript
 ```bash
-npm install @cq/cqc
+npm install @cq/cqc@0.1.0
 ```
 
 ### Usage Examples
@@ -318,8 +327,44 @@ python -c "from cqc.assets.v1 import asset_pb2"
 npm run build
 ```
 
+## Versioning
+
+This project follows [Semantic Versioning 2.0.0](https://semver.org/).
+
+### Current Version: v0.1.0
+
+During pre-1.0 development (0.x.x):
+- **0.X.0** (minor) - May include breaking changes, new features
+- **0.0.X** (patch) - Backward compatible bug fixes
+
+After 1.0.0:
+- **X.0.0** (major) - Breaking API changes
+- **0.X.0** (minor) - Backward compatible new features
+- **0.0.X** (patch) - Backward compatible bug fixes
+
+### Using Specific Versions in Go
+
+```go
+// In go.mod - pin to specific version
+require github.com/Combine-Capital/cqc/gen/go v0.1.0
+
+// Or use version constraints
+require github.com/Combine-Capital/cqc/gen/go v0.1  // Any 0.1.x
+```
+
+### Checking Version
+
+```bash
+# List all available versions
+git tag -l
+
+# View changelog
+cat CHANGELOG.md
+```
+
 ## Documentation
 
+- [CHANGELOG](CHANGELOG.md) - Version history and migration guides
 - [Project Brief](docs/BRIEF.md) - Vision, requirements, and success metrics
 - [Technical Specification](docs/SPEC.md) - Architecture and implementation details
 - [Implementation Roadmap](docs/ROADMAP.md) - Development sequence and milestones
