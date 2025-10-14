@@ -43,9 +43,21 @@ const (
 	AssetRegistry_CreateChain_FullMethodName             = "/cqc.services.v1.AssetRegistry/CreateChain"
 	AssetRegistry_GetChain_FullMethodName                = "/cqc.services.v1.AssetRegistry/GetChain"
 	AssetRegistry_ListChains_FullMethodName              = "/cqc.services.v1.AssetRegistry/ListChains"
+	AssetRegistry_CreateSymbol_FullMethodName            = "/cqc.services.v1.AssetRegistry/CreateSymbol"
+	AssetRegistry_GetSymbol_FullMethodName               = "/cqc.services.v1.AssetRegistry/GetSymbol"
+	AssetRegistry_UpdateSymbol_FullMethodName            = "/cqc.services.v1.AssetRegistry/UpdateSymbol"
+	AssetRegistry_DeleteSymbol_FullMethodName            = "/cqc.services.v1.AssetRegistry/DeleteSymbol"
+	AssetRegistry_ListSymbols_FullMethodName             = "/cqc.services.v1.AssetRegistry/ListSymbols"
+	AssetRegistry_SearchSymbols_FullMethodName           = "/cqc.services.v1.AssetRegistry/SearchSymbols"
+	AssetRegistry_CreateSymbolIdentifier_FullMethodName  = "/cqc.services.v1.AssetRegistry/CreateSymbolIdentifier"
+	AssetRegistry_GetSymbolIdentifier_FullMethodName     = "/cqc.services.v1.AssetRegistry/GetSymbolIdentifier"
+	AssetRegistry_ListSymbolIdentifiers_FullMethodName   = "/cqc.services.v1.AssetRegistry/ListSymbolIdentifiers"
 	AssetRegistry_CreateVenue_FullMethodName             = "/cqc.services.v1.AssetRegistry/CreateVenue"
 	AssetRegistry_GetVenue_FullMethodName                = "/cqc.services.v1.AssetRegistry/GetVenue"
 	AssetRegistry_ListVenues_FullMethodName              = "/cqc.services.v1.AssetRegistry/ListVenues"
+	AssetRegistry_CreateVenueAsset_FullMethodName        = "/cqc.services.v1.AssetRegistry/CreateVenueAsset"
+	AssetRegistry_GetVenueAsset_FullMethodName           = "/cqc.services.v1.AssetRegistry/GetVenueAsset"
+	AssetRegistry_ListVenueAssets_FullMethodName         = "/cqc.services.v1.AssetRegistry/ListVenueAssets"
 	AssetRegistry_CreateVenueSymbol_FullMethodName       = "/cqc.services.v1.AssetRegistry/CreateVenueSymbol"
 	AssetRegistry_GetVenueSymbol_FullMethodName          = "/cqc.services.v1.AssetRegistry/GetVenueSymbol"
 	AssetRegistry_ListVenueSymbols_FullMethodName        = "/cqc.services.v1.AssetRegistry/ListVenueSymbols"
@@ -103,17 +115,41 @@ type AssetRegistryClient interface {
 	GetChain(ctx context.Context, in *GetChainRequest, opts ...grpc.CallOption) (*GetChainResponse, error)
 	// ListChains lists all registered blockchain networks.
 	ListChains(ctx context.Context, in *ListChainsRequest, opts ...grpc.CallOption) (*ListChainsResponse, error)
+	// CreateSymbol creates a new trading symbol/market.
+	CreateSymbol(ctx context.Context, in *CreateSymbolRequest, opts ...grpc.CallOption) (*CreateSymbolResponse, error)
+	// GetSymbol retrieves a specific symbol by ID.
+	GetSymbol(ctx context.Context, in *GetSymbolRequest, opts ...grpc.CallOption) (*GetSymbolResponse, error)
+	// UpdateSymbol updates an existing symbol's metadata.
+	UpdateSymbol(ctx context.Context, in *UpdateSymbolRequest, opts ...grpc.CallOption) (*UpdateSymbolResponse, error)
+	// DeleteSymbol soft-deletes a symbol from the registry.
+	DeleteSymbol(ctx context.Context, in *DeleteSymbolRequest, opts ...grpc.CallOption) (*DeleteSymbolResponse, error)
+	// ListSymbols retrieves a paginated list of symbols with optional filtering.
+	ListSymbols(ctx context.Context, in *ListSymbolsRequest, opts ...grpc.CallOption) (*ListSymbolsResponse, error)
+	// SearchSymbols searches for symbols by name or other criteria.
+	SearchSymbols(ctx context.Context, in *SearchSymbolsRequest, opts ...grpc.CallOption) (*SearchSymbolsResponse, error)
+	// CreateSymbolIdentifier adds an external identifier mapping for a symbol.
+	CreateSymbolIdentifier(ctx context.Context, in *CreateSymbolIdentifierRequest, opts ...grpc.CallOption) (*CreateSymbolIdentifierResponse, error)
+	// GetSymbolIdentifier retrieves a symbol identifier mapping.
+	GetSymbolIdentifier(ctx context.Context, in *GetSymbolIdentifierRequest, opts ...grpc.CallOption) (*GetSymbolIdentifierResponse, error)
+	// ListSymbolIdentifiers lists all identifier mappings for a symbol.
+	ListSymbolIdentifiers(ctx context.Context, in *ListSymbolIdentifiersRequest, opts ...grpc.CallOption) (*ListSymbolIdentifiersResponse, error)
 	// CreateVenue registers a new trading venue.
 	CreateVenue(ctx context.Context, in *CreateVenueRequest, opts ...grpc.CallOption) (*CreateVenueResponse, error)
 	// GetVenue retrieves a specific venue by ID.
 	GetVenue(ctx context.Context, in *GetVenueRequest, opts ...grpc.CallOption) (*GetVenueResponse, error)
 	// ListVenues lists all registered trading venues.
 	ListVenues(ctx context.Context, in *ListVenuesRequest, opts ...grpc.CallOption) (*ListVenuesResponse, error)
-	// CreateVenueSymbol maps a venue's trading symbol to a canonical asset.
+	// CreateVenueAsset registers asset availability on a venue.
+	CreateVenueAsset(ctx context.Context, in *CreateVenueAssetRequest, opts ...grpc.CallOption) (*CreateVenueAssetResponse, error)
+	// GetVenueAsset retrieves venue asset availability information.
+	GetVenueAsset(ctx context.Context, in *GetVenueAssetRequest, opts ...grpc.CallOption) (*GetVenueAssetResponse, error)
+	// ListVenueAssets lists all assets available on a venue or all venues for an asset.
+	ListVenueAssets(ctx context.Context, in *ListVenueAssetsRequest, opts ...grpc.CallOption) (*ListVenueAssetsResponse, error)
+	// CreateVenueSymbol maps a venue's trading symbol to a canonical symbol.
 	CreateVenueSymbol(ctx context.Context, in *CreateVenueSymbolRequest, opts ...grpc.CallOption) (*CreateVenueSymbolResponse, error)
 	// GetVenueSymbol retrieves a venue symbol mapping.
 	GetVenueSymbol(ctx context.Context, in *GetVenueSymbolRequest, opts ...grpc.CallOption) (*GetVenueSymbolResponse, error)
-	// ListVenueSymbols lists all symbol mappings for a venue or asset.
+	// ListVenueSymbols lists all symbol mappings for a venue or symbol.
 	ListVenueSymbols(ctx context.Context, in *ListVenueSymbolsRequest, opts ...grpc.CallOption) (*ListVenueSymbolsResponse, error)
 }
 
@@ -341,6 +377,87 @@ func (c *assetRegistryClient) ListChains(ctx context.Context, in *ListChainsRequ
 	return out, nil
 }
 
+func (c *assetRegistryClient) CreateSymbol(ctx context.Context, in *CreateSymbolRequest, opts ...grpc.CallOption) (*CreateSymbolResponse, error) {
+	out := new(CreateSymbolResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_CreateSymbol_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) GetSymbol(ctx context.Context, in *GetSymbolRequest, opts ...grpc.CallOption) (*GetSymbolResponse, error) {
+	out := new(GetSymbolResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetSymbol_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) UpdateSymbol(ctx context.Context, in *UpdateSymbolRequest, opts ...grpc.CallOption) (*UpdateSymbolResponse, error) {
+	out := new(UpdateSymbolResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_UpdateSymbol_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) DeleteSymbol(ctx context.Context, in *DeleteSymbolRequest, opts ...grpc.CallOption) (*DeleteSymbolResponse, error) {
+	out := new(DeleteSymbolResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_DeleteSymbol_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) ListSymbols(ctx context.Context, in *ListSymbolsRequest, opts ...grpc.CallOption) (*ListSymbolsResponse, error) {
+	out := new(ListSymbolsResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_ListSymbols_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) SearchSymbols(ctx context.Context, in *SearchSymbolsRequest, opts ...grpc.CallOption) (*SearchSymbolsResponse, error) {
+	out := new(SearchSymbolsResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_SearchSymbols_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) CreateSymbolIdentifier(ctx context.Context, in *CreateSymbolIdentifierRequest, opts ...grpc.CallOption) (*CreateSymbolIdentifierResponse, error) {
+	out := new(CreateSymbolIdentifierResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_CreateSymbolIdentifier_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) GetSymbolIdentifier(ctx context.Context, in *GetSymbolIdentifierRequest, opts ...grpc.CallOption) (*GetSymbolIdentifierResponse, error) {
+	out := new(GetSymbolIdentifierResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetSymbolIdentifier_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) ListSymbolIdentifiers(ctx context.Context, in *ListSymbolIdentifiersRequest, opts ...grpc.CallOption) (*ListSymbolIdentifiersResponse, error) {
+	out := new(ListSymbolIdentifiersResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_ListSymbolIdentifiers_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *assetRegistryClient) CreateVenue(ctx context.Context, in *CreateVenueRequest, opts ...grpc.CallOption) (*CreateVenueResponse, error) {
 	out := new(CreateVenueResponse)
 	err := c.cc.Invoke(ctx, AssetRegistry_CreateVenue_FullMethodName, in, out, opts...)
@@ -362,6 +479,33 @@ func (c *assetRegistryClient) GetVenue(ctx context.Context, in *GetVenueRequest,
 func (c *assetRegistryClient) ListVenues(ctx context.Context, in *ListVenuesRequest, opts ...grpc.CallOption) (*ListVenuesResponse, error) {
 	out := new(ListVenuesResponse)
 	err := c.cc.Invoke(ctx, AssetRegistry_ListVenues_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) CreateVenueAsset(ctx context.Context, in *CreateVenueAssetRequest, opts ...grpc.CallOption) (*CreateVenueAssetResponse, error) {
+	out := new(CreateVenueAssetResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_CreateVenueAsset_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) GetVenueAsset(ctx context.Context, in *GetVenueAssetRequest, opts ...grpc.CallOption) (*GetVenueAssetResponse, error) {
+	out := new(GetVenueAssetResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetVenueAsset_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) ListVenueAssets(ctx context.Context, in *ListVenueAssetsRequest, opts ...grpc.CallOption) (*ListVenueAssetsResponse, error) {
+	out := new(ListVenueAssetsResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_ListVenueAssets_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -447,17 +591,41 @@ type AssetRegistryServer interface {
 	GetChain(context.Context, *GetChainRequest) (*GetChainResponse, error)
 	// ListChains lists all registered blockchain networks.
 	ListChains(context.Context, *ListChainsRequest) (*ListChainsResponse, error)
+	// CreateSymbol creates a new trading symbol/market.
+	CreateSymbol(context.Context, *CreateSymbolRequest) (*CreateSymbolResponse, error)
+	// GetSymbol retrieves a specific symbol by ID.
+	GetSymbol(context.Context, *GetSymbolRequest) (*GetSymbolResponse, error)
+	// UpdateSymbol updates an existing symbol's metadata.
+	UpdateSymbol(context.Context, *UpdateSymbolRequest) (*UpdateSymbolResponse, error)
+	// DeleteSymbol soft-deletes a symbol from the registry.
+	DeleteSymbol(context.Context, *DeleteSymbolRequest) (*DeleteSymbolResponse, error)
+	// ListSymbols retrieves a paginated list of symbols with optional filtering.
+	ListSymbols(context.Context, *ListSymbolsRequest) (*ListSymbolsResponse, error)
+	// SearchSymbols searches for symbols by name or other criteria.
+	SearchSymbols(context.Context, *SearchSymbolsRequest) (*SearchSymbolsResponse, error)
+	// CreateSymbolIdentifier adds an external identifier mapping for a symbol.
+	CreateSymbolIdentifier(context.Context, *CreateSymbolIdentifierRequest) (*CreateSymbolIdentifierResponse, error)
+	// GetSymbolIdentifier retrieves a symbol identifier mapping.
+	GetSymbolIdentifier(context.Context, *GetSymbolIdentifierRequest) (*GetSymbolIdentifierResponse, error)
+	// ListSymbolIdentifiers lists all identifier mappings for a symbol.
+	ListSymbolIdentifiers(context.Context, *ListSymbolIdentifiersRequest) (*ListSymbolIdentifiersResponse, error)
 	// CreateVenue registers a new trading venue.
 	CreateVenue(context.Context, *CreateVenueRequest) (*CreateVenueResponse, error)
 	// GetVenue retrieves a specific venue by ID.
 	GetVenue(context.Context, *GetVenueRequest) (*GetVenueResponse, error)
 	// ListVenues lists all registered trading venues.
 	ListVenues(context.Context, *ListVenuesRequest) (*ListVenuesResponse, error)
-	// CreateVenueSymbol maps a venue's trading symbol to a canonical asset.
+	// CreateVenueAsset registers asset availability on a venue.
+	CreateVenueAsset(context.Context, *CreateVenueAssetRequest) (*CreateVenueAssetResponse, error)
+	// GetVenueAsset retrieves venue asset availability information.
+	GetVenueAsset(context.Context, *GetVenueAssetRequest) (*GetVenueAssetResponse, error)
+	// ListVenueAssets lists all assets available on a venue or all venues for an asset.
+	ListVenueAssets(context.Context, *ListVenueAssetsRequest) (*ListVenueAssetsResponse, error)
+	// CreateVenueSymbol maps a venue's trading symbol to a canonical symbol.
 	CreateVenueSymbol(context.Context, *CreateVenueSymbolRequest) (*CreateVenueSymbolResponse, error)
 	// GetVenueSymbol retrieves a venue symbol mapping.
 	GetVenueSymbol(context.Context, *GetVenueSymbolRequest) (*GetVenueSymbolResponse, error)
-	// ListVenueSymbols lists all symbol mappings for a venue or asset.
+	// ListVenueSymbols lists all symbol mappings for a venue or symbol.
 	ListVenueSymbols(context.Context, *ListVenueSymbolsRequest) (*ListVenueSymbolsResponse, error)
 	mustEmbedUnimplementedAssetRegistryServer()
 }
@@ -538,6 +706,33 @@ func (UnimplementedAssetRegistryServer) GetChain(context.Context, *GetChainReque
 func (UnimplementedAssetRegistryServer) ListChains(context.Context, *ListChainsRequest) (*ListChainsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListChains not implemented")
 }
+func (UnimplementedAssetRegistryServer) CreateSymbol(context.Context, *CreateSymbolRequest) (*CreateSymbolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSymbol not implemented")
+}
+func (UnimplementedAssetRegistryServer) GetSymbol(context.Context, *GetSymbolRequest) (*GetSymbolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSymbol not implemented")
+}
+func (UnimplementedAssetRegistryServer) UpdateSymbol(context.Context, *UpdateSymbolRequest) (*UpdateSymbolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSymbol not implemented")
+}
+func (UnimplementedAssetRegistryServer) DeleteSymbol(context.Context, *DeleteSymbolRequest) (*DeleteSymbolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSymbol not implemented")
+}
+func (UnimplementedAssetRegistryServer) ListSymbols(context.Context, *ListSymbolsRequest) (*ListSymbolsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListSymbols not implemented")
+}
+func (UnimplementedAssetRegistryServer) SearchSymbols(context.Context, *SearchSymbolsRequest) (*SearchSymbolsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchSymbols not implemented")
+}
+func (UnimplementedAssetRegistryServer) CreateSymbolIdentifier(context.Context, *CreateSymbolIdentifierRequest) (*CreateSymbolIdentifierResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSymbolIdentifier not implemented")
+}
+func (UnimplementedAssetRegistryServer) GetSymbolIdentifier(context.Context, *GetSymbolIdentifierRequest) (*GetSymbolIdentifierResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSymbolIdentifier not implemented")
+}
+func (UnimplementedAssetRegistryServer) ListSymbolIdentifiers(context.Context, *ListSymbolIdentifiersRequest) (*ListSymbolIdentifiersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListSymbolIdentifiers not implemented")
+}
 func (UnimplementedAssetRegistryServer) CreateVenue(context.Context, *CreateVenueRequest) (*CreateVenueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateVenue not implemented")
 }
@@ -546,6 +741,15 @@ func (UnimplementedAssetRegistryServer) GetVenue(context.Context, *GetVenueReque
 }
 func (UnimplementedAssetRegistryServer) ListVenues(context.Context, *ListVenuesRequest) (*ListVenuesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVenues not implemented")
+}
+func (UnimplementedAssetRegistryServer) CreateVenueAsset(context.Context, *CreateVenueAssetRequest) (*CreateVenueAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateVenueAsset not implemented")
+}
+func (UnimplementedAssetRegistryServer) GetVenueAsset(context.Context, *GetVenueAssetRequest) (*GetVenueAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVenueAsset not implemented")
+}
+func (UnimplementedAssetRegistryServer) ListVenueAssets(context.Context, *ListVenueAssetsRequest) (*ListVenueAssetsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListVenueAssets not implemented")
 }
 func (UnimplementedAssetRegistryServer) CreateVenueSymbol(context.Context, *CreateVenueSymbolRequest) (*CreateVenueSymbolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateVenueSymbol not implemented")
@@ -1001,6 +1205,168 @@ func _AssetRegistry_ListChains_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AssetRegistry_CreateSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSymbolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).CreateSymbol(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_CreateSymbol_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).CreateSymbol(ctx, req.(*CreateSymbolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_GetSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSymbolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).GetSymbol(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_GetSymbol_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).GetSymbol(ctx, req.(*GetSymbolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_UpdateSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSymbolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).UpdateSymbol(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_UpdateSymbol_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).UpdateSymbol(ctx, req.(*UpdateSymbolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_DeleteSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSymbolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).DeleteSymbol(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_DeleteSymbol_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).DeleteSymbol(ctx, req.(*DeleteSymbolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_ListSymbols_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSymbolsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).ListSymbols(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_ListSymbols_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).ListSymbols(ctx, req.(*ListSymbolsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_SearchSymbols_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchSymbolsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).SearchSymbols(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_SearchSymbols_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).SearchSymbols(ctx, req.(*SearchSymbolsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_CreateSymbolIdentifier_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSymbolIdentifierRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).CreateSymbolIdentifier(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_CreateSymbolIdentifier_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).CreateSymbolIdentifier(ctx, req.(*CreateSymbolIdentifierRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_GetSymbolIdentifier_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSymbolIdentifierRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).GetSymbolIdentifier(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_GetSymbolIdentifier_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).GetSymbolIdentifier(ctx, req.(*GetSymbolIdentifierRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_ListSymbolIdentifiers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSymbolIdentifiersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).ListSymbolIdentifiers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_ListSymbolIdentifiers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).ListSymbolIdentifiers(ctx, req.(*ListSymbolIdentifiersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AssetRegistry_CreateVenue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateVenueRequest)
 	if err := dec(in); err != nil {
@@ -1051,6 +1417,60 @@ func _AssetRegistry_ListVenues_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AssetRegistryServer).ListVenues(ctx, req.(*ListVenuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_CreateVenueAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateVenueAssetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).CreateVenueAsset(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_CreateVenueAsset_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).CreateVenueAsset(ctx, req.(*CreateVenueAssetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_GetVenueAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVenueAssetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).GetVenueAsset(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_GetVenueAsset_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).GetVenueAsset(ctx, req.(*GetVenueAssetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_ListVenueAssets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListVenueAssetsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).ListVenueAssets(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_ListVenueAssets_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).ListVenueAssets(ctx, req.(*ListVenueAssetsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1213,6 +1633,42 @@ var AssetRegistry_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AssetRegistry_ListChains_Handler,
 		},
 		{
+			MethodName: "CreateSymbol",
+			Handler:    _AssetRegistry_CreateSymbol_Handler,
+		},
+		{
+			MethodName: "GetSymbol",
+			Handler:    _AssetRegistry_GetSymbol_Handler,
+		},
+		{
+			MethodName: "UpdateSymbol",
+			Handler:    _AssetRegistry_UpdateSymbol_Handler,
+		},
+		{
+			MethodName: "DeleteSymbol",
+			Handler:    _AssetRegistry_DeleteSymbol_Handler,
+		},
+		{
+			MethodName: "ListSymbols",
+			Handler:    _AssetRegistry_ListSymbols_Handler,
+		},
+		{
+			MethodName: "SearchSymbols",
+			Handler:    _AssetRegistry_SearchSymbols_Handler,
+		},
+		{
+			MethodName: "CreateSymbolIdentifier",
+			Handler:    _AssetRegistry_CreateSymbolIdentifier_Handler,
+		},
+		{
+			MethodName: "GetSymbolIdentifier",
+			Handler:    _AssetRegistry_GetSymbolIdentifier_Handler,
+		},
+		{
+			MethodName: "ListSymbolIdentifiers",
+			Handler:    _AssetRegistry_ListSymbolIdentifiers_Handler,
+		},
+		{
 			MethodName: "CreateVenue",
 			Handler:    _AssetRegistry_CreateVenue_Handler,
 		},
@@ -1223,6 +1679,18 @@ var AssetRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListVenues",
 			Handler:    _AssetRegistry_ListVenues_Handler,
+		},
+		{
+			MethodName: "CreateVenueAsset",
+			Handler:    _AssetRegistry_CreateVenueAsset_Handler,
+		},
+		{
+			MethodName: "GetVenueAsset",
+			Handler:    _AssetRegistry_GetVenueAsset_Handler,
+		},
+		{
+			MethodName: "ListVenueAssets",
+			Handler:    _AssetRegistry_ListVenueAssets_Handler,
 		},
 		{
 			MethodName: "CreateVenueSymbol",

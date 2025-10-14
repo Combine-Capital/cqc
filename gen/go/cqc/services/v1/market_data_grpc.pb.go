@@ -40,35 +40,35 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MarketDataClient interface {
-	// GetPrice retrieves the current price for an asset.
+	// GetPrice retrieves the current price for a trading symbol.
 	GetPrice(ctx context.Context, in *GetPriceRequest, opts ...grpc.CallOption) (*GetPriceResponse, error)
-	// StreamPrices streams real-time price updates for specified assets.
+	// StreamPrices streams real-time price updates for specified symbols.
 	StreamPrices(ctx context.Context, in *StreamPricesRequest, opts ...grpc.CallOption) (MarketData_StreamPricesClient, error)
-	// GetPriceHistory retrieves historical prices for an asset within a time range.
+	// GetPriceHistory retrieves historical prices for a symbol within a time range.
 	GetPriceHistory(ctx context.Context, in *GetPriceHistoryRequest, opts ...grpc.CallOption) (*GetPriceHistoryResponse, error)
-	// GetVWAP retrieves the Volume-Weighted Average Price for an asset.
+	// GetVWAP retrieves the Volume-Weighted Average Price for a symbol.
 	GetVWAP(ctx context.Context, in *GetVWAPRequest, opts ...grpc.CallOption) (*GetVWAPResponse, error)
-	// GetOrderBook retrieves the current order book snapshot for a trading pair.
+	// GetOrderBook retrieves the current order book snapshot for a trading symbol.
 	GetOrderBook(ctx context.Context, in *GetOrderBookRequest, opts ...grpc.CallOption) (*GetOrderBookResponse, error)
-	// StreamOrderBook streams real-time order book updates for a trading pair.
+	// StreamOrderBook streams real-time order book updates for a trading symbol.
 	StreamOrderBook(ctx context.Context, in *StreamOrderBookRequest, opts ...grpc.CallOption) (MarketData_StreamOrderBookClient, error)
-	// GetMarketDepth retrieves liquidity depth metrics for a trading pair.
+	// GetMarketDepth retrieves liquidity depth metrics for a trading symbol.
 	GetMarketDepth(ctx context.Context, in *GetMarketDepthRequest, opts ...grpc.CallOption) (*GetMarketDepthResponse, error)
 	// GetTrade retrieves a specific trade by ID.
 	GetTrade(ctx context.Context, in *GetTradeRequest, opts ...grpc.CallOption) (*GetTradeResponse, error)
-	// ListTrades retrieves recent trades for a trading pair.
+	// ListTrades retrieves recent trades for a trading symbol.
 	ListTrades(ctx context.Context, in *ListTradesRequest, opts ...grpc.CallOption) (*ListTradesResponse, error)
-	// StreamTrades streams real-time trade executions for specified trading pairs.
+	// StreamTrades streams real-time trade executions for specified symbols.
 	StreamTrades(ctx context.Context, in *StreamTradesRequest, opts ...grpc.CallOption) (MarketData_StreamTradesClient, error)
-	// GetCandle retrieves a specific candle for a trading pair at a given time.
+	// GetCandle retrieves a specific candle for a trading symbol at a given time.
 	GetCandle(ctx context.Context, in *GetCandleRequest, opts ...grpc.CallOption) (*GetCandleResponse, error)
 	// ListCandles retrieves historical candle data for charting and analysis.
 	ListCandles(ctx context.Context, in *ListCandlesRequest, opts ...grpc.CallOption) (*ListCandlesResponse, error)
-	// GetLiquidityMetrics retrieves liquidity metrics for a trading pair or venue.
+	// GetLiquidityMetrics retrieves liquidity metrics for a trading symbol or venue.
 	GetLiquidityMetrics(ctx context.Context, in *GetLiquidityMetricsRequest, opts ...grpc.CallOption) (*GetLiquidityMetricsResponse, error)
-	// GetMultiVenuePrice retrieves and aggregates prices across multiple venues.
+	// GetMultiVenuePrice retrieves and aggregates prices across multiple venues for a symbol.
 	GetMultiVenuePrice(ctx context.Context, in *GetMultiVenuePriceRequest, opts ...grpc.CallOption) (*GetMultiVenuePriceResponse, error)
-	// GetMarketSummary retrieves a comprehensive market summary for an asset.
+	// GetMarketSummary retrieves a comprehensive market summary for a symbol.
 	GetMarketSummary(ctx context.Context, in *GetMarketSummaryRequest, opts ...grpc.CallOption) (*GetMarketSummaryResponse, error)
 }
 
@@ -288,35 +288,35 @@ func (c *marketDataClient) GetMarketSummary(ctx context.Context, in *GetMarketSu
 // All implementations must embed UnimplementedMarketDataServer
 // for forward compatibility
 type MarketDataServer interface {
-	// GetPrice retrieves the current price for an asset.
+	// GetPrice retrieves the current price for a trading symbol.
 	GetPrice(context.Context, *GetPriceRequest) (*GetPriceResponse, error)
-	// StreamPrices streams real-time price updates for specified assets.
+	// StreamPrices streams real-time price updates for specified symbols.
 	StreamPrices(*StreamPricesRequest, MarketData_StreamPricesServer) error
-	// GetPriceHistory retrieves historical prices for an asset within a time range.
+	// GetPriceHistory retrieves historical prices for a symbol within a time range.
 	GetPriceHistory(context.Context, *GetPriceHistoryRequest) (*GetPriceHistoryResponse, error)
-	// GetVWAP retrieves the Volume-Weighted Average Price for an asset.
+	// GetVWAP retrieves the Volume-Weighted Average Price for a symbol.
 	GetVWAP(context.Context, *GetVWAPRequest) (*GetVWAPResponse, error)
-	// GetOrderBook retrieves the current order book snapshot for a trading pair.
+	// GetOrderBook retrieves the current order book snapshot for a trading symbol.
 	GetOrderBook(context.Context, *GetOrderBookRequest) (*GetOrderBookResponse, error)
-	// StreamOrderBook streams real-time order book updates for a trading pair.
+	// StreamOrderBook streams real-time order book updates for a trading symbol.
 	StreamOrderBook(*StreamOrderBookRequest, MarketData_StreamOrderBookServer) error
-	// GetMarketDepth retrieves liquidity depth metrics for a trading pair.
+	// GetMarketDepth retrieves liquidity depth metrics for a trading symbol.
 	GetMarketDepth(context.Context, *GetMarketDepthRequest) (*GetMarketDepthResponse, error)
 	// GetTrade retrieves a specific trade by ID.
 	GetTrade(context.Context, *GetTradeRequest) (*GetTradeResponse, error)
-	// ListTrades retrieves recent trades for a trading pair.
+	// ListTrades retrieves recent trades for a trading symbol.
 	ListTrades(context.Context, *ListTradesRequest) (*ListTradesResponse, error)
-	// StreamTrades streams real-time trade executions for specified trading pairs.
+	// StreamTrades streams real-time trade executions for specified symbols.
 	StreamTrades(*StreamTradesRequest, MarketData_StreamTradesServer) error
-	// GetCandle retrieves a specific candle for a trading pair at a given time.
+	// GetCandle retrieves a specific candle for a trading symbol at a given time.
 	GetCandle(context.Context, *GetCandleRequest) (*GetCandleResponse, error)
 	// ListCandles retrieves historical candle data for charting and analysis.
 	ListCandles(context.Context, *ListCandlesRequest) (*ListCandlesResponse, error)
-	// GetLiquidityMetrics retrieves liquidity metrics for a trading pair or venue.
+	// GetLiquidityMetrics retrieves liquidity metrics for a trading symbol or venue.
 	GetLiquidityMetrics(context.Context, *GetLiquidityMetricsRequest) (*GetLiquidityMetricsResponse, error)
-	// GetMultiVenuePrice retrieves and aggregates prices across multiple venues.
+	// GetMultiVenuePrice retrieves and aggregates prices across multiple venues for a symbol.
 	GetMultiVenuePrice(context.Context, *GetMultiVenuePriceRequest) (*GetMultiVenuePriceResponse, error)
-	// GetMarketSummary retrieves a comprehensive market summary for an asset.
+	// GetMarketSummary retrieves a comprehensive market summary for a symbol.
 	GetMarketSummary(context.Context, *GetMarketSummaryRequest) (*GetMarketSummaryResponse, error)
 	mustEmbedUnimplementedMarketDataServer()
 }

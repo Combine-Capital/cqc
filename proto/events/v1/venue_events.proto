@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package cqc.events.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/events/v1;eventsv1";
+
+import "google/protobuf/timestamp.proto";
+import "proto/venues/v1/venue_asset.proto";
+import "proto/venues/v1/venue_symbol.proto";
+
+// VenueAssetListed event is published when an asset becomes available on a venue.
+// This event notifies services that a new asset can be deposited, withdrawn, or traded on a venue.
+message VenueAssetListed {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that listed the asset.
+  // Format: "service:{service_name}" (e.g., "service:cqar"), or "user:{user_id}".
+  optional string actor_id = 3;
+
+  // The venue asset listing information.
+  optional cqc.venues.v1.VenueAsset venue_asset = 4;
+
+  // Whether this is the first time this asset is listed on this venue.
+  optional bool is_new_listing = 5;
+}
+
+// VenueAssetDelisted event is published when an asset is removed from a venue.
+// This event notifies services that an asset is no longer available on a venue.
+message VenueAssetDelisted {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that delisted the asset.
+  optional string actor_id = 3;
+
+  // Venue identifier where the asset was delisted.
+  optional string venue_id = 4;
+
+  // Asset identifier that was delisted.
+  optional string asset_id = 5;
+
+  // Reason for delisting (if available).
+  optional string reason = 6;
+}
+
+// VenueSymbolListed event is published when a trading symbol/market becomes available on a venue.
+// This event notifies services that a new symbol can be traded on a venue.
+message VenueSymbolListed {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that listed the symbol.
+  // Format: "service:{service_name}" (e.g., "service:cqar"), or "user:{user_id}".
+  optional string actor_id = 3;
+
+  // The venue symbol listing information.
+  optional cqc.venues.v1.VenueSymbol venue_symbol = 4;
+
+  // Whether this is the first time this symbol is listed on this venue.
+  optional bool is_new_listing = 5;
+}
+
+// VenueSymbolDelisted event is published when a trading symbol is removed from a venue.
+// This event notifies services that a symbol is no longer tradeable on a venue.
+message VenueSymbolDelisted {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that delisted the symbol.
+  optional string actor_id = 3;
+
+  // Venue identifier where the symbol was delisted.
+  optional string venue_id = 4;
+
+  // Symbol identifier that was delisted.
+  optional string symbol_id = 5;
+
+  // Reason for delisting (if available).
+  optional string reason = 6;
+}

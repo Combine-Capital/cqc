@@ -18,47 +18,45 @@ message Trade {
   // Unique trade identifier from the venue (if available).
   optional string trade_id = 1;
 
-  // Asset identifier for the base currency.
-  optional string asset_id = 2;
-
-  // Asset identifier for the quote currency.
-  optional string quote_asset_id = 3;
+  // Symbol identifier (UUID) for this trade.
+  // References the canonical symbol from the markets domain.
+  optional string symbol_id = 2;
 
   // Venue where this trade occurred.
-  optional string venue_id = 4;
+  optional string venue_id = 3;
 
-  // Trading pair symbol on the venue (e.g., "BTCUSDT").
-  optional string venue_symbol = 5;
+  // Venue-specific symbol representation (e.g., "BTCUSDT" on Binance).
+  optional string venue_symbol = 4;
 
   // Timestamp when the trade was executed.
-  optional google.protobuf.Timestamp timestamp = 6;
+  optional google.protobuf.Timestamp timestamp = 5;
 
   // Execution price of the trade.
-  optional double price = 7;
+  optional double price = 6;
 
   // Quantity traded in base currency.
-  optional double quantity = 8;
+  optional double quantity = 7;
 
   // Side of the trade (buy or sell from taker's perspective).
-  optional TradeSide side = 9;
+  optional TradeSide side = 8;
 
   // Total value of the trade in quote currency (price * quantity).
-  optional double value = 10;
+  optional double value = 9;
 
   // Transaction hash (for on-chain DEX trades).
-  optional string tx_hash = 11;
+  optional string tx_hash = 10;
 
   // Block number (for on-chain trades).
-  optional int64 block_number = 12;
+  optional int64 block_number = 11;
 
   // Whether this trade was a liquidation.
-  optional bool is_liquidation = 13;
+  optional bool is_liquidation = 12;
 
   // Maker order ID (if available).
-  optional string maker_order_id = 14;
+  optional string maker_order_id = 13;
 
   // Taker order ID (if available).
-  optional string taker_order_id = 15;
+  optional string taker_order_id = 14;
 }
 
 // CandleInterval represents the time period for a candle/OHLCV bar.
@@ -78,55 +76,53 @@ enum CandleInterval {
 // Candle represents OHLCV (Open, High, Low, Close, Volume) data for a time period.
 // Candles are used for charting and technical analysis.
 message Candle {
-  // Asset identifier for the base currency.
-  optional string asset_id = 1;
-
-  // Asset identifier for the quote currency.
-  optional string quote_asset_id = 2;
+  // Symbol identifier (UUID) for this candle data.
+  // References the canonical symbol from the markets domain.
+  optional string symbol_id = 1;
 
   // Venue where this candle data is from.
-  optional string venue_id = 3;
+  optional string venue_id = 2;
 
-  // Trading pair symbol on the venue.
-  optional string venue_symbol = 4;
+  // Venue-specific symbol representation.
+  optional string venue_symbol = 3;
 
   // Start timestamp of the candle period.
-  optional google.protobuf.Timestamp timestamp = 5;
+  optional google.protobuf.Timestamp timestamp = 4;
 
   // Candle interval/timeframe.
-  optional CandleInterval interval = 6;
+  optional CandleInterval interval = 5;
 
   // Opening price (first trade in the period).
-  optional double open = 7;
+  optional double open = 6;
 
   // Highest price during the period.
-  optional double high = 8;
+  optional double high = 7;
 
   // Lowest price during the period.
-  optional double low = 9;
+  optional double low = 8;
 
   // Closing price (last trade in the period).
-  optional double close = 10;
+  optional double close = 9;
 
   // Total volume traded during the period (base currency).
-  optional double volume = 11;
+  optional double volume = 10;
 
   // Total value traded during the period (quote currency).
-  optional double quote_volume = 12;
+  optional double quote_volume = 11;
 
   // Number of trades during the period.
-  optional int64 trade_count = 13;
+  optional int64 trade_count = 12;
 
   // Volume-weighted average price for this period.
-  optional double vwap = 14;
+  optional double vwap = 13;
 
   // Whether this candle is closed/complete.
   // False indicates the candle is still accumulating (real-time data).
-  optional bool is_closed = 15;
+  optional bool is_closed = 14;
 
   // Buy volume (volume from buy-side trades).
-  optional double buy_volume = 16;
+  optional double buy_volume = 15;
 
   // Sell volume (volume from sell-side trades).
-  optional double sell_volume = 17;
+  optional double sell_volume = 16;
 }

@@ -2,14 +2,14 @@
 
 ## Progress Checklist
 - [x] **Commit 1**: Project Foundation & Configuration
-- [x] **Commit 2**: Assets Domain Protocol Buffers *(needs migration)*
-- [x] **Commit 3**: Markets Domain Protocol Buffers *(needs Symbol additions)*
-- [x] **Commit 4**: Portfolio & Venues Domain Protocol Buffers *(needs venue file additions)*
-- [x] **Commit 5**: Events Domain Protocol Buffers *(needs updates)*
-- [x] **Commit 6**: gRPC Service Interfaces *(needs updates)*
+- [x] **Commit 2**: Assets Domain Protocol Buffers
+- [x] **Commit 3**: Markets Domain Protocol Buffers
+- [x] **Commit 4**: Portfolio & Venues Domain Protocol Buffers
+- [x] **Commit 5**: Events Domain Protocol Buffers
+- [x] **Commit 6**: gRPC Service Interfaces
 - [x] **Commit 7**: Build System & Code Generation
 - [x] **Commit 8**: Package Configuration & Documentation
-- [ ] **Commit 9**: Domain Separation Migration (Asset/Symbol/Venue) ⭐ **CRITICAL**
+- [x] **Commit 9**: Domain Separation Migration (Asset/Symbol/Venue) ⭐ **COMPLETE**
 
 ## Implementation Sequence
 
@@ -216,52 +216,52 @@
 **Deliverables**:
 
 **Phase 1: Create New Protobuf Definitions**
-- [ ] Create `proto/markets/v1/symbol.proto`:
+- [x] Create `proto/markets/v1/symbol.proto`:
   - Symbol message with symbol_id, symbol, symbol_type (SPOT/PERPETUAL/FUTURE/OPTION/MARGIN)
   - Include base_asset_id, quote_asset_id, settlement_asset_id
   - Include tick_size, lot_size, min/max order sizes
   - Option-specific: strike_price, expiry, option_type (CALL/PUT)
-- [ ] Create `proto/markets/v1/symbol_identifier.proto`:
+- [x] Create `proto/markets/v1/symbol_identifier.proto`:
   - SymbolIdentifier message mapping symbol_id to external data providers
-- [ ] Create `proto/venues/v1/venue.proto`:
+- [x] Create `proto/venues/v1/venue.proto`:
   - Move Venue message and VenueType enum from `proto/assets/v1/venue.proto`
-- [ ] Create `proto/venues/v1/venue_asset.proto`:
+- [x] Create `proto/venues/v1/venue_asset.proto`:
   - VenueAsset message: venue_id, asset_id, venue_asset_symbol
   - Properties: deposit_enabled, withdraw_enabled, trading_enabled, fees, listing dates
-- [ ] Create `proto/venues/v1/venue_symbol.proto`:
+- [x] Create `proto/venues/v1/venue_symbol.proto`:
   - VenueSymbol message: venue_id, symbol_id (canonical), venue_symbol (venue-specific)
   - Properties: is_active, maker_fee, taker_fee, listing dates
 
 **Phase 2: Update Existing Files**
-- [ ] Remove `proto/assets/v1/venue.proto` (moved to venues domain)
-- [ ] Update `proto/services/v1/asset_registry.proto`:
+- [x] Remove `proto/assets/v1/venue.proto` (moved to venues domain)
+- [x] Update `proto/services/v1/asset_registry.proto`:
   - Add Symbol operations: CreateSymbol, GetSymbol, UpdateSymbol, DeleteSymbol, ListSymbols, SearchSymbols
   - Add SymbolIdentifier operations: CreateSymbolIdentifier, GetSymbolIdentifier, ListSymbolIdentifiers
   - Add VenueAsset operations: CreateVenueAsset, GetVenueAsset, ListVenueAssets
   - Update VenueSymbol operations to use new symbol_id references
   - Update Venue operations to use new venues domain import
-- [ ] Update `proto/services/v1/market_data.proto`:
+- [x] Update `proto/services/v1/market_data.proto`:
   - Change all operations to query by symbol_id instead of asset_id pairs
   - GetPrice(symbol_id), GetOrderBook(symbol_id), StreamTrades(symbol_id)
-- [ ] Update `proto/events/v1/market_events.proto`:
+- [x] Update `proto/events/v1/market_events.proto`:
   - Add SymbolCreated event
   - Update PriceUpdated to reference symbol_id
-- [ ] Create `proto/events/v1/venue_events.proto`:
+- [x] Create `proto/events/v1/venue_events.proto`:
   - VenueAssetListed, VenueAssetDelisted events
   - VenueSymbolListed, VenueSymbolDelisted events
-- [ ] Update `proto/markets/v1/price.proto`:
+- [x] Update `proto/markets/v1/price.proto`:
   - Update Price message to reference symbol_id instead of asset_id
-- [ ] Update `proto/markets/v1/orderbook.proto`:
+- [x] Update `proto/markets/v1/orderbook.proto`:
   - Update OrderBook message to reference symbol_id
-- [ ] Update `proto/markets/v1/trade.proto`:
+- [x] Update `proto/markets/v1/trade.proto`:
   - Update Trade message to reference symbol_id
 
 **Phase 3: Code Generation & Validation**
-- [ ] Run `make generate` to regenerate all client code
-- [ ] Verify all proto files compile without errors
-- [ ] Verify generated Go code compiles: `cd gen/go && go build ./...`
-- [ ] Update import paths in all generated code
-- [ ] Commit all generated code changes
+- [x] Run `make generate` to regenerate all client code
+- [x] Verify all proto files compile without errors
+- [x] Verify generated Go code compiles: `cd gen/go && go build ./...`
+- [x] Update import paths in all generated code
+- [x] Commit all generated code changes
 
 **Success Criteria**:
 - Clear domain separation: assets/v1 (tokens), markets/v1 (symbols + market data), venues/v1 (platforms + mappings)

@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package cqc.venues.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1;venuesv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// VenueSymbol represents the availability of a trading symbol/market on a specific venue.
+// This maps canonical symbols to venue-specific representations.
+message VenueSymbol {
+  // Venue identifier where this symbol is traded.
+  optional string venue_id = 1;
+
+  // Canonical symbol identifier (UUID) from the markets domain.
+  // References Symbol.symbol_id
+  optional string symbol_id = 2;
+
+  // Venue-specific symbol representation.
+  // Examples:
+  //   - Binance spot: "BTCUSDT"
+  //   - Binance futures: "BTCUSDT" (different market from spot)
+  //   - Coinbase: "BTC-USD"
+  //   - dYdX: "ETH-USD"
+  //   - Uniswap V3: pool address "0x..."
+  optional string venue_symbol = 3;
+
+  // Whether this symbol is currently active and tradeable on the venue.
+  optional bool is_active = 4;
+
+  // Maker fee rate (0.001 = 0.1%).
+  // NULL if venue doesn't support maker/taker distinction.
+  optional double maker_fee = 5;
+
+  // Taker fee rate (0.001 = 0.1%).
+  optional double taker_fee = 6;
+
+  // Minimum order value for this symbol on this venue in quote currency.
+  optional double min_order_value = 7;
+
+  // Maximum order value for this symbol on this venue in quote currency.
+  // NULL if no maximum.
+  optional double max_order_value = 8;
+
+  // Minimum notional value (price * quantity) in quote currency.
+  optional double min_notional = 9;
+
+  // Maximum leverage available for this symbol on this venue.
+  // NULL for spot markets or venues without leverage.
+  optional double max_leverage = 10;
+
+  // Timestamp when this symbol was listed on the venue.
+  optional google.protobuf.Timestamp listed_at = 11;
+
+  // Timestamp when this symbol was delisted from the venue.
+  // NULL if still listed.
+  optional google.protobuf.Timestamp delisted_at = 12;
+
+  // Additional venue symbol-specific metadata.
+  // May include venue-specific trading rules, liquidity pool addresses, etc.
+  optional google.protobuf.Struct metadata = 13;
+}

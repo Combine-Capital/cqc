@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package cqc.venues.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1;venuesv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// VenueAsset represents the availability of an asset on a specific venue.
+// This message tracks which tokens/coins are supported by each exchange/protocol.
+message VenueAsset {
+  // Venue identifier where this asset is available.
+  optional string venue_id = 1;
+
+  // Canonical asset identifier (UUID) from the assets domain.
+  optional string asset_id = 2;
+
+  // Venue-specific asset symbol/ticker.
+  // Example: "BTC" on Binance, "WBTC" on Uniswap, "btcb" on PancakeSwap
+  optional string venue_asset_symbol = 3;
+
+  // Specific on-chain deployment ID if this venue asset refers to a particular deployment.
+  // Example: Uniswap V3 on Ethereum lists WBTC at address 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599
+  optional string deployment_id = 4;
+
+  // Whether deposits are enabled for this asset on this venue.
+  optional bool deposit_enabled = 5;
+
+  // Whether withdrawals are enabled for this asset on this venue.
+  optional bool withdraw_enabled = 6;
+
+  // Whether trading is enabled for this asset on this venue.
+  optional bool trading_enabled = 7;
+
+  // Minimum deposit amount in asset units.
+  optional double min_deposit = 8;
+
+  // Minimum withdrawal amount in asset units.
+  optional double min_withdrawal = 9;
+
+  // Withdrawal fee in asset units.
+  optional double withdrawal_fee = 10;
+
+  // Deposit fee in asset units (typically 0 for most venues).
+  optional double deposit_fee = 11;
+
+  // Timestamp when this asset was listed on the venue.
+  optional google.protobuf.Timestamp listed_at = 12;
+
+  // Timestamp when this asset was delisted from the venue.
+  // NULL if still listed.
+  optional google.protobuf.Timestamp delisted_at = 13;
+
+  // Whether this asset is currently active on the venue.
+  optional bool is_active = 14;
+
+  // Additional venue asset-specific metadata.
+  optional google.protobuf.Struct metadata = 15;
+}

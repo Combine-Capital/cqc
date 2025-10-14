@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// DataSource represents external data provider for market information.
+enum DataSource {
+  DATA_SOURCE_UNSPECIFIED = 0;
+  DATA_SOURCE_COINGECKO = 1;        // CoinGecko API
+  DATA_SOURCE_COINMARKETCAP = 2;    // CoinMarketCap API
+  DATA_SOURCE_DEFILLAMA = 3;        // DefiLlama API
+  DATA_SOURCE_MESSARI = 4;          // Messari API
+  DATA_SOURCE_GLASSNODE = 5;        // Glassnode API
+}
+
+// SymbolIdentifier maps a canonical Symbol to external data provider identifiers.
+// This allows querying external APIs using their native symbol identifiers.
+message SymbolIdentifier {
+  // Canonical symbol identifier (UUID) this identifier maps to.
+  optional string symbol_id = 1;
+
+  // Data source/provider for this identifier.
+  optional DataSource data_source = 2;
+
+  // External identifier string used by the data source.
+  // Examples:
+  //   - CoinGecko: "bitcoin-usd" for BTC/USD
+  //   - CoinMarketCap: "1-USD" for BTC/USD (symbol ID 1 in USD)
+  //   - DefiLlama: "ethereum:0x..." for token pair
+  optional string external_id = 3;
+
+  // URL or API endpoint for accessing this symbol's data.
+  // Example: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+  optional string api_url = 4;
+
+  // Timestamp when this identifier was created.
+  optional google.protobuf.Timestamp created_at = 5;
+
+  // Timestamp when this identifier was last verified/updated.
+  optional google.protobuf.Timestamp last_verified_at = 6;
+
+  // Whether this identifier is currently valid and usable.
+  optional bool is_active = 7;
+
+  // Additional data source-specific metadata.
+  optional google.protobuf.Struct metadata = 8;
+}
