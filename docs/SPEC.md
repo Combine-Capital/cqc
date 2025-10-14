@@ -2,18 +2,91 @@
 
 **Project Type:** Shared Contract Library (Protocol Buffer definitions + code generation)
 
+## Domain Separation Principles
+
+### Critical Distinctions
+
+**Asset vs Symbol vs Venue**
+- **Asset** = Individual token/coin (BTC, ETH, USDT, WETH)
+  - Lives in: `assets/v1/asset.proto`
+  - Examples: Bitcoin, Ethereum, USD Coin, Wrapped Ether
+  - Properties: symbol, name, type, deployments across chains
+  
+- **Symbol** = Trading pair/market (BTC/USDT spot, ETH-PERP, BTC-25OCT24-3000-C)
+  - Lives in: `markets/v1/symbol.proto`
+  - Examples: BTC/USDT spot, ETH/USD perpetual, ETH call option
+  - Properties: base_asset_id, quote_asset_id, type (SPOT/PERPETUAL/FUTURE/OPTION), market specs
+  
+- **Venue** = Exchange/protocol platform (Binance, Uniswap V3, dYdX)
+  - Lives in: `venues/v1/venue.proto`
+  - Examples: Binance (CEX), Uniswap V3 on Ethereum (DEX), dYdX (DEX Perpetuals)
+  - Properties: venue_id, name, type, API endpoints
+
+**VenueAsset vs VenueSymbol**
+- **VenueAsset** = Asset availability on a venue (which tokens you can trade)
+  - "Binance lists BTC, ETH, USDT"
+  - "Uniswap V3 on Ethereum lists WETH, USDC, DAI"
+  
+- **VenueSymbol** = Symbol/market availability on a venue (which trading pairs exist)
+  - "Binance offers BTC/USDT spot market as 'BTCUSDT'"
+  - "Binance offers BTC/USDT perpetual as 'BTCUSDT' in futures"
+  - "dYdX offers ETH/USD perpetual as 'ETH-USD'"
+
+**DataSource vs Venue**
+- **DataSource** = Information provider (CoinGecko, CoinMarketCap, DeFiLlama)
+  - Purpose: Get asset metadata, prices, market cap
+  - AssetIdentifier: Canonical Asset → CoinGecko ID
+  - SymbolIdentifier: Canonical Symbol → Provider ID
+  
+- **Venue** = Tradeable platform (Binance, Coinbase, Uniswap)
+  - Purpose: Execute orders, deposit, withdraw
+  - VenueAsset: Which assets exist on venue
+  - VenueSymbol: Which symbols/markets exist on venue
+
 ## Core Requirements (from Brief)
 
 ### MVP Scope
-- Define protobuf messages for assets domain (Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain)
-- Define protobuf enums for assets domain (AssetType, RelationshipType, DataSource, FlagType, FlagSeverity)
-- Define protobuf messages for venues domain (Venue, VenueSymbol, VenueType enum)
-- Define protobuf messages for markets domain (Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics)
-- Define protobuf messages for portfolio domain (Position, Portfolio, Allocation, Exposure, Transaction, PnL)
-- Define protobuf messages for events domain (AssetCreated, AssetDeploymentCreated, RelationshipEstablished, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert)
-- Define gRPC service interfaces for AssetRegistry, MarketData, Portfolio, VenueGateway, RiskEngine
+
+#### Assets Domain (Individual Tokens/Coins)
+- Define protobuf messages: Asset, AssetIdentifier, AssetDeployment, AssetRelationship, AssetQualityFlag, Chain, AssetGroup, AssetGroupMember
+- Define protobuf enums: AssetType, RelationshipType, DataSource, FlagType, FlagSeverity
+- Asset represents individual tokens (BTC, ETH, USDT, WETH)
+- AssetDeployment tracks token addresses across chains
+- AssetRelationship maps wrapping/staking/bridging relationships
+
+#### Markets Domain (Trading Pairs/Markets)
+- Define protobuf messages: Symbol, SymbolIdentifier
+- Define protobuf enums: SymbolType (SPOT, PERPETUAL, FUTURE, OPTION, MARGIN), OptionType (CALL, PUT)
+- Symbol represents trading pairs/markets (BTC/USDT spot, ETH-PERP, BTC-25OCT24-3000-C)
+- Symbol includes: base_asset_id, quote_asset_id, settlement_asset_id, tick_size, lot_size, order limits
+- SymbolIdentifier maps canonical symbols to external data provider identifiers
+- Define market data messages: Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics
+
+#### Venues Domain (Exchanges/Protocols)
+- Define protobuf messages: Venue, VenueAsset, VenueSymbol, VenueAccount, Balance, Order, ExecutionReport
+- Define protobuf enums: VenueType (CEX, DEX, DEX_AGGREGATOR, BRIDGE, LENDING), AccountType, AccountStatus, OrderType, OrderSide, OrderStatus, TimeInForce, BalanceType
+- Venue represents exchange/protocol metadata (Binance, Uniswap V3, dYdX)
+- VenueAsset maps which assets are available on each venue
+- VenueSymbol maps which trading symbols/markets are available on each venue
+- VenueAccount manages user credentials and permissions per venue
+
+#### Portfolio Domain (Position Tracking)
+- Define protobuf messages: Position, Portfolio, Allocation, Exposure, Transaction, PnL
+
+#### Events Domain (Inter-Service Communication)
+- Define event messages: AssetCreated, AssetDeploymentCreated, RelationshipEstablished, SymbolCreated, VenueAssetListed, VenueSymbolListed, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert, QualityFlagRaised
+
+#### Service Interfaces
+- AssetRegistry: Manages Assets, Symbols, Chains, Venues, VenueAssets, VenueSymbols, Relationships, Quality Flags
+- VenueGateway: Manages VenueAccounts, order execution, balance queries, deposits/withdrawals
+- MarketData: Price feeds, orderbook streams, trade history for Symbols
+- Portfolio: Position tracking, PnL calculation
+- RiskEngine: Risk limits, exposure monitoring
+
+#### Code Generation & Organization
 - Provide Makefile with code generation targets for Go, Python, TypeScript from protobuf definitions
-- Organize protos by versioned domain structure (assets/v1/, venues/v1/, markets/v1/, portfolio/v1/, events/v1/)
+- Organize protos by versioned domain structure (assets/v1/, markets/v1/, venues/v1/, portfolio/v1/, events/v1/, services/v1/)
+- Commit generated code to repository for versioning
 
 ### Post-MVP Scope
 - Define OpenAPI 3.0 specifications for REST endpoints per service
@@ -124,15 +197,18 @@
 - gRPC service definition conventions
 
 **Key Responsibilities:**
-- Define message structure for assets domain (Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain, Venue, VenueSymbol)
-- Define enum types for reference data (AssetType, RelationshipType, DataSource, FlagType, FlagSeverity, VenueType)
-- Define message structure for markets domain (Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics)
+- Define message structure for assets domain (Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain)
+- Define enum types for assets (AssetType, RelationshipType, DataSource, FlagType, FlagSeverity)
+- Define message structure for markets domain (Symbol, SymbolIdentifier, Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics)
+- Define enum types for markets (SymbolType, OptionType)
+- Define message structure for venues domain (Venue, VenueAsset, VenueSymbol, VenueAccount, Balance, Order, ExecutionReport)
+- Define enum types for venues (VenueType, AccountType, AccountStatus, OrderType, OrderSide, OrderStatus, TimeInForce, BalanceType)
 - Define message structure for portfolio domain (Position, Portfolio, Allocation, Exposure, Transaction, PnL)
-- Define message structure for venues domain for trading operations (Order, OrderStatus, Balance, ExecutionReport, VenueAccount)
-- Define message structure for events domain (AssetCreated, AssetDeploymentCreated, RelationshipEstablished, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert, QualityFlagRaised)
+- Define message structure for events domain (AssetCreated, AssetDeploymentCreated, RelationshipEstablished, SymbolCreated, VenueAssetListed, VenueSymbolListed, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert, QualityFlagRaised)
 - Define gRPC service interfaces (AssetRegistry, MarketData, Portfolio, VenueGateway, RiskEngine)
 - Maintain backward compatibility through proper versioning
 - Include field-level documentation and validation constraints
+- Clearly separate Assets (tokens) from Symbols (trading pairs) from Venues (platforms)
 
 **Post-MVP:**
 - Add OpenAPI annotations for REST endpoint generation
@@ -208,44 +284,48 @@
 ```
 cqc/
 ├── proto/                          # Protocol Buffer definitions
-│   ├── assets/
-│   │   └── v1/
-│   │       ├── asset.proto         # Asset, AssetIdentifier, AssetType enum, DataSource enum
-│   │       ├── deployment.proto    # AssetDeployment
-│   │       ├── relationship.proto  # AssetRelationship, AssetGroup, AssetGroupMember, RelationshipType enum
-│   │       ├── quality.proto       # AssetQualityFlag, FlagType enum, FlagSeverity enum
-│   │       ├── chain.proto         # Chain
-│   │       └── venue.proto         # Venue, VenueSymbol, VenueType enum
-│   ├── markets/
-│   │   └── v1/
-│   │       ├── price.proto         # Price, VWAP
-│   │       ├── orderbook.proto     # OrderBook, MarketDepth
-│   │       ├── trade.proto         # Trade, Candle
-│   │       └── liquidity.proto     # LiquidityMetrics
-│   ├── portfolio/
-│   │   └── v1/
-│   │       ├── position.proto      # Position, Exposure
-│   │       ├── portfolio.proto     # Portfolio, Allocation
-│   │       └── transaction.proto   # Transaction, PnL
-│   ├── venues/
-│   │   └── v1/
-│   │       ├── order.proto         # Order, OrderStatus
-│   │       ├── execution.proto     # Balance, ExecutionReport
-│   │       └── account.proto       # VenueAccount
-│   ├── events/
-│   │   └── v1/
-│   │       ├── asset_events.proto  # AssetCreated, AssetDeploymentCreated, RelationshipEstablished
-│   │       ├── market_events.proto # PriceUpdated
-│   │       ├── order_events.proto  # OrderPlaced
-│   │       ├── position_events.proto # PositionChanged
-│   │       └── risk_events.proto   # RiskAlert, QualityFlagRaised
-│   └── services/
-│       └── v1/
-│           ├── asset_registry.proto   # AssetRegistry service
-│           ├── market_data.proto      # MarketData service
-│           ├── portfolio.proto        # Portfolio service
-│           ├── venue_gateway.proto    # VenueGateway service
-│           └── risk_engine.proto      # RiskEngine service
+│   ├── assets/v1/                  # INDIVIDUAL TOKENS/COINS
+│   │   ├── asset.proto             # Asset, AssetIdentifier, AssetType enum, DataSource enum
+│   │   ├── deployment.proto        # AssetDeployment (on-chain addresses)
+│   │   ├── relationship.proto      # AssetRelationship, RelationshipType enum (wraps, bridges, stakes)
+│   │   ├── quality.proto           # AssetQualityFlag, FlagType enum, FlagSeverity enum
+│   │   └── chain.proto             # Chain (blockchain networks)
+│   │
+│   ├── markets/v1/                 # TRADING PAIRS/MARKETS
+│   │   ├── symbol.proto            # Symbol, SymbolType enum (SPOT, PERPETUAL, FUTURE, OPTION)
+│   │   ├── symbol_identifier.proto # SymbolIdentifier (Symbol → external data provider)
+│   │   ├── price.proto             # Price, VWAP
+│   │   ├── orderbook.proto         # OrderBook, MarketDepth
+│   │   ├── trade.proto             # Trade, Candle
+│   │   └── liquidity.proto         # LiquidityMetrics
+│   │
+│   ├── venues/v1/                  # EXCHANGES/PROTOCOLS
+│   │   ├── venue.proto             # Venue (exchange/protocol metadata), VenueType enum
+│   │   ├── venue_asset.proto       # VenueAsset (which assets available on venue)
+│   │   ├── venue_symbol.proto      # VenueSymbol (which symbols/markets on venue)
+│   │   ├── account.proto           # VenueAccount (credentials, permissions), AccountType, AccountStatus
+│   │   ├── order.proto             # Order, OrderType, OrderSide, OrderStatus, TimeInForce
+│   │   └── execution.proto         # Balance, ExecutionReport, BalanceType
+│   │
+│   ├── portfolio/v1/               # POSITION TRACKING
+│   │   ├── position.proto          # Position, Exposure
+│   │   ├── portfolio.proto         # Portfolio, Allocation
+│   │   └── transaction.proto       # Transaction, PnL
+│   │
+│   ├── events/v1/                  # INTER-SERVICE EVENTS
+│   │   ├── asset_events.proto      # AssetCreated, AssetDeploymentCreated, RelationshipEstablished
+│   │   ├── market_events.proto     # SymbolCreated, PriceUpdated
+│   │   ├── venue_events.proto      # VenueAssetListed, VenueSymbolListed
+│   │   ├── order_events.proto      # OrderPlaced, OrderFilled, OrderCancelled
+│   │   ├── position_events.proto   # PositionChanged
+│   │   └── risk_events.proto       # RiskAlert, QualityFlagRaised
+│   │
+│   └── services/v1/                # GRPC SERVICE INTERFACES
+│       ├── asset_registry.proto    # AssetRegistry (Assets, Symbols, Venues, VenueAssets, VenueSymbols, Chains)
+│       ├── market_data.proto       # MarketData (price feeds, orderbooks for Symbols)
+│       ├── portfolio.proto         # Portfolio (position tracking, PnL)
+│       ├── venue_gateway.proto     # VenueGateway (VenueAccounts, orders, balances, execution)
+│       └── risk_engine.proto       # RiskEngine (risk limits, exposure monitoring)
 │
 ├── gen/                            # Generated code (committed to repo)
 │   ├── go/

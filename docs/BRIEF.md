@@ -17,15 +17,44 @@ Central contract repository providing Protocol Buffer definitions, OpenAPI specs
 - **Success:** Generate service implementations with correct data types and successful inter-service communication
 
 ## Core Requirements
-- [MVP] Define protobuf messages for assets domain (Asset, AssetIdentifier, AssetDeployment, AssetGroup, AssetGroupMember, AssetRelationship, AssetQualityFlag, Chain)
-- [MVP] Define protobuf enums for assets domain (AssetType, RelationshipType, DataSource, FlagType, FlagSeverity)
-- [MVP] Define protobuf messages for venues domain (Venue, VenueSymbol, VenueType enum)
-- [MVP] Define protobuf messages for markets domain (Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics)
-- [MVP] Define protobuf messages for portfolio domain (Position, Portfolio, Allocation, Exposure, Transaction, PnL)
-- [MVP] Define protobuf messages for events domain (AssetCreated, AssetDeploymentCreated, RelationshipEstablished, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert)
-- [MVP] Define gRPC service interfaces for AssetRegistry, MarketData, Portfolio, VenueGateway, RiskEngine
+
+### Assets Domain (Individual Tokens/Coins)
+- [MVP] Define protobuf messages: Asset, AssetIdentifier, AssetDeployment, AssetRelationship, AssetQualityFlag, Chain
+- [MVP] Define protobuf enums: AssetType (NATIVE, ERC20, SPL, WRAPPED, SYNTHETIC, etc.), RelationshipType (WRAPS, BRIDGES, STAKES, etc.), DataSource (COINGECKO, COINMARKETCAP, DEFILLAMA, etc.), FlagType (SCAM, EXPLOITED, DEPRECATED, etc.), FlagSeverity (INFO, LOW, MEDIUM, HIGH, CRITICAL)
+- [MVP] Support asset grouping (AssetGroup, AssetGroupMember) for aggregation (e.g., "all ETH variants")
+
+### Markets Domain (Trading Pairs/Markets)
+- [MVP] Define protobuf messages: Symbol (trading pair/market definition), SymbolIdentifier (Symbol → external data provider mapping)
+- [MVP] Define protobuf enums: SymbolType (SPOT, PERPETUAL, FUTURE, OPTION, MARGIN), OptionType (CALL, PUT)
+- [MVP] Symbol must include: base_asset_id, quote_asset_id, settlement_asset_id, market specifications (tick_size, lot_size, limits)
+- [MVP] Support option-specific fields: strike_price, expiry, option_type
+- [MVP] Define market data messages: Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics
+
+### Venues Domain (Exchanges/Protocols)
+- [MVP] Define protobuf messages: Venue (exchange/protocol metadata), VenueAsset (which assets listed on venue), VenueSymbol (which symbols/markets traded on venue)
+- [MVP] Define protobuf enums: VenueType (CEX, DEX, DEX_AGGREGATOR, BRIDGE, LENDING), AccountType (SPOT, MARGIN, FUTURES, OPTIONS, WALLET), AccountStatus (ACTIVE, INACTIVE, SUSPENDED, etc.)
+- [MVP] Venue account management: VenueAccount (credentials, permissions, fees, limits), Balance, Order, ExecutionReport
+- [MVP] Clear separation: Venue = platform metadata, VenueAsset = asset availability, VenueSymbol = symbol/market availability
+
+### Portfolio Domain (Position Tracking)
+- [MVP] Define protobuf messages: Position, Portfolio, Allocation, Exposure, Transaction, PnL
+
+### Events Domain (Inter-Service Communication)
+- [MVP] Define event messages: AssetCreated, AssetDeploymentCreated, RelationshipEstablished, SymbolCreated, VenueAssetListed, VenueSymbolListed, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert
+
+### Service Interfaces
+- [MVP] Define gRPC service: AssetRegistry (manages Assets, Symbols, Venues, VenueAssets, VenueSymbols, Chains)
+- [MVP] Define gRPC service: VenueGateway (manages VenueAccounts, order execution, balance queries, deposits/withdrawals)
+- [MVP] Define gRPC service: MarketData (price feeds, orderbook streams, trade history)
+- [MVP] Define gRPC service: Portfolio (position tracking, PnL calculation)
+- [MVP] Define gRPC service: RiskEngine (risk limits, exposure monitoring)
+
+### Code Generation & Organization
 - [MVP] Provide Makefile with code generation targets for Go, Python, TypeScript from protobuf definitions
-- [MVP] Organize protos by versioned domain structure (assets/v1/, venues/v1/, markets/v1/, portfolio/v1/, events/v1/)
+- [MVP] Organize protos by versioned domain structure (assets/v1/, markets/v1/, venues/v1/, portfolio/v1/, events/v1/, services/v1/)
+- [MVP] Commit generated code to repository for versioning and easy import
+
+### Post-MVP
 - [Post MVP] Define OpenAPI 3.0 specifications for REST endpoints per service
 - [Post MVP] Provide JSON Schema definitions for service configuration files
 - [Post MVP] Include usage examples and integration tests for generated code in all target languages
