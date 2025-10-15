@@ -120,7 +120,7 @@ generate-ts: ## Generate TypeScript code from proto files
 	@echo "✓ TypeScript directory created at $(TS_OUT)"
 
 .PHONY: generate
-generate: check-tools validate generate-go generate-python generate-ts ## Generate code for all languages
+generate: check-tools clean validate generate-go generate-python generate-ts ## Generate code for all languages
 	@echo ""
 	@echo "════════════════════════════════════════════════════════"
 	@echo "✓ Code generation complete!"
