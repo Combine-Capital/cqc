@@ -53,6 +53,12 @@ message AssetDeployment {
   // Timestamp of when this deployment occurred.
   optional google.protobuf.Timestamp deployed_at = 12;
 
+  // Timestamp when this deployment record was created.
+  optional google.protobuf.Timestamp created_at = 13;
+
+  // Timestamp when this deployment record was last updated.
+  optional google.protobuf.Timestamp updated_at = 14;
+
   // Additional deployment-specific metadata.
-  optional google.protobuf.Struct metadata = 13;
+  optional google.protobuf.Struct metadata = 15;
 }

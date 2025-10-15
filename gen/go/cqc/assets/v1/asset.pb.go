@@ -177,8 +177,10 @@ type Asset struct {
 	WebsiteUrl *string `protobuf:"bytes,8,opt,name=website_url,json=websiteUrl,proto3,oneof" json:"website_url,omitempty"`
 	// Timestamp when this asset record was created.
 	CreatedAt *timestamp.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
+	// Timestamp when this asset record was last updated.
+	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
 	// Additional metadata as structured data.
-	Metadata      *_struct.Struct `protobuf:"bytes,10,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,11,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -276,6 +278,13 @@ func (x *Asset) GetCreatedAt() *timestamp.Timestamp {
 	return nil
 }
 
+func (x *Asset) GetUpdatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 func (x *Asset) GetMetadata() *_struct.Struct {
 	if x != nil {
 		return x.Metadata
@@ -287,16 +296,20 @@ func (x *Asset) GetMetadata() *_struct.Struct {
 // This enables lookups by CoinGecko ID, CoinMarketCap ID, etc.
 type AssetIdentifier struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier ID (UUID).
+	IdentifierId *string `protobuf:"bytes,1,opt,name=identifier_id,json=identifierId,proto3,oneof" json:"identifier_id,omitempty"`
 	// Asset UUID this identifier belongs to.
-	AssetId *string `protobuf:"bytes,1,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
+	AssetId *string `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
 	// Data provider/source of this identifier.
-	Source *DataSource `protobuf:"varint,2,opt,name=source,proto3,enum=cqc.assets.v1.DataSource,oneof" json:"source,omitempty"`
+	Source *DataSource `protobuf:"varint,3,opt,name=source,proto3,enum=cqc.assets.v1.DataSource,oneof" json:"source,omitempty"`
 	// External identifier from the data provider (e.g., "bitcoin" for CoinGecko, "1" for CMC).
-	ExternalId *string `protobuf:"bytes,3,opt,name=external_id,json=externalId,proto3,oneof" json:"external_id,omitempty"`
+	ExternalId *string `protobuf:"bytes,4,opt,name=external_id,json=externalId,proto3,oneof" json:"external_id,omitempty"`
 	// Whether this is the primary identifier for this source.
-	IsPrimary *bool `protobuf:"varint,4,opt,name=is_primary,json=isPrimary,proto3,oneof" json:"is_primary,omitempty"`
+	IsPrimary *bool `protobuf:"varint,5,opt,name=is_primary,json=isPrimary,proto3,oneof" json:"is_primary,omitempty"`
+	// Timestamp when this identifier was created.
+	CreatedAt *timestamp.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
 	// Additional metadata specific to this identifier mapping.
-	Metadata      *_struct.Struct `protobuf:"bytes,5,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,7,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -331,6 +344,13 @@ func (*AssetIdentifier) Descriptor() ([]byte, []int) {
 	return file_proto_assets_v1_asset_proto_rawDescGZIP(), []int{1}
 }
 
+func (x *AssetIdentifier) GetIdentifierId() string {
+	if x != nil && x.IdentifierId != nil {
+		return *x.IdentifierId
+	}
+	return ""
+}
+
 func (x *AssetIdentifier) GetAssetId() string {
 	if x != nil && x.AssetId != nil {
 		return *x.AssetId
@@ -359,6 +379,13 @@ func (x *AssetIdentifier) GetIsPrimary() bool {
 	return false
 }
 
+func (x *AssetIdentifier) GetCreatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
 func (x *AssetIdentifier) GetMetadata() *_struct.Struct {
 	if x != nil {
 		return x.Metadata
@@ -370,7 +397,7 @@ var File_proto_assets_v1_asset_proto protoreflect.FileDescriptor
 
 const file_proto_assets_v1_asset_proto_rawDesc = "" +
 	"\n" +
-	"\x1bproto/assets/v1/asset.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xa9\x04\n" +
+	"\x1bproto/assets/v1/asset.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xf8\x04\n" +
 	"\x05Asset\x12\x1e\n" +
 	"\basset_id\x18\x01 \x01(\tH\x00R\aassetId\x88\x01\x01\x12\x1b\n" +
 	"\x06symbol\x18\x02 \x01(\tH\x01R\x06symbol\x88\x01\x01\x12\x17\n" +
@@ -383,9 +410,12 @@ const file_proto_assets_v1_asset_proto_rawDesc = "" +
 	"\vwebsite_url\x18\b \x01(\tH\aR\n" +
 	"websiteUrl\x88\x01\x01\x12>\n" +
 	"\n" +
-	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\bR\tcreatedAt\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\n" +
-	" \x01(\v2\x17.google.protobuf.StructH\tR\bmetadata\x88\x01\x01B\v\n" +
+	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\bR\tcreatedAt\x88\x01\x01\x12>\n" +
+	"\n" +
+	"updated_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampH\tR\tupdatedAt\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\v \x01(\v2\x17.google.protobuf.StructH\n" +
+	"R\bmetadata\x88\x01\x01B\v\n" +
 	"\t_asset_idB\t\n" +
 	"\a_symbolB\a\n" +
 	"\x05_nameB\r\n" +
@@ -394,20 +424,26 @@ const file_proto_assets_v1_asset_proto_rawDesc = "" +
 	"\f_descriptionB\v\n" +
 	"\t_logo_urlB\x0e\n" +
 	"\f_website_urlB\r\n" +
-	"\v_created_atB\v\n" +
-	"\t_metadata\"\xb1\x02\n" +
-	"\x0fAssetIdentifier\x12\x1e\n" +
-	"\basset_id\x18\x01 \x01(\tH\x00R\aassetId\x88\x01\x01\x126\n" +
-	"\x06source\x18\x02 \x01(\x0e2\x19.cqc.assets.v1.DataSourceH\x01R\x06source\x88\x01\x01\x12$\n" +
-	"\vexternal_id\x18\x03 \x01(\tH\x02R\n" +
+	"\v_created_atB\r\n" +
+	"\v_updated_atB\v\n" +
+	"\t_metadata\"\xbc\x03\n" +
+	"\x0fAssetIdentifier\x12(\n" +
+	"\ridentifier_id\x18\x01 \x01(\tH\x00R\fidentifierId\x88\x01\x01\x12\x1e\n" +
+	"\basset_id\x18\x02 \x01(\tH\x01R\aassetId\x88\x01\x01\x126\n" +
+	"\x06source\x18\x03 \x01(\x0e2\x19.cqc.assets.v1.DataSourceH\x02R\x06source\x88\x01\x01\x12$\n" +
+	"\vexternal_id\x18\x04 \x01(\tH\x03R\n" +
 	"externalId\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"is_primary\x18\x04 \x01(\bH\x03R\tisPrimary\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\x05 \x01(\v2\x17.google.protobuf.StructH\x04R\bmetadata\x88\x01\x01B\v\n" +
+	"is_primary\x18\x05 \x01(\bH\x04R\tisPrimary\x88\x01\x01\x12>\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampH\x05R\tcreatedAt\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\a \x01(\v2\x17.google.protobuf.StructH\x06R\bmetadata\x88\x01\x01B\x10\n" +
+	"\x0e_identifier_idB\v\n" +
 	"\t_asset_idB\t\n" +
 	"\a_sourceB\x0e\n" +
 	"\f_external_idB\r\n" +
-	"\v_is_primaryB\v\n" +
+	"\v_is_primaryB\r\n" +
+	"\v_created_atB\v\n" +
 	"\t_metadata*\x80\x02\n" +
 	"\tAssetType\x12\x1a\n" +
 	"\x16ASSET_TYPE_UNSPECIFIED\x10\x00\x12\x15\n" +
@@ -454,14 +490,16 @@ var file_proto_assets_v1_asset_proto_goTypes = []any{
 var file_proto_assets_v1_asset_proto_depIdxs = []int32{
 	0, // 0: cqc.assets.v1.Asset.asset_type:type_name -> cqc.assets.v1.AssetType
 	4, // 1: cqc.assets.v1.Asset.created_at:type_name -> google.protobuf.Timestamp
-	5, // 2: cqc.assets.v1.Asset.metadata:type_name -> google.protobuf.Struct
-	1, // 3: cqc.assets.v1.AssetIdentifier.source:type_name -> cqc.assets.v1.DataSource
-	5, // 4: cqc.assets.v1.AssetIdentifier.metadata:type_name -> google.protobuf.Struct
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	4, // 2: cqc.assets.v1.Asset.updated_at:type_name -> google.protobuf.Timestamp
+	5, // 3: cqc.assets.v1.Asset.metadata:type_name -> google.protobuf.Struct
+	1, // 4: cqc.assets.v1.AssetIdentifier.source:type_name -> cqc.assets.v1.DataSource
+	4, // 5: cqc.assets.v1.AssetIdentifier.created_at:type_name -> google.protobuf.Timestamp
+	5, // 6: cqc.assets.v1.AssetIdentifier.metadata:type_name -> google.protobuf.Struct
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_assets_v1_asset_proto_init() }

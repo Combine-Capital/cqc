@@ -95,25 +95,31 @@ func (RelationshipType) EnumDescriptor() ([]byte, []int) {
 // Examples: WETH wraps ETH, stETH stakes ETH, bridged USDC relates to native USDC.
 type AssetRelationship struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique relationship identifier (UUID).
+	RelationshipId *string `protobuf:"bytes,1,opt,name=relationship_id,json=relationshipId,proto3,oneof" json:"relationship_id,omitempty"`
 	// Parent asset UUID (the underlying or source asset).
 	// Example: ETH is the parent when WETH wraps it.
-	ParentAssetId *string `protobuf:"bytes,1,opt,name=parent_asset_id,json=parentAssetId,proto3,oneof" json:"parent_asset_id,omitempty"`
+	FromAssetId *string `protobuf:"bytes,2,opt,name=from_asset_id,json=fromAssetId,proto3,oneof" json:"from_asset_id,omitempty"`
 	// Child asset UUID (the derivative or resulting asset).
 	// Example: WETH is the child when it wraps ETH.
-	ChildAssetId *string `protobuf:"bytes,2,opt,name=child_asset_id,json=childAssetId,proto3,oneof" json:"child_asset_id,omitempty"`
+	ToAssetId *string `protobuf:"bytes,3,opt,name=to_asset_id,json=toAssetId,proto3,oneof" json:"to_asset_id,omitempty"`
 	// Type of relationship between parent and child.
-	RelationshipType *RelationshipType `protobuf:"varint,3,opt,name=relationship_type,json=relationshipType,proto3,enum=cqc.assets.v1.RelationshipType,oneof" json:"relationship_type,omitempty"`
+	RelationshipType *RelationshipType `protobuf:"varint,4,opt,name=relationship_type,json=relationshipType,proto3,enum=cqc.assets.v1.RelationshipType,oneof" json:"relationship_type,omitempty"`
 	// Conversion rate between assets, if fixed.
 	// Represented as string to preserve precision.
 	// NULL/empty for non-1:1 conversions (e.g., stETH to ETH is variable).
 	// Example: "1.000000000000000000" for 1:1 wrapping.
-	ConversionRate *string `protobuf:"bytes,4,opt,name=conversion_rate,json=conversionRate,proto3,oneof" json:"conversion_rate,omitempty"`
+	ConversionRate *string `protobuf:"bytes,5,opt,name=conversion_rate,json=conversionRate,proto3,oneof" json:"conversion_rate,omitempty"`
 	// Protocol facilitating this relationship (e.g., "Lido", "Aave", "Uniswap", "Wormhole").
-	Protocol *string `protobuf:"bytes,5,opt,name=protocol,proto3,oneof" json:"protocol,omitempty"`
-	// Additional relationship-specific metadata.
-	Metadata *_struct.Struct `protobuf:"bytes,6,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Protocol *string `protobuf:"bytes,6,opt,name=protocol,proto3,oneof" json:"protocol,omitempty"`
+	// Human-readable explanation of this relationship.
+	Description *string `protobuf:"bytes,7,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	// Timestamp when this relationship was established.
-	CreatedAt     *timestamp.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
+	CreatedAt *timestamp.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
+	// Timestamp when this relationship was last updated.
+	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
+	// Additional relationship-specific metadata.
+	Metadata      *_struct.Struct `protobuf:"bytes,10,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -148,16 +154,23 @@ func (*AssetRelationship) Descriptor() ([]byte, []int) {
 	return file_proto_assets_v1_relationship_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AssetRelationship) GetParentAssetId() string {
-	if x != nil && x.ParentAssetId != nil {
-		return *x.ParentAssetId
+func (x *AssetRelationship) GetRelationshipId() string {
+	if x != nil && x.RelationshipId != nil {
+		return *x.RelationshipId
 	}
 	return ""
 }
 
-func (x *AssetRelationship) GetChildAssetId() string {
-	if x != nil && x.ChildAssetId != nil {
-		return *x.ChildAssetId
+func (x *AssetRelationship) GetFromAssetId() string {
+	if x != nil && x.FromAssetId != nil {
+		return *x.FromAssetId
+	}
+	return ""
+}
+
+func (x *AssetRelationship) GetToAssetId() string {
+	if x != nil && x.ToAssetId != nil {
+		return *x.ToAssetId
 	}
 	return ""
 }
@@ -183,11 +196,11 @@ func (x *AssetRelationship) GetProtocol() string {
 	return ""
 }
 
-func (x *AssetRelationship) GetMetadata() *_struct.Struct {
-	if x != nil {
-		return x.Metadata
+func (x *AssetRelationship) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
-	return nil
+	return ""
 }
 
 func (x *AssetRelationship) GetCreatedAt() *timestamp.Timestamp {
@@ -197,20 +210,38 @@ func (x *AssetRelationship) GetCreatedAt() *timestamp.Timestamp {
 	return nil
 }
 
+func (x *AssetRelationship) GetUpdatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *AssetRelationship) GetMetadata() *_struct.Struct {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
 // AssetGroup represents a logical grouping of related assets.
 // Examples: All USDC variants across chains, all native ETH versions.
 type AssetGroup struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Unique group identifier (e.g., "usdc-circle", "eth-native", "btc-native").
+	// Unique group identifier (UUID).
 	GroupId *string `protobuf:"bytes,1,opt,name=group_id,json=groupId,proto3,oneof" json:"group_id,omitempty"`
-	// Canonical symbol for this group (e.g., "USDC", "ETH", "BTC").
-	CanonicalSymbol *string `protobuf:"bytes,2,opt,name=canonical_symbol,json=canonicalSymbol,proto3,oneof" json:"canonical_symbol,omitempty"`
-	// Issuer or controlling entity (e.g., "circle", "ethereum-foundation").
-	Issuer *string `protobuf:"bytes,3,opt,name=issuer,proto3,oneof" json:"issuer,omitempty"`
+	// Unique group name (lowercase_with_underscores).
+	Name *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	// Description of what this group represents.
-	Description *string `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	// List of member assets with weights.
+	Members []*AssetGroupMember `protobuf:"bytes,4,rep,name=members,proto3" json:"members,omitempty"`
+	// Timestamp when this group was created.
+	CreatedAt *timestamp.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
+	// Timestamp when this group was last updated.
+	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
 	// Additional group metadata.
-	Metadata      *_struct.Struct `protobuf:"bytes,5,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,7,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -252,16 +283,9 @@ func (x *AssetGroup) GetGroupId() string {
 	return ""
 }
 
-func (x *AssetGroup) GetCanonicalSymbol() string {
-	if x != nil && x.CanonicalSymbol != nil {
-		return *x.CanonicalSymbol
-	}
-	return ""
-}
-
-func (x *AssetGroup) GetIssuer() string {
-	if x != nil && x.Issuer != nil {
-		return *x.Issuer
+func (x *AssetGroup) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
 	}
 	return ""
 }
@@ -271,6 +295,27 @@ func (x *AssetGroup) GetDescription() string {
 		return *x.Description
 	}
 	return ""
+}
+
+func (x *AssetGroup) GetMembers() []*AssetGroupMember {
+	if x != nil {
+		return x.Members
+	}
+	return nil
+}
+
+func (x *AssetGroup) GetCreatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *AssetGroup) GetUpdatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
 }
 
 func (x *AssetGroup) GetMetadata() *_struct.Struct {
@@ -283,13 +328,16 @@ func (x *AssetGroup) GetMetadata() *_struct.Struct {
 // AssetGroupMember represents membership of an asset in a group.
 type AssetGroupMember struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique membership identifier (UUID).
+	MemberId *string `protobuf:"bytes,1,opt,name=member_id,json=memberId,proto3,oneof" json:"member_id,omitempty"`
 	// Group identifier this membership belongs to.
-	GroupId *string `protobuf:"bytes,1,opt,name=group_id,json=groupId,proto3,oneof" json:"group_id,omitempty"`
+	GroupId *string `protobuf:"bytes,2,opt,name=group_id,json=groupId,proto3,oneof" json:"group_id,omitempty"`
 	// Asset UUID that is a member of this group.
-	AssetId *string `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
-	// Whether this asset is the canonical representative of the group.
-	// Example: USDC on Ethereum is canonical for the USDC group.
-	IsCanonical   *bool `protobuf:"varint,3,opt,name=is_canonical,json=isCanonical,proto3,oneof" json:"is_canonical,omitempty"`
+	AssetId *string `protobuf:"bytes,3,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
+	// Weight for aggregation (default 1.0).
+	Weight *float64 `protobuf:"fixed64,4,opt,name=weight,proto3,oneof" json:"weight,omitempty"`
+	// Timestamp when this asset was added to the group.
+	AddedAt       *timestamp.Timestamp `protobuf:"bytes,5,opt,name=added_at,json=addedAt,proto3,oneof" json:"added_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -324,6 +372,13 @@ func (*AssetGroupMember) Descriptor() ([]byte, []int) {
 	return file_proto_assets_v1_relationship_proto_rawDescGZIP(), []int{2}
 }
 
+func (x *AssetGroupMember) GetMemberId() string {
+	if x != nil && x.MemberId != nil {
+		return *x.MemberId
+	}
+	return ""
+}
+
 func (x *AssetGroupMember) GetGroupId() string {
 	if x != nil && x.GroupId != nil {
 		return *x.GroupId
@@ -338,53 +393,78 @@ func (x *AssetGroupMember) GetAssetId() string {
 	return ""
 }
 
-func (x *AssetGroupMember) GetIsCanonical() bool {
-	if x != nil && x.IsCanonical != nil {
-		return *x.IsCanonical
+func (x *AssetGroupMember) GetWeight() float64 {
+	if x != nil && x.Weight != nil {
+		return *x.Weight
 	}
-	return false
+	return 0
+}
+
+func (x *AssetGroupMember) GetAddedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.AddedAt
+	}
+	return nil
 }
 
 var File_proto_assets_v1_relationship_proto protoreflect.FileDescriptor
 
 const file_proto_assets_v1_relationship_proto_rawDesc = "" +
 	"\n" +
-	"\"proto/assets/v1/relationship.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x81\x04\n" +
-	"\x11AssetRelationship\x12+\n" +
-	"\x0fparent_asset_id\x18\x01 \x01(\tH\x00R\rparentAssetId\x88\x01\x01\x12)\n" +
-	"\x0echild_asset_id\x18\x02 \x01(\tH\x01R\fchildAssetId\x88\x01\x01\x12Q\n" +
-	"\x11relationship_type\x18\x03 \x01(\x0e2\x1f.cqc.assets.v1.RelationshipTypeH\x02R\x10relationshipType\x88\x01\x01\x12,\n" +
-	"\x0fconversion_rate\x18\x04 \x01(\tH\x03R\x0econversionRate\x88\x01\x01\x12\x1f\n" +
-	"\bprotocol\x18\x05 \x01(\tH\x04R\bprotocol\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\x06 \x01(\v2\x17.google.protobuf.StructH\x05R\bmetadata\x88\x01\x01\x12>\n" +
+	"\"proto/assets/v1/relationship.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xba\x05\n" +
+	"\x11AssetRelationship\x12,\n" +
+	"\x0frelationship_id\x18\x01 \x01(\tH\x00R\x0erelationshipId\x88\x01\x01\x12'\n" +
+	"\rfrom_asset_id\x18\x02 \x01(\tH\x01R\vfromAssetId\x88\x01\x01\x12#\n" +
+	"\vto_asset_id\x18\x03 \x01(\tH\x02R\ttoAssetId\x88\x01\x01\x12Q\n" +
+	"\x11relationship_type\x18\x04 \x01(\x0e2\x1f.cqc.assets.v1.RelationshipTypeH\x03R\x10relationshipType\x88\x01\x01\x12,\n" +
+	"\x0fconversion_rate\x18\x05 \x01(\tH\x04R\x0econversionRate\x88\x01\x01\x12\x1f\n" +
+	"\bprotocol\x18\x06 \x01(\tH\x05R\bprotocol\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\a \x01(\tH\x06R\vdescription\x88\x01\x01\x12>\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampH\x06R\tcreatedAt\x88\x01\x01B\x12\n" +
-	"\x10_parent_asset_idB\x11\n" +
-	"\x0f_child_asset_idB\x14\n" +
+	"created_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampH\aR\tcreatedAt\x88\x01\x01\x12>\n" +
+	"\n" +
+	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\bR\tupdatedAt\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\n" +
+	" \x01(\v2\x17.google.protobuf.StructH\tR\bmetadata\x88\x01\x01B\x12\n" +
+	"\x10_relationship_idB\x10\n" +
+	"\x0e_from_asset_idB\x0e\n" +
+	"\f_to_asset_idB\x14\n" +
 	"\x12_relationship_typeB\x12\n" +
 	"\x10_conversion_rateB\v\n" +
-	"\t_protocolB\v\n" +
-	"\t_metadataB\r\n" +
-	"\v_created_at\"\xa4\x02\n" +
+	"\t_protocolB\x0e\n" +
+	"\f_descriptionB\r\n" +
+	"\v_created_atB\r\n" +
+	"\v_updated_atB\v\n" +
+	"\t_metadata\"\xb2\x03\n" +
 	"\n" +
 	"AssetGroup\x12\x1e\n" +
-	"\bgroup_id\x18\x01 \x01(\tH\x00R\agroupId\x88\x01\x01\x12.\n" +
-	"\x10canonical_symbol\x18\x02 \x01(\tH\x01R\x0fcanonicalSymbol\x88\x01\x01\x12\x1b\n" +
-	"\x06issuer\x18\x03 \x01(\tH\x02R\x06issuer\x88\x01\x01\x12%\n" +
-	"\vdescription\x18\x04 \x01(\tH\x03R\vdescription\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\x05 \x01(\v2\x17.google.protobuf.StructH\x04R\bmetadata\x88\x01\x01B\v\n" +
-	"\t_group_idB\x13\n" +
-	"\x11_canonical_symbolB\t\n" +
-	"\a_issuerB\x0e\n" +
-	"\f_descriptionB\v\n" +
-	"\t_metadata\"\xa5\x01\n" +
-	"\x10AssetGroupMember\x12\x1e\n" +
-	"\bgroup_id\x18\x01 \x01(\tH\x00R\agroupId\x88\x01\x01\x12\x1e\n" +
-	"\basset_id\x18\x02 \x01(\tH\x01R\aassetId\x88\x01\x01\x12&\n" +
-	"\fis_canonical\x18\x03 \x01(\bH\x02R\visCanonical\x88\x01\x01B\v\n" +
+	"\bgroup_id\x18\x01 \x01(\tH\x00R\agroupId\x88\x01\x01\x12\x17\n" +
+	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x02R\vdescription\x88\x01\x01\x129\n" +
+	"\amembers\x18\x04 \x03(\v2\x1f.cqc.assets.v1.AssetGroupMemberR\amembers\x12>\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\tcreatedAt\x88\x01\x01\x12>\n" +
+	"\n" +
+	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\tupdatedAt\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\a \x01(\v2\x17.google.protobuf.StructH\x05R\bmetadata\x88\x01\x01B\v\n" +
+	"\t_group_idB\a\n" +
+	"\x05_nameB\x0e\n" +
+	"\f_descriptionB\r\n" +
+	"\v_created_atB\r\n" +
+	"\v_updated_atB\v\n" +
+	"\t_metadata\"\x8d\x02\n" +
+	"\x10AssetGroupMember\x12 \n" +
+	"\tmember_id\x18\x01 \x01(\tH\x00R\bmemberId\x88\x01\x01\x12\x1e\n" +
+	"\bgroup_id\x18\x02 \x01(\tH\x01R\agroupId\x88\x01\x01\x12\x1e\n" +
+	"\basset_id\x18\x03 \x01(\tH\x02R\aassetId\x88\x01\x01\x12\x1b\n" +
+	"\x06weight\x18\x04 \x01(\x01H\x03R\x06weight\x88\x01\x01\x12:\n" +
+	"\badded_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\aaddedAt\x88\x01\x01B\f\n" +
+	"\n" +
+	"_member_idB\v\n" +
 	"\t_group_idB\v\n" +
-	"\t_asset_idB\x0f\n" +
-	"\r_is_canonical*\xc2\x02\n" +
+	"\t_asset_idB\t\n" +
+	"\a_weightB\v\n" +
+	"\t_added_at*\xc2\x02\n" +
 	"\x10RelationshipType\x12!\n" +
 	"\x1dRELATIONSHIP_TYPE_UNSPECIFIED\x10\x00\x12\x1b\n" +
 	"\x17RELATIONSHIP_TYPE_WRAPS\x10\x01\x12\x1d\n" +
@@ -415,19 +495,24 @@ var file_proto_assets_v1_relationship_proto_goTypes = []any{
 	(*AssetRelationship)(nil),   // 1: cqc.assets.v1.AssetRelationship
 	(*AssetGroup)(nil),          // 2: cqc.assets.v1.AssetGroup
 	(*AssetGroupMember)(nil),    // 3: cqc.assets.v1.AssetGroupMember
-	(*_struct.Struct)(nil),      // 4: google.protobuf.Struct
-	(*timestamp.Timestamp)(nil), // 5: google.protobuf.Timestamp
+	(*timestamp.Timestamp)(nil), // 4: google.protobuf.Timestamp
+	(*_struct.Struct)(nil),      // 5: google.protobuf.Struct
 }
 var file_proto_assets_v1_relationship_proto_depIdxs = []int32{
 	0, // 0: cqc.assets.v1.AssetRelationship.relationship_type:type_name -> cqc.assets.v1.RelationshipType
-	4, // 1: cqc.assets.v1.AssetRelationship.metadata:type_name -> google.protobuf.Struct
-	5, // 2: cqc.assets.v1.AssetRelationship.created_at:type_name -> google.protobuf.Timestamp
-	4, // 3: cqc.assets.v1.AssetGroup.metadata:type_name -> google.protobuf.Struct
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 1: cqc.assets.v1.AssetRelationship.created_at:type_name -> google.protobuf.Timestamp
+	4, // 2: cqc.assets.v1.AssetRelationship.updated_at:type_name -> google.protobuf.Timestamp
+	5, // 3: cqc.assets.v1.AssetRelationship.metadata:type_name -> google.protobuf.Struct
+	3, // 4: cqc.assets.v1.AssetGroup.members:type_name -> cqc.assets.v1.AssetGroupMember
+	4, // 5: cqc.assets.v1.AssetGroup.created_at:type_name -> google.protobuf.Timestamp
+	4, // 6: cqc.assets.v1.AssetGroup.updated_at:type_name -> google.protobuf.Timestamp
+	5, // 7: cqc.assets.v1.AssetGroup.metadata:type_name -> google.protobuf.Struct
+	4, // 8: cqc.assets.v1.AssetGroupMember.added_at:type_name -> google.protobuf.Timestamp
+	9, // [9:9] is the sub-list for method output_type
+	9, // [9:9] is the sub-list for method input_type
+	9, // [9:9] is the sub-list for extension type_name
+	9, // [9:9] is the sub-list for extension extendee
+	0, // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_proto_assets_v1_relationship_proto_init() }

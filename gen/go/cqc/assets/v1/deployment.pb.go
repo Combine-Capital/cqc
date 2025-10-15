@@ -58,8 +58,12 @@ type AssetDeployment struct {
 	IsVerified *bool `protobuf:"varint,11,opt,name=is_verified,json=isVerified,proto3,oneof" json:"is_verified,omitempty"`
 	// Timestamp of when this deployment occurred.
 	DeployedAt *timestamp.Timestamp `protobuf:"bytes,12,opt,name=deployed_at,json=deployedAt,proto3,oneof" json:"deployed_at,omitempty"`
+	// Timestamp when this deployment record was created.
+	CreatedAt *timestamp.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
+	// Timestamp when this deployment record was last updated.
+	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
 	// Additional deployment-specific metadata.
-	Metadata      *_struct.Struct `protobuf:"bytes,13,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,15,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -178,6 +182,20 @@ func (x *AssetDeployment) GetDeployedAt() *timestamp.Timestamp {
 	return nil
 }
 
+func (x *AssetDeployment) GetCreatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *AssetDeployment) GetUpdatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 func (x *AssetDeployment) GetMetadata() *_struct.Struct {
 	if x != nil {
 		return x.Metadata
@@ -189,7 +207,7 @@ var File_proto_assets_v1_deployment_proto protoreflect.FileDescriptor
 
 const file_proto_assets_v1_deployment_proto_rawDesc = "" +
 	"\n" +
-	" proto/assets/v1/deployment.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x81\x06\n" +
+	" proto/assets/v1/deployment.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x9f\a\n" +
 	"\x0fAssetDeployment\x12(\n" +
 	"\rdeployment_id\x18\x01 \x01(\tH\x00R\fdeploymentId\x88\x01\x01\x12\x1e\n" +
 	"\basset_id\x18\x02 \x01(\tH\x01R\aassetId\x88\x01\x01\x12\x1e\n" +
@@ -207,8 +225,12 @@ const file_proto_assets_v1_deployment_proto_rawDesc = "" +
 	"R\n" +
 	"isVerified\x88\x01\x01\x12@\n" +
 	"\vdeployed_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampH\vR\n" +
-	"deployedAt\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\r \x01(\v2\x17.google.protobuf.StructH\fR\bmetadata\x88\x01\x01B\x10\n" +
+	"deployedAt\x88\x01\x01\x12>\n" +
+	"\n" +
+	"created_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampH\fR\tcreatedAt\x88\x01\x01\x12>\n" +
+	"\n" +
+	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampH\rR\tupdatedAt\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\x0f \x01(\v2\x17.google.protobuf.StructH\x0eR\bmetadata\x88\x01\x01B\x10\n" +
 	"\x0e_deployment_idB\v\n" +
 	"\t_asset_idB\v\n" +
 	"\t_chain_idB\r\n" +
@@ -221,7 +243,9 @@ const file_proto_assets_v1_deployment_proto_rawDesc = "" +
 	"\x0e_deployment_txB\x13\n" +
 	"\x11_deployer_addressB\x0e\n" +
 	"\f_is_verifiedB\x0e\n" +
-	"\f_deployed_atB\v\n" +
+	"\f_deployed_atB\r\n" +
+	"\v_created_atB\r\n" +
+	"\v_updated_atB\v\n" +
 	"\t_metadataB>Z<github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1;assetsv1b\x06proto3"
 
 var (
@@ -244,12 +268,14 @@ var file_proto_assets_v1_deployment_proto_goTypes = []any{
 }
 var file_proto_assets_v1_deployment_proto_depIdxs = []int32{
 	1, // 0: cqc.assets.v1.AssetDeployment.deployed_at:type_name -> google.protobuf.Timestamp
-	2, // 1: cqc.assets.v1.AssetDeployment.metadata:type_name -> google.protobuf.Struct
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 1: cqc.assets.v1.AssetDeployment.created_at:type_name -> google.protobuf.Timestamp
+	1, // 2: cqc.assets.v1.AssetDeployment.updated_at:type_name -> google.protobuf.Timestamp
+	2, // 3: cqc.assets.v1.AssetDeployment.metadata:type_name -> google.protobuf.Struct
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_proto_assets_v1_deployment_proto_init() }

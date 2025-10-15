@@ -23,61 +23,81 @@ enum RelationshipType {
 // AssetRelationship represents a relationship between two assets.
 // Examples: WETH wraps ETH, stETH stakes ETH, bridged USDC relates to native USDC.
 message AssetRelationship {
+  // Unique relationship identifier (UUID).
+  optional string relationship_id = 1;
+
   // Parent asset UUID (the underlying or source asset).
   // Example: ETH is the parent when WETH wraps it.
-  optional string parent_asset_id = 1;
+  optional string from_asset_id = 2;
 
   // Child asset UUID (the derivative or resulting asset).
   // Example: WETH is the child when it wraps ETH.
-  optional string child_asset_id = 2;
+  optional string to_asset_id = 3;
 
   // Type of relationship between parent and child.
-  optional RelationshipType relationship_type = 3;
+  optional RelationshipType relationship_type = 4;
 
   // Conversion rate between assets, if fixed.
   // Represented as string to preserve precision.
   // NULL/empty for non-1:1 conversions (e.g., stETH to ETH is variable).
   // Example: "1.000000000000000000" for 1:1 wrapping.
-  optional string conversion_rate = 4;
+  optional string conversion_rate = 5;
 
   // Protocol facilitating this relationship (e.g., "Lido", "Aave", "Uniswap", "Wormhole").
-  optional string protocol = 5;
+  optional string protocol = 6;
 
-  // Additional relationship-specific metadata.
-  optional google.protobuf.Struct metadata = 6;
+  // Human-readable explanation of this relationship.
+  optional string description = 7;
 
   // Timestamp when this relationship was established.
-  optional google.protobuf.Timestamp created_at = 7;
+  optional google.protobuf.Timestamp created_at = 8;
+
+  // Timestamp when this relationship was last updated.
+  optional google.protobuf.Timestamp updated_at = 9;
+
+  // Additional relationship-specific metadata.
+  optional google.protobuf.Struct metadata = 10;
 }
 
 // AssetGroup represents a logical grouping of related assets.
 // Examples: All USDC variants across chains, all native ETH versions.
 message AssetGroup {
-  // Unique group identifier (e.g., "usdc-circle", "eth-native", "btc-native").
+  // Unique group identifier (UUID).
   optional string group_id = 1;
 
-  // Canonical symbol for this group (e.g., "USDC", "ETH", "BTC").
-  optional string canonical_symbol = 2;
-
-  // Issuer or controlling entity (e.g., "circle", "ethereum-foundation").
-  optional string issuer = 3;
+  // Unique group name (lowercase_with_underscores).
+  optional string name = 2;
 
   // Description of what this group represents.
-  optional string description = 4;
+  optional string description = 3;
+
+  // List of member assets with weights.
+  repeated AssetGroupMember members = 4;
+
+  // Timestamp when this group was created.
+  optional google.protobuf.Timestamp created_at = 5;
+
+  // Timestamp when this group was last updated.
+  optional google.protobuf.Timestamp updated_at = 6;
 
   // Additional group metadata.
-  optional google.protobuf.Struct metadata = 5;
+  optional google.protobuf.Struct metadata = 7;
 }
 
 // AssetGroupMember represents membership of an asset in a group.
 message AssetGroupMember {
+  // Unique membership identifier (UUID).
+  optional string member_id = 1;
+
   // Group identifier this membership belongs to.
-  optional string group_id = 1;
+  optional string group_id = 2;
 
   // Asset UUID that is a member of this group.
-  optional string asset_id = 2;
+  optional string asset_id = 3;
 
-  // Whether this asset is the canonical representative of the group.
-  // Example: USDC on Ethereum is canonical for the USDC group.
-  optional bool is_canonical = 3;
+  // Weight for aggregation (default 1.0).
+  optional double weight = 4;
+
+  // Timestamp when this asset was added to the group.
+  optional google.protobuf.Timestamp added_at = 5;
 }

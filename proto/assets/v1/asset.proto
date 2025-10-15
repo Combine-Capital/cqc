@@ -63,25 +63,34 @@ message Asset {
   // Timestamp when this asset record was created.
   optional google.protobuf.Timestamp created_at = 9;
 
+  // Timestamp when this asset record was last updated.
+  optional google.protobuf.Timestamp updated_at = 10;
+
   // Additional metadata as structured data.
-  optional google.protobuf.Struct metadata = 10;
+  optional google.protobuf.Struct metadata = 11;
 }
 
 // AssetIdentifier maps canonical assets to external data provider identifiers.
 // This enables lookups by CoinGecko ID, CoinMarketCap ID, etc.
 message AssetIdentifier {
+  // Unique identifier ID (UUID).
+  optional string identifier_id = 1;
+
   // Asset UUID this identifier belongs to.
-  optional string asset_id = 1;
+  optional string asset_id = 2;
 
   // Data provider/source of this identifier.
-  optional DataSource source = 2;
+  optional DataSource source = 3;
 
   // External identifier from the data provider (e.g., "bitcoin" for CoinGecko, "1" for CMC).
-  optional string external_id = 3;
+  optional string external_id = 4;
 
   // Whether this is the primary identifier for this source.
-  optional bool is_primary = 4;
+  optional bool is_primary = 5;
+
+  // Timestamp when this identifier was created.
+  optional google.protobuf.Timestamp created_at = 6;
 
   // Additional metadata specific to this identifier mapping.
-  optional google.protobuf.Struct metadata = 5;
+  optional google.protobuf.Struct metadata = 7;
 }

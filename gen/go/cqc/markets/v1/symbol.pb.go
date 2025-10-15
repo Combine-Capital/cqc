@@ -185,11 +185,13 @@ type Symbol struct {
 	IsActive *bool `protobuf:"varint,16,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`
 	// Timestamp when this symbol was created/listed.
 	CreatedAt *timestamp.Timestamp `protobuf:"bytes,17,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
+	// Timestamp when this symbol was last updated.
+	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,18,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
 	// Timestamp when this symbol was deactivated/delisted.
 	// NULL if still active.
-	DelistedAt *timestamp.Timestamp `protobuf:"bytes,18,opt,name=delisted_at,json=delistedAt,proto3,oneof" json:"delisted_at,omitempty"`
+	DelistedAt *timestamp.Timestamp `protobuf:"bytes,19,opt,name=delisted_at,json=delistedAt,proto3,oneof" json:"delisted_at,omitempty"`
 	// Additional symbol-specific metadata.
-	Metadata      *_struct.Struct `protobuf:"bytes,19,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,20,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -343,6 +345,13 @@ func (x *Symbol) GetCreatedAt() *timestamp.Timestamp {
 	return nil
 }
 
+func (x *Symbol) GetUpdatedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 func (x *Symbol) GetDelistedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.DelistedAt
@@ -361,7 +370,7 @@ var File_proto_markets_v1_symbol_proto protoreflect.FileDescriptor
 
 const file_proto_markets_v1_symbol_proto_rawDesc = "" +
 	"\n" +
-	"\x1dproto/markets/v1/symbol.proto\x12\x0ecqc.markets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xad\t\n" +
+	"\x1dproto/markets/v1/symbol.proto\x12\x0ecqc.markets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xfc\t\n" +
 	"\x06Symbol\x12 \n" +
 	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1b\n" +
 	"\x06symbol\x18\x02 \x01(\tH\x01R\x06symbol\x88\x01\x01\x12@\n" +
@@ -384,10 +393,12 @@ const file_proto_markets_v1_symbol_proto_rawDesc = "" +
 	"optionType\x88\x01\x01\x12 \n" +
 	"\tis_active\x18\x10 \x01(\bH\x0fR\bisActive\x88\x01\x01\x12>\n" +
 	"\n" +
-	"created_at\x18\x11 \x01(\v2\x1a.google.protobuf.TimestampH\x10R\tcreatedAt\x88\x01\x01\x12@\n" +
-	"\vdelisted_at\x18\x12 \x01(\v2\x1a.google.protobuf.TimestampH\x11R\n" +
+	"created_at\x18\x11 \x01(\v2\x1a.google.protobuf.TimestampH\x10R\tcreatedAt\x88\x01\x01\x12>\n" +
+	"\n" +
+	"updated_at\x18\x12 \x01(\v2\x1a.google.protobuf.TimestampH\x11R\tupdatedAt\x88\x01\x01\x12@\n" +
+	"\vdelisted_at\x18\x13 \x01(\v2\x1a.google.protobuf.TimestampH\x12R\n" +
 	"delistedAt\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\x13 \x01(\v2\x17.google.protobuf.StructH\x12R\bmetadata\x88\x01\x01B\f\n" +
+	"\bmetadata\x18\x14 \x01(\v2\x17.google.protobuf.StructH\x13R\bmetadata\x88\x01\x01B\f\n" +
 	"\n" +
 	"_symbol_idB\t\n" +
 	"\a_symbolB\x0e\n" +
@@ -407,7 +418,8 @@ const file_proto_markets_v1_symbol_proto_rawDesc = "" +
 	"\f_option_typeB\f\n" +
 	"\n" +
 	"_is_activeB\r\n" +
-	"\v_created_atB\x0e\n" +
+	"\v_created_atB\r\n" +
+	"\v_updated_atB\x0e\n" +
 	"\f_delisted_atB\v\n" +
 	"\t_metadata*\xa2\x01\n" +
 	"\n" +
@@ -450,13 +462,14 @@ var file_proto_markets_v1_symbol_proto_depIdxs = []int32{
 	3, // 1: cqc.markets.v1.Symbol.expiry:type_name -> google.protobuf.Timestamp
 	1, // 2: cqc.markets.v1.Symbol.option_type:type_name -> cqc.markets.v1.OptionType
 	3, // 3: cqc.markets.v1.Symbol.created_at:type_name -> google.protobuf.Timestamp
-	3, // 4: cqc.markets.v1.Symbol.delisted_at:type_name -> google.protobuf.Timestamp
-	4, // 5: cqc.markets.v1.Symbol.metadata:type_name -> google.protobuf.Struct
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	3, // 4: cqc.markets.v1.Symbol.updated_at:type_name -> google.protobuf.Timestamp
+	3, // 5: cqc.markets.v1.Symbol.delisted_at:type_name -> google.protobuf.Timestamp
+	4, // 6: cqc.markets.v1.Symbol.metadata:type_name -> google.protobuf.Struct
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_markets_v1_symbol_proto_init() }

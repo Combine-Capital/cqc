@@ -93,10 +93,13 @@ message Symbol {
   // Timestamp when this symbol was created/listed.
   optional google.protobuf.Timestamp created_at = 17;
 
+  // Timestamp when this symbol was last updated.
+  optional google.protobuf.Timestamp updated_at = 18;
+
   // Timestamp when this symbol was deactivated/delisted.
   // NULL if still active.
-  optional google.protobuf.Timestamp delisted_at = 18;
+  optional google.protobuf.Timestamp delisted_at = 19;
 
   // Additional symbol-specific metadata.
-  optional google.protobuf.Struct metadata = 19;
+  optional google.protobuf.Struct metadata = 20;
 }

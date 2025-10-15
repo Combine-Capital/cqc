@@ -34,31 +34,40 @@ enum FlagSeverity {
 // AssetQualityFlag represents a quality or safety flag raised for an asset.
 // Flags indicate potential risks or issues with an asset (scams, exploits, low liquidity, etc.).
 message AssetQualityFlag {
+  // Unique flag identifier (UUID).
+  optional string flag_id = 1;
+
   // Asset UUID this flag applies to.
-  optional string asset_id = 1;
+  optional string asset_id = 2;
 
   // Type of flag raised.
-  optional FlagType flag_type = 2;
+  optional FlagType flag_type = 3;
 
   // Severity level of this flag.
-  optional FlagSeverity severity = 3;
+  optional FlagSeverity severity = 4;
 
   // Source of this flag (e.g., "certik", "tokensniffer", "manual", "coingecko").
-  optional string source = 4;
+  optional string source = 5;
 
-  // Timestamp when this flag was raised.
-  optional google.protobuf.Timestamp flagged_at = 5;
-
-  // Timestamp when this flag was cleared/resolved, if applicable.
-  // NULL/unset if flag is still active.
-  optional google.protobuf.Timestamp cleared_at = 6;
-
-  // Additional notes or details about this flag.
-  optional string notes = 7;
+  // Detailed explanation of the issue.
+  optional string reason = 6;
 
   // URL to evidence or documentation supporting this flag.
-  optional string evidence_url = 8;
+  optional string evidence_url = 7;
+
+  // Timestamp when this flag was raised.
+  optional google.protobuf.Timestamp raised_at = 8;
+
+  // Timestamp when this flag was resolved, if applicable.
+  // NULL/unset if flag is still active.
+  optional google.protobuf.Timestamp resolved_at = 9;
+
+  // Who resolved this flag.
+  optional string resolved_by = 10;
+
+  // Explanation of resolution.
+  optional string resolution_notes = 11;
 
   // Additional flag-specific metadata.
-  optional google.protobuf.Struct metadata = 9;
+  optional google.protobuf.Struct metadata = 12;
 }

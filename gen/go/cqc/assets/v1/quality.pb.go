@@ -157,25 +157,31 @@ func (FlagSeverity) EnumDescriptor() ([]byte, []int) {
 // Flags indicate potential risks or issues with an asset (scams, exploits, low liquidity, etc.).
 type AssetQualityFlag struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique flag identifier (UUID).
+	FlagId *string `protobuf:"bytes,1,opt,name=flag_id,json=flagId,proto3,oneof" json:"flag_id,omitempty"`
 	// Asset UUID this flag applies to.
-	AssetId *string `protobuf:"bytes,1,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
+	AssetId *string `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
 	// Type of flag raised.
-	FlagType *FlagType `protobuf:"varint,2,opt,name=flag_type,json=flagType,proto3,enum=cqc.assets.v1.FlagType,oneof" json:"flag_type,omitempty"`
+	FlagType *FlagType `protobuf:"varint,3,opt,name=flag_type,json=flagType,proto3,enum=cqc.assets.v1.FlagType,oneof" json:"flag_type,omitempty"`
 	// Severity level of this flag.
-	Severity *FlagSeverity `protobuf:"varint,3,opt,name=severity,proto3,enum=cqc.assets.v1.FlagSeverity,oneof" json:"severity,omitempty"`
+	Severity *FlagSeverity `protobuf:"varint,4,opt,name=severity,proto3,enum=cqc.assets.v1.FlagSeverity,oneof" json:"severity,omitempty"`
 	// Source of this flag (e.g., "certik", "tokensniffer", "manual", "coingecko").
-	Source *string `protobuf:"bytes,4,opt,name=source,proto3,oneof" json:"source,omitempty"`
-	// Timestamp when this flag was raised.
-	FlaggedAt *timestamp.Timestamp `protobuf:"bytes,5,opt,name=flagged_at,json=flaggedAt,proto3,oneof" json:"flagged_at,omitempty"`
-	// Timestamp when this flag was cleared/resolved, if applicable.
-	// NULL/unset if flag is still active.
-	ClearedAt *timestamp.Timestamp `protobuf:"bytes,6,opt,name=cleared_at,json=clearedAt,proto3,oneof" json:"cleared_at,omitempty"`
-	// Additional notes or details about this flag.
-	Notes *string `protobuf:"bytes,7,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	Source *string `protobuf:"bytes,5,opt,name=source,proto3,oneof" json:"source,omitempty"`
+	// Detailed explanation of the issue.
+	Reason *string `protobuf:"bytes,6,opt,name=reason,proto3,oneof" json:"reason,omitempty"`
 	// URL to evidence or documentation supporting this flag.
-	EvidenceUrl *string `protobuf:"bytes,8,opt,name=evidence_url,json=evidenceUrl,proto3,oneof" json:"evidence_url,omitempty"`
+	EvidenceUrl *string `protobuf:"bytes,7,opt,name=evidence_url,json=evidenceUrl,proto3,oneof" json:"evidence_url,omitempty"`
+	// Timestamp when this flag was raised.
+	RaisedAt *timestamp.Timestamp `protobuf:"bytes,8,opt,name=raised_at,json=raisedAt,proto3,oneof" json:"raised_at,omitempty"`
+	// Timestamp when this flag was resolved, if applicable.
+	// NULL/unset if flag is still active.
+	ResolvedAt *timestamp.Timestamp `protobuf:"bytes,9,opt,name=resolved_at,json=resolvedAt,proto3,oneof" json:"resolved_at,omitempty"`
+	// Who resolved this flag.
+	ResolvedBy *string `protobuf:"bytes,10,opt,name=resolved_by,json=resolvedBy,proto3,oneof" json:"resolved_by,omitempty"`
+	// Explanation of resolution.
+	ResolutionNotes *string `protobuf:"bytes,11,opt,name=resolution_notes,json=resolutionNotes,proto3,oneof" json:"resolution_notes,omitempty"`
 	// Additional flag-specific metadata.
-	Metadata      *_struct.Struct `protobuf:"bytes,9,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,12,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -210,6 +216,13 @@ func (*AssetQualityFlag) Descriptor() ([]byte, []int) {
 	return file_proto_assets_v1_quality_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *AssetQualityFlag) GetFlagId() string {
+	if x != nil && x.FlagId != nil {
+		return *x.FlagId
+	}
+	return ""
+}
+
 func (x *AssetQualityFlag) GetAssetId() string {
 	if x != nil && x.AssetId != nil {
 		return *x.AssetId
@@ -238,23 +251,9 @@ func (x *AssetQualityFlag) GetSource() string {
 	return ""
 }
 
-func (x *AssetQualityFlag) GetFlaggedAt() *timestamp.Timestamp {
-	if x != nil {
-		return x.FlaggedAt
-	}
-	return nil
-}
-
-func (x *AssetQualityFlag) GetClearedAt() *timestamp.Timestamp {
-	if x != nil {
-		return x.ClearedAt
-	}
-	return nil
-}
-
-func (x *AssetQualityFlag) GetNotes() string {
-	if x != nil && x.Notes != nil {
-		return *x.Notes
+func (x *AssetQualityFlag) GetReason() string {
+	if x != nil && x.Reason != nil {
+		return *x.Reason
 	}
 	return ""
 }
@@ -262,6 +261,34 @@ func (x *AssetQualityFlag) GetNotes() string {
 func (x *AssetQualityFlag) GetEvidenceUrl() string {
 	if x != nil && x.EvidenceUrl != nil {
 		return *x.EvidenceUrl
+	}
+	return ""
+}
+
+func (x *AssetQualityFlag) GetRaisedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.RaisedAt
+	}
+	return nil
+}
+
+func (x *AssetQualityFlag) GetResolvedAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.ResolvedAt
+	}
+	return nil
+}
+
+func (x *AssetQualityFlag) GetResolvedBy() string {
+	if x != nil && x.ResolvedBy != nil {
+		return *x.ResolvedBy
+	}
+	return ""
+}
+
+func (x *AssetQualityFlag) GetResolutionNotes() string {
+	if x != nil && x.ResolutionNotes != nil {
+		return *x.ResolutionNotes
 	}
 	return ""
 }
@@ -277,28 +304,38 @@ var File_proto_assets_v1_quality_proto protoreflect.FileDescriptor
 
 const file_proto_assets_v1_quality_proto_rawDesc = "" +
 	"\n" +
-	"\x1dproto/assets/v1/quality.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xbe\x04\n" +
-	"\x10AssetQualityFlag\x12\x1e\n" +
-	"\basset_id\x18\x01 \x01(\tH\x00R\aassetId\x88\x01\x01\x129\n" +
-	"\tflag_type\x18\x02 \x01(\x0e2\x17.cqc.assets.v1.FlagTypeH\x01R\bflagType\x88\x01\x01\x12<\n" +
-	"\bseverity\x18\x03 \x01(\x0e2\x1b.cqc.assets.v1.FlagSeverityH\x02R\bseverity\x88\x01\x01\x12\x1b\n" +
-	"\x06source\x18\x04 \x01(\tH\x03R\x06source\x88\x01\x01\x12>\n" +
+	"\x1dproto/assets/v1/quality.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xe6\x05\n" +
+	"\x10AssetQualityFlag\x12\x1c\n" +
+	"\aflag_id\x18\x01 \x01(\tH\x00R\x06flagId\x88\x01\x01\x12\x1e\n" +
+	"\basset_id\x18\x02 \x01(\tH\x01R\aassetId\x88\x01\x01\x129\n" +
+	"\tflag_type\x18\x03 \x01(\x0e2\x17.cqc.assets.v1.FlagTypeH\x02R\bflagType\x88\x01\x01\x12<\n" +
+	"\bseverity\x18\x04 \x01(\x0e2\x1b.cqc.assets.v1.FlagSeverityH\x03R\bseverity\x88\x01\x01\x12\x1b\n" +
+	"\x06source\x18\x05 \x01(\tH\x04R\x06source\x88\x01\x01\x12\x1b\n" +
+	"\x06reason\x18\x06 \x01(\tH\x05R\x06reason\x88\x01\x01\x12&\n" +
+	"\fevidence_url\x18\a \x01(\tH\x06R\vevidenceUrl\x88\x01\x01\x12<\n" +
+	"\traised_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampH\aR\braisedAt\x88\x01\x01\x12@\n" +
+	"\vresolved_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\bR\n" +
+	"resolvedAt\x88\x01\x01\x12$\n" +
+	"\vresolved_by\x18\n" +
+	" \x01(\tH\tR\n" +
+	"resolvedBy\x88\x01\x01\x12.\n" +
+	"\x10resolution_notes\x18\v \x01(\tH\n" +
+	"R\x0fresolutionNotes\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\f \x01(\v2\x17.google.protobuf.StructH\vR\bmetadata\x88\x01\x01B\n" +
 	"\n" +
-	"flagged_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\tflaggedAt\x88\x01\x01\x12>\n" +
-	"\n" +
-	"cleared_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampH\x05R\tclearedAt\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18\a \x01(\tH\x06R\x05notes\x88\x01\x01\x12&\n" +
-	"\fevidence_url\x18\b \x01(\tH\aR\vevidenceUrl\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\t \x01(\v2\x17.google.protobuf.StructH\bR\bmetadata\x88\x01\x01B\v\n" +
+	"\b_flag_idB\v\n" +
 	"\t_asset_idB\f\n" +
 	"\n" +
 	"_flag_typeB\v\n" +
 	"\t_severityB\t\n" +
-	"\a_sourceB\r\n" +
-	"\v_flagged_atB\r\n" +
-	"\v_cleared_atB\b\n" +
-	"\x06_notesB\x0f\n" +
-	"\r_evidence_urlB\v\n" +
+	"\a_sourceB\t\n" +
+	"\a_reasonB\x0f\n" +
+	"\r_evidence_urlB\f\n" +
+	"\n" +
+	"_raised_atB\x0e\n" +
+	"\f_resolved_atB\x0e\n" +
+	"\f_resolved_byB\x13\n" +
+	"\x11_resolution_notesB\v\n" +
 	"\t_metadata*\x81\x02\n" +
 	"\bFlagType\x12\x19\n" +
 	"\x15FLAG_TYPE_UNSPECIFIED\x10\x00\x12\x12\n" +
@@ -343,8 +380,8 @@ var file_proto_assets_v1_quality_proto_goTypes = []any{
 var file_proto_assets_v1_quality_proto_depIdxs = []int32{
 	0, // 0: cqc.assets.v1.AssetQualityFlag.flag_type:type_name -> cqc.assets.v1.FlagType
 	1, // 1: cqc.assets.v1.AssetQualityFlag.severity:type_name -> cqc.assets.v1.FlagSeverity
-	3, // 2: cqc.assets.v1.AssetQualityFlag.flagged_at:type_name -> google.protobuf.Timestamp
-	3, // 3: cqc.assets.v1.AssetQualityFlag.cleared_at:type_name -> google.protobuf.Timestamp
+	3, // 2: cqc.assets.v1.AssetQualityFlag.raised_at:type_name -> google.protobuf.Timestamp
+	3, // 3: cqc.assets.v1.AssetQualityFlag.resolved_at:type_name -> google.protobuf.Timestamp
 	4, // 4: cqc.assets.v1.AssetQualityFlag.metadata:type_name -> google.protobuf.Struct
 	5, // [5:5] is the sub-list for method output_type
 	5, // [5:5] is the sub-list for method input_type

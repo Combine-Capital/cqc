@@ -86,27 +86,24 @@ func (DataSource) EnumDescriptor() ([]byte, []int) {
 // This allows querying external APIs using their native symbol identifiers.
 type SymbolIdentifier struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier ID (UUID).
+	IdentifierId *string `protobuf:"bytes,1,opt,name=identifier_id,json=identifierId,proto3,oneof" json:"identifier_id,omitempty"`
 	// Canonical symbol identifier (UUID) this identifier maps to.
-	SymbolId *string `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	SymbolId *string `protobuf:"bytes,2,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
 	// Data source/provider for this identifier.
-	DataSource *DataSource `protobuf:"varint,2,opt,name=data_source,json=dataSource,proto3,enum=cqc.markets.v1.DataSource,oneof" json:"data_source,omitempty"`
+	DataSource *DataSource `protobuf:"varint,3,opt,name=data_source,json=dataSource,proto3,enum=cqc.markets.v1.DataSource,oneof" json:"data_source,omitempty"`
 	// External identifier string used by the data source.
 	// Examples:
 	//   - CoinGecko: "bitcoin-usd" for BTC/USD
 	//   - CoinMarketCap: "1-USD" for BTC/USD (symbol ID 1 in USD)
 	//   - DefiLlama: "ethereum:0x..." for token pair
-	ExternalId *string `protobuf:"bytes,3,opt,name=external_id,json=externalId,proto3,oneof" json:"external_id,omitempty"`
-	// URL or API endpoint for accessing this symbol's data.
-	// Example: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
-	ApiUrl *string `protobuf:"bytes,4,opt,name=api_url,json=apiUrl,proto3,oneof" json:"api_url,omitempty"`
+	ExternalId *string `protobuf:"bytes,4,opt,name=external_id,json=externalId,proto3,oneof" json:"external_id,omitempty"`
+	// Whether this is the primary identifier for this source.
+	IsPrimary *bool `protobuf:"varint,5,opt,name=is_primary,json=isPrimary,proto3,oneof" json:"is_primary,omitempty"`
 	// Timestamp when this identifier was created.
-	CreatedAt *timestamp.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
-	// Timestamp when this identifier was last verified/updated.
-	LastVerifiedAt *timestamp.Timestamp `protobuf:"bytes,6,opt,name=last_verified_at,json=lastVerifiedAt,proto3,oneof" json:"last_verified_at,omitempty"`
-	// Whether this identifier is currently valid and usable.
-	IsActive *bool `protobuf:"varint,7,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`
+	CreatedAt *timestamp.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
 	// Additional data source-specific metadata.
-	Metadata      *_struct.Struct `protobuf:"bytes,8,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,7,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -141,6 +138,13 @@ func (*SymbolIdentifier) Descriptor() ([]byte, []int) {
 	return file_proto_markets_v1_symbol_identifier_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *SymbolIdentifier) GetIdentifierId() string {
+	if x != nil && x.IdentifierId != nil {
+		return *x.IdentifierId
+	}
+	return ""
+}
+
 func (x *SymbolIdentifier) GetSymbolId() string {
 	if x != nil && x.SymbolId != nil {
 		return *x.SymbolId
@@ -162,11 +166,11 @@ func (x *SymbolIdentifier) GetExternalId() string {
 	return ""
 }
 
-func (x *SymbolIdentifier) GetApiUrl() string {
-	if x != nil && x.ApiUrl != nil {
-		return *x.ApiUrl
+func (x *SymbolIdentifier) GetIsPrimary() bool {
+	if x != nil && x.IsPrimary != nil {
+		return *x.IsPrimary
 	}
-	return ""
+	return false
 }
 
 func (x *SymbolIdentifier) GetCreatedAt() *timestamp.Timestamp {
@@ -174,20 +178,6 @@ func (x *SymbolIdentifier) GetCreatedAt() *timestamp.Timestamp {
 		return x.CreatedAt
 	}
 	return nil
-}
-
-func (x *SymbolIdentifier) GetLastVerifiedAt() *timestamp.Timestamp {
-	if x != nil {
-		return x.LastVerifiedAt
-	}
-	return nil
-}
-
-func (x *SymbolIdentifier) GetIsActive() bool {
-	if x != nil && x.IsActive != nil {
-		return *x.IsActive
-	}
-	return false
 }
 
 func (x *SymbolIdentifier) GetMetadata() *_struct.Struct {
@@ -201,29 +191,26 @@ var File_proto_markets_v1_symbol_identifier_proto protoreflect.FileDescriptor
 
 const file_proto_markets_v1_symbol_identifier_proto_rawDesc = "" +
 	"\n" +
-	"(proto/markets/v1/symbol_identifier.proto\x12\x0ecqc.markets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x9a\x04\n" +
-	"\x10SymbolIdentifier\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12@\n" +
-	"\vdata_source\x18\x02 \x01(\x0e2\x1a.cqc.markets.v1.DataSourceH\x01R\n" +
+	"(proto/markets/v1/symbol_identifier.proto\x12\x0ecqc.markets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xcf\x03\n" +
+	"\x10SymbolIdentifier\x12(\n" +
+	"\ridentifier_id\x18\x01 \x01(\tH\x00R\fidentifierId\x88\x01\x01\x12 \n" +
+	"\tsymbol_id\x18\x02 \x01(\tH\x01R\bsymbolId\x88\x01\x01\x12@\n" +
+	"\vdata_source\x18\x03 \x01(\x0e2\x1a.cqc.markets.v1.DataSourceH\x02R\n" +
 	"dataSource\x88\x01\x01\x12$\n" +
-	"\vexternal_id\x18\x03 \x01(\tH\x02R\n" +
-	"externalId\x88\x01\x01\x12\x1c\n" +
-	"\aapi_url\x18\x04 \x01(\tH\x03R\x06apiUrl\x88\x01\x01\x12>\n" +
+	"\vexternal_id\x18\x04 \x01(\tH\x03R\n" +
+	"externalId\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\tcreatedAt\x88\x01\x01\x12I\n" +
-	"\x10last_verified_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampH\x05R\x0elastVerifiedAt\x88\x01\x01\x12 \n" +
-	"\tis_active\x18\a \x01(\bH\x06R\bisActive\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\b \x01(\v2\x17.google.protobuf.StructH\aR\bmetadata\x88\x01\x01B\f\n" +
+	"is_primary\x18\x05 \x01(\bH\x04R\tisPrimary\x88\x01\x01\x12>\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampH\x05R\tcreatedAt\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\a \x01(\v2\x17.google.protobuf.StructH\x06R\bmetadata\x88\x01\x01B\x10\n" +
+	"\x0e_identifier_idB\f\n" +
 	"\n" +
 	"_symbol_idB\x0e\n" +
 	"\f_data_sourceB\x0e\n" +
-	"\f_external_idB\n" +
-	"\n" +
-	"\b_api_urlB\r\n" +
-	"\v_created_atB\x13\n" +
-	"\x11_last_verified_atB\f\n" +
-	"\n" +
-	"_is_activeB\v\n" +
+	"\f_external_idB\r\n" +
+	"\v_is_primaryB\r\n" +
+	"\v_created_atB\v\n" +
 	"\t_metadata*\xb2\x01\n" +
 	"\n" +
 	"DataSource\x12\x1b\n" +
@@ -257,13 +244,12 @@ var file_proto_markets_v1_symbol_identifier_proto_goTypes = []any{
 var file_proto_markets_v1_symbol_identifier_proto_depIdxs = []int32{
 	0, // 0: cqc.markets.v1.SymbolIdentifier.data_source:type_name -> cqc.markets.v1.DataSource
 	2, // 1: cqc.markets.v1.SymbolIdentifier.created_at:type_name -> google.protobuf.Timestamp
-	2, // 2: cqc.markets.v1.SymbolIdentifier.last_verified_at:type_name -> google.protobuf.Timestamp
-	3, // 3: cqc.markets.v1.SymbolIdentifier.metadata:type_name -> google.protobuf.Struct
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	3, // 2: cqc.markets.v1.SymbolIdentifier.metadata:type_name -> google.protobuf.Struct
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_markets_v1_symbol_identifier_proto_init() }
