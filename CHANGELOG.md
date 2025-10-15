@@ -5,6 +5,76 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-10-15
+
+### Changed - Proto Definition Cleanup and Standardization
+
+#### Assets Domain Updates
+
+**`proto/assets/v1/chain.proto`**
+- **BREAKING**: Standardized chain identifiers to uppercase (e.g., "ETHEREUM", "POLYGON", "ARBITRUM", "SOLANA", "BITCOIN")
+- **BREAKING**: Standardized chain types to uppercase (e.g., "EVM", "SOLANA", "BITCOIN", "COSMOS")
+- Removed `rpc_url` field (field 7) - RPC endpoints should be managed at infrastructure level, not in canonical definitions
+- Renumbered fields 8-9 to 7-8 for cleaner field numbering
+
+**`proto/assets/v1/deployment.proto`**
+- **BREAKING**: Standardized deployment_id format to use uppercase chain IDs (e.g., "ETHEREUM:0xA0b8...", "SOLANA:EPjF...")
+- **BREAKING**: Standardized chain_id values to uppercase
+- Removed deployment-specific fields that belong at infrastructure/indexer level:
+  - `is_canonical` (field 7) - Canonicality is a relationship concern
+  - `deployment_block` (field 8) - Infrastructure detail
+  - `deployment_tx` (field 9) - Infrastructure detail
+  - `deployer_address` (field 10) - Infrastructure detail
+  - `is_verified` (field 11) - Explorer-specific metadata
+- Renumbered remaining fields for cleaner structure (fields 12-15 → 7-10)
+- Simplified to focus on essential deployment information: contract address, decimals, timestamps
+
+**`proto/assets/v1/relationship.proto`**
+- Improved documentation for `AssetGroup.name` field with concrete examples
+- Added examples: "usdc_variants", "eth_equivalents", "top_10_by_mcap", "stablecoins"
+
+#### Generated Code
+- Regenerated Go bindings for all updated proto definitions
+- Reduced generated code size due to removed fields
+
+### Rationale
+
+This release focuses on **separation of concerns** and **data modeling clarity**:
+
+1. **Uppercase identifiers**: Chain IDs and types are now consistently uppercase, treating them as constants rather than freeform strings
+2. **Removed infrastructure fields**: Fields like `rpc_url`, `deployment_block`, `deployer_address` are infrastructure concerns, not part of the canonical asset model
+3. **Simplified deployments**: AssetDeployment now focuses solely on "where does this asset exist" rather than "how was it deployed"
+4. **Cleaner field numbering**: Removed gaps in field numbers for better readability
+
+### Migration Guide
+
+#### Chain ID Updates
+```go
+// Old
+chainId := "ethereum"
+chainType := "evm"
+
+// New
+chainId := "ETHEREUM"
+chainType := "EVM"
+```
+
+#### Deployment ID Updates
+```go
+// Old
+deploymentId := "ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+
+// New
+deploymentId := "ETHEREUM:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+```
+
+#### Removed Fields
+If you were using removed fields, handle them as follows:
+- `Chain.rpc_url` → Manage RPC endpoints in your infrastructure configuration
+- `AssetDeployment.is_canonical` → Use AssetRelationship with CANONICAL type
+- `AssetDeployment.deployment_block/tx/deployer_address` → Query from blockchain indexer
+- `AssetDeployment.is_verified` → Query from block explorer API
+
 ## [0.1.0] - 2025-10-14
 
 ### Added - Initial Release with Domain Separation
@@ -175,4 +245,6 @@ During pre-1.0 development (0.x.x versions):
 - Removing fields or changing types requires MAJOR version bump (after 1.0)
 - Deprecated fields will be marked with `[deprecated = true]`
 
+[0.3.0]: https://github.com/Combine-Capital/cqc/releases/tag/v0.3.0
+[0.2.0]: https://github.com/Combine-Capital/cqc/releases/tag/v0.2.0
 [0.1.0]: https://github.com/Combine-Capital/cqc/releases/tag/v0.1.0
