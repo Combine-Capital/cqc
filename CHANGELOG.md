@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-10-15
+
+### Fixed
+
+**Build System**
+- Updated Makefile to automatically clean generated code before regeneration
+- `make generate` now calls `clean` first to prevent stale files
+- Removed stale `gen/go/cqc/assets/v1/venue.pb.go` (leftover from domain migration in v0.1.0)
+
+### Changed
+
+**Documentation**
+- Added comprehensive v0.3.0 changelog documentation
+
 ## [0.3.0] - 2025-10-15
 
 ### Changed - Proto Definition Cleanup and Standardization
@@ -245,6 +259,7 @@ During pre-1.0 development (0.x.x versions):
 - Removing fields or changing types requires MAJOR version bump (after 1.0)
 - Deprecated fields will be marked with `[deprecated = true]`
 
+[0.3.1]: https://github.com/Combine-Capital/cqc/releases/tag/v0.3.1
 [0.3.0]: https://github.com/Combine-Capital/cqc/releases/tag/v0.3.0
 [0.2.0]: https://github.com/Combine-Capital/cqc/releases/tag/v0.2.0
 [0.1.0]: https://github.com/Combine-Capital/cqc/releases/tag/v0.1.0
