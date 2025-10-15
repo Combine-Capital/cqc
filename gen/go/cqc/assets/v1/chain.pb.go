@@ -25,26 +25,24 @@ const (
 // Chain represents a blockchain network.
 type Chain struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Unique chain identifier (e.g., "ethereum", "polygon", "arbitrum", "solana", "bitcoin").
+	// Unique chain identifier (e.g., "ETHEREUM", "POLYGON", "ARBITRUM", "SOLANA", "BITCOIN").
 	ChainId *string `protobuf:"bytes,1,opt,name=chain_id,json=chainId,proto3,oneof" json:"chain_id,omitempty"`
 	// Human-readable chain name (e.g., "Ethereum", "Polygon", "Arbitrum", "Solana", "Bitcoin").
 	ChainName *string `protobuf:"bytes,2,opt,name=chain_name,json=chainName,proto3,oneof" json:"chain_name,omitempty"`
 	// Asset UUID of the native token for this chain.
 	// Example: ETH asset UUID for Ethereum, SOL asset UUID for Solana.
 	NativeAssetId *string `protobuf:"bytes,3,opt,name=native_asset_id,json=nativeAssetId,proto3,oneof" json:"native_asset_id,omitempty"`
-	// Chain type/architecture (e.g., "evm", "solana", "bitcoin", "cosmos").
+	// Chain type/architecture (e.g., "EVM", "SOLANA", "BITCOIN", "COSMOS").
 	ChainType *string `protobuf:"bytes,4,opt,name=chain_type,json=chainType,proto3,oneof" json:"chain_type,omitempty"`
 	// Network ID or chain ID for transaction signing (e.g., 1 for Ethereum mainnet, 137 for Polygon).
 	// Used primarily for EVM chains.
 	NetworkId *int64 `protobuf:"varint,5,opt,name=network_id,json=networkId,proto3,oneof" json:"network_id,omitempty"`
 	// Block explorer URL for this chain (e.g., "https://etherscan.io", "https://solscan.io").
 	ExplorerUrl *string `protobuf:"bytes,6,opt,name=explorer_url,json=explorerUrl,proto3,oneof" json:"explorer_url,omitempty"`
-	// Primary RPC endpoint URL for connecting to this chain.
-	RpcUrl *string `protobuf:"bytes,7,opt,name=rpc_url,json=rpcUrl,proto3,oneof" json:"rpc_url,omitempty"`
 	// Whether this is a testnet (true) or mainnet (false).
-	IsTestnet *bool `protobuf:"varint,8,opt,name=is_testnet,json=isTestnet,proto3,oneof" json:"is_testnet,omitempty"`
+	IsTestnet *bool `protobuf:"varint,7,opt,name=is_testnet,json=isTestnet,proto3,oneof" json:"is_testnet,omitempty"`
 	// Additional chain-specific metadata.
-	Metadata      *_struct.Struct `protobuf:"bytes,9,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,8,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -121,13 +119,6 @@ func (x *Chain) GetExplorerUrl() string {
 	return ""
 }
 
-func (x *Chain) GetRpcUrl() string {
-	if x != nil && x.RpcUrl != nil {
-		return *x.RpcUrl
-	}
-	return ""
-}
-
 func (x *Chain) GetIsTestnet() bool {
 	if x != nil && x.IsTestnet != nil {
 		return *x.IsTestnet
@@ -146,7 +137,7 @@ var File_proto_assets_v1_chain_proto protoreflect.FileDescriptor
 
 const file_proto_assets_v1_chain_proto_rawDesc = "" +
 	"\n" +
-	"\x1bproto/assets/v1/chain.proto\x12\rcqc.assets.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xeb\x03\n" +
+	"\x1bproto/assets/v1/chain.proto\x12\rcqc.assets.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xc1\x03\n" +
 	"\x05Chain\x12\x1e\n" +
 	"\bchain_id\x18\x01 \x01(\tH\x00R\achainId\x88\x01\x01\x12\"\n" +
 	"\n" +
@@ -156,19 +147,16 @@ const file_proto_assets_v1_chain_proto_rawDesc = "" +
 	"chain_type\x18\x04 \x01(\tH\x03R\tchainType\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"network_id\x18\x05 \x01(\x03H\x04R\tnetworkId\x88\x01\x01\x12&\n" +
-	"\fexplorer_url\x18\x06 \x01(\tH\x05R\vexplorerUrl\x88\x01\x01\x12\x1c\n" +
-	"\arpc_url\x18\a \x01(\tH\x06R\x06rpcUrl\x88\x01\x01\x12\"\n" +
+	"\fexplorer_url\x18\x06 \x01(\tH\x05R\vexplorerUrl\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"is_testnet\x18\b \x01(\bH\aR\tisTestnet\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\t \x01(\v2\x17.google.protobuf.StructH\bR\bmetadata\x88\x01\x01B\v\n" +
+	"is_testnet\x18\a \x01(\bH\x06R\tisTestnet\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\b \x01(\v2\x17.google.protobuf.StructH\aR\bmetadata\x88\x01\x01B\v\n" +
 	"\t_chain_idB\r\n" +
 	"\v_chain_nameB\x12\n" +
 	"\x10_native_asset_idB\r\n" +
 	"\v_chain_typeB\r\n" +
 	"\v_network_idB\x0f\n" +
-	"\r_explorer_urlB\n" +
-	"\n" +
-	"\b_rpc_urlB\r\n" +
+	"\r_explorer_urlB\r\n" +
 	"\v_is_testnetB\v\n" +
 	"\t_metadataB>Z<github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1;assetsv1b\x06proto3"
 

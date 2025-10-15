@@ -28,13 +28,13 @@ const (
 type AssetDeployment struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique deployment identifier in format "{chain}:{address}".
-	// Example: "ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" for USDC on Ethereum.
-	// Example: "solana:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" for USDC on Solana.
-	// For native tokens, use "native" as address (e.g., "ethereum:native" for ETH).
+	// Example: "ETHEREUM:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" for USDC on Ethereum.
+	// Example: "SOLANA:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" for USDC on Solana.
+	// For native tokens, use "native" as address (e.g., "ETHEREUM:native" for ETH).
 	DeploymentId *string `protobuf:"bytes,1,opt,name=deployment_id,json=deploymentId,proto3,oneof" json:"deployment_id,omitempty"`
 	// Asset UUID this deployment belongs to.
 	AssetId *string `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
-	// Chain identifier where this asset is deployed (e.g., "ethereum", "polygon", "arbitrum", "solana", "bitcoin").
+	// Chain identifier where this asset is deployed (e.g., "ETHEREUM", "POLYGON", "ARBITRUM", "SOLANA", "BITCOIN").
 	ChainId *string `protobuf:"bytes,3,opt,name=chain_id,json=chainId,proto3,oneof" json:"chain_id,omitempty"`
 	// Human-readable chain name (e.g., "Ethereum", "Polygon", "Arbitrum", "Solana", "Bitcoin").
 	ChainName *string `protobuf:"bytes,4,opt,name=chain_name,json=chainName,proto3,oneof" json:"chain_name,omitempty"`
@@ -45,25 +45,14 @@ type AssetDeployment struct {
 	// Number of decimal places this deployment uses.
 	// Must be between 0 and 18 (matches SQL CHECK constraint).
 	Decimals *int32 `protobuf:"varint,6,opt,name=decimals,proto3,oneof" json:"decimals,omitempty"`
-	// Whether this is the canonical/primary deployment for this asset.
-	// For example, USDC on Ethereum is canonical, while bridged USDC on Polygon is not.
-	IsCanonical *bool `protobuf:"varint,7,opt,name=is_canonical,json=isCanonical,proto3,oneof" json:"is_canonical,omitempty"`
-	// Block number when this contract was deployed.
-	DeploymentBlock *int64 `protobuf:"varint,8,opt,name=deployment_block,json=deploymentBlock,proto3,oneof" json:"deployment_block,omitempty"`
-	// Transaction hash of the deployment transaction.
-	DeploymentTx *string `protobuf:"bytes,9,opt,name=deployment_tx,json=deploymentTx,proto3,oneof" json:"deployment_tx,omitempty"`
-	// Address that deployed this contract.
-	DeployerAddress *string `protobuf:"bytes,10,opt,name=deployer_address,json=deployerAddress,proto3,oneof" json:"deployer_address,omitempty"`
-	// Whether this contract is verified on the blockchain explorer.
-	IsVerified *bool `protobuf:"varint,11,opt,name=is_verified,json=isVerified,proto3,oneof" json:"is_verified,omitempty"`
 	// Timestamp of when this deployment occurred.
-	DeployedAt *timestamp.Timestamp `protobuf:"bytes,12,opt,name=deployed_at,json=deployedAt,proto3,oneof" json:"deployed_at,omitempty"`
+	DeployedAt *timestamp.Timestamp `protobuf:"bytes,7,opt,name=deployed_at,json=deployedAt,proto3,oneof" json:"deployed_at,omitempty"`
 	// Timestamp when this deployment record was created.
-	CreatedAt *timestamp.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
+	CreatedAt *timestamp.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
 	// Timestamp when this deployment record was last updated.
-	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
+	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
 	// Additional deployment-specific metadata.
-	Metadata      *_struct.Struct `protobuf:"bytes,15,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
+	Metadata      *_struct.Struct `protobuf:"bytes,10,opt,name=metadata,proto3,oneof" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -140,41 +129,6 @@ func (x *AssetDeployment) GetDecimals() int32 {
 	return 0
 }
 
-func (x *AssetDeployment) GetIsCanonical() bool {
-	if x != nil && x.IsCanonical != nil {
-		return *x.IsCanonical
-	}
-	return false
-}
-
-func (x *AssetDeployment) GetDeploymentBlock() int64 {
-	if x != nil && x.DeploymentBlock != nil {
-		return *x.DeploymentBlock
-	}
-	return 0
-}
-
-func (x *AssetDeployment) GetDeploymentTx() string {
-	if x != nil && x.DeploymentTx != nil {
-		return *x.DeploymentTx
-	}
-	return ""
-}
-
-func (x *AssetDeployment) GetDeployerAddress() string {
-	if x != nil && x.DeployerAddress != nil {
-		return *x.DeployerAddress
-	}
-	return ""
-}
-
-func (x *AssetDeployment) GetIsVerified() bool {
-	if x != nil && x.IsVerified != nil {
-		return *x.IsVerified
-	}
-	return false
-}
-
 func (x *AssetDeployment) GetDeployedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.DeployedAt
@@ -207,7 +161,7 @@ var File_proto_assets_v1_deployment_proto protoreflect.FileDescriptor
 
 const file_proto_assets_v1_deployment_proto_rawDesc = "" +
 	"\n" +
-	" proto/assets/v1/deployment.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x9f\a\n" +
+	" proto/assets/v1/deployment.proto\x12\rcqc.assets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xea\x04\n" +
 	"\x0fAssetDeployment\x12(\n" +
 	"\rdeployment_id\x18\x01 \x01(\tH\x00R\fdeploymentId\x88\x01\x01\x12\x1e\n" +
 	"\basset_id\x18\x02 \x01(\tH\x01R\aassetId\x88\x01\x01\x12\x1e\n" +
@@ -215,34 +169,22 @@ const file_proto_assets_v1_deployment_proto_rawDesc = "" +
 	"\n" +
 	"chain_name\x18\x04 \x01(\tH\x03R\tchainName\x88\x01\x01\x12\x1d\n" +
 	"\aaddress\x18\x05 \x01(\tH\x04R\aaddress\x88\x01\x01\x12\x1f\n" +
-	"\bdecimals\x18\x06 \x01(\x05H\x05R\bdecimals\x88\x01\x01\x12&\n" +
-	"\fis_canonical\x18\a \x01(\bH\x06R\visCanonical\x88\x01\x01\x12.\n" +
-	"\x10deployment_block\x18\b \x01(\x03H\aR\x0fdeploymentBlock\x88\x01\x01\x12(\n" +
-	"\rdeployment_tx\x18\t \x01(\tH\bR\fdeploymentTx\x88\x01\x01\x12.\n" +
-	"\x10deployer_address\x18\n" +
-	" \x01(\tH\tR\x0fdeployerAddress\x88\x01\x01\x12$\n" +
-	"\vis_verified\x18\v \x01(\bH\n" +
-	"R\n" +
-	"isVerified\x88\x01\x01\x12@\n" +
-	"\vdeployed_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampH\vR\n" +
+	"\bdecimals\x18\x06 \x01(\x05H\x05R\bdecimals\x88\x01\x01\x12@\n" +
+	"\vdeployed_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampH\x06R\n" +
 	"deployedAt\x88\x01\x01\x12>\n" +
 	"\n" +
-	"created_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampH\fR\tcreatedAt\x88\x01\x01\x12>\n" +
+	"created_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampH\aR\tcreatedAt\x88\x01\x01\x12>\n" +
 	"\n" +
-	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampH\rR\tupdatedAt\x88\x01\x01\x128\n" +
-	"\bmetadata\x18\x0f \x01(\v2\x17.google.protobuf.StructH\x0eR\bmetadata\x88\x01\x01B\x10\n" +
+	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\bR\tupdatedAt\x88\x01\x01\x128\n" +
+	"\bmetadata\x18\n" +
+	" \x01(\v2\x17.google.protobuf.StructH\tR\bmetadata\x88\x01\x01B\x10\n" +
 	"\x0e_deployment_idB\v\n" +
 	"\t_asset_idB\v\n" +
 	"\t_chain_idB\r\n" +
 	"\v_chain_nameB\n" +
 	"\n" +
 	"\b_addressB\v\n" +
-	"\t_decimalsB\x0f\n" +
-	"\r_is_canonicalB\x13\n" +
-	"\x11_deployment_blockB\x10\n" +
-	"\x0e_deployment_txB\x13\n" +
-	"\x11_deployer_addressB\x0e\n" +
-	"\f_is_verifiedB\x0e\n" +
+	"\t_decimalsB\x0e\n" +
 	"\f_deployed_atB\r\n" +
 	"\v_created_atB\r\n" +
 	"\v_updated_atB\v\n" +

@@ -225,12 +225,12 @@ func (x *AssetRelationship) GetMetadata() *_struct.Struct {
 }
 
 // AssetGroup represents a logical grouping of related assets.
-// Examples: All USDC variants across chains, all native ETH versions.
+// Examples: All USDC variants across chains, all native ETH versions, stablecoins, major cryptocurrencies.
 type AssetGroup struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique group identifier (UUID).
 	GroupId *string `protobuf:"bytes,1,opt,name=group_id,json=groupId,proto3,oneof" json:"group_id,omitempty"`
-	// Unique group name (lowercase_with_underscores).
+	// Unique group name (e.g., "usdc_variants", "eth_equivalents", "top_10_by_mcap", "stablecoins").
 	Name *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	// Description of what this group represents.
 	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`

@@ -8,7 +8,7 @@ import "google/protobuf/struct.proto";
 
 // Chain represents a blockchain network.
 message Chain {
-  // Unique chain identifier (e.g., "ethereum", "polygon", "arbitrum", "solana", "bitcoin").
+  // Unique chain identifier (e.g., "ETHEREUM", "POLYGON", "ARBITRUM", "SOLANA", "BITCOIN").
   optional string chain_id = 1;
 
   // Human-readable chain name (e.g., "Ethereum", "Polygon", "Arbitrum", "Solana", "Bitcoin").
@@ -18,7 +18,7 @@ message Chain {
   // Example: ETH asset UUID for Ethereum, SOL asset UUID for Solana.
   optional string native_asset_id = 3;
 
-  // Chain type/architecture (e.g., "evm", "solana", "bitcoin", "cosmos").
+  // Chain type/architecture (e.g., "EVM", "SOLANA", "BITCOIN", "COSMOS").
   optional string chain_type = 4;
 
   // Network ID or chain ID for transaction signing (e.g., 1 for Ethereum mainnet, 137 for Polygon).
@@ -28,12 +28,9 @@ message Chain {
   // Block explorer URL for this chain (e.g., "https://etherscan.io", "https://solscan.io").
   optional string explorer_url = 6;
 
-  // Primary RPC endpoint URL for connecting to this chain.
-  optional string rpc_url = 7;
-
   // Whether this is a testnet (true) or mainnet (false).
-  optional bool is_testnet = 8;
+  optional bool is_testnet = 7;
 
   // Additional chain-specific metadata.
-  optional google.protobuf.Struct metadata = 9;
+  optional google.protobuf.Struct metadata = 8;
 }

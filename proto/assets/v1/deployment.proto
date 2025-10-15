@@ -11,15 +11,15 @@ import "google/protobuf/struct.proto";
 // One canonical asset (e.g., USDC) can have multiple deployments across different chains.
 message AssetDeployment {
   // Unique deployment identifier in format "{chain}:{address}".
-  // Example: "ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" for USDC on Ethereum.
-  // Example: "solana:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" for USDC on Solana.
-  // For native tokens, use "native" as address (e.g., "ethereum:native" for ETH).
+  // Example: "ETHEREUM:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" for USDC on Ethereum.
+  // Example: "SOLANA:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" for USDC on Solana.
+  // For native tokens, use "native" as address (e.g., "ETHEREUM:native" for ETH).
   optional string deployment_id = 1;
 
   // Asset UUID this deployment belongs to.
   optional string asset_id = 2;
 
-  // Chain identifier where this asset is deployed (e.g., "ethereum", "polygon", "arbitrum", "solana", "bitcoin").
+  // Chain identifier where this asset is deployed (e.g., "ETHEREUM", "POLYGON", "ARBITRUM", "SOLANA", "BITCOIN").
   optional string chain_id = 3;
 
   // Human-readable chain name (e.g., "Ethereum", "Polygon", "Arbitrum", "Solana", "Bitcoin").
@@ -34,31 +34,15 @@ message AssetDeployment {
   // Must be between 0 and 18 (matches SQL CHECK constraint).
   optional int32 decimals = 6;
 
-  // Whether this is the canonical/primary deployment for this asset.
-  // For example, USDC on Ethereum is canonical, while bridged USDC on Polygon is not.
-  optional bool is_canonical = 7;
-
-  // Block number when this contract was deployed.
-  optional int64 deployment_block = 8;
-
-  // Transaction hash of the deployment transaction.
-  optional string deployment_tx = 9;
-
-  // Address that deployed this contract.
-  optional string deployer_address = 10;
-
-  // Whether this contract is verified on the blockchain explorer.
-  optional bool is_verified = 11;
-
   // Timestamp of when this deployment occurred.
-  optional google.protobuf.Timestamp deployed_at = 12;
+  optional google.protobuf.Timestamp deployed_at = 7;
 
   // Timestamp when this deployment record was created.
-  optional google.protobuf.Timestamp created_at = 13;
+  optional google.protobuf.Timestamp created_at = 8;
 
   // Timestamp when this deployment record was last updated.
-  optional google.protobuf.Timestamp updated_at = 14;
+  optional google.protobuf.Timestamp updated_at = 9;
 
   // Additional deployment-specific metadata.
-  optional google.protobuf.Struct metadata = 15;
+  optional google.protobuf.Struct metadata = 10;
 }

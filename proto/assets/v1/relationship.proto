@@ -60,12 +60,12 @@ message AssetRelationship {
 }
 
 // AssetGroup represents a logical grouping of related assets.
-// Examples: All USDC variants across chains, all native ETH versions.
+// Examples: All USDC variants across chains, all native ETH versions, stablecoins, major cryptocurrencies.
 message AssetGroup {
   // Unique group identifier (UUID).
   optional string group_id = 1;
 
-  // Unique group name (lowercase_with_underscores).
+  // Unique group name (e.g., "usdc_variants", "eth_equivalents", "top_10_by_mcap", "stablecoins").
   optional string name = 2;
 
   // Description of what this group represents.
