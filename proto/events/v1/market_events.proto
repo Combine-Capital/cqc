@@ -5,24 +5,42 @@ package cqc.events.v1;
 option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/events/v1;eventsv1";
 
 import "google/protobuf/timestamp.proto";
-import "proto/markets/v1/symbol.proto";
+import "proto/markets/v1/instrument.proto";
+import "proto/markets/v1/market.proto";
 import "proto/markets/v1/price.proto";
 
-// SymbolCreated event is published when a new trading symbol/market is registered.
-// This event notifies services that a new symbol is available for trading and market data.
-message SymbolCreated {
+// InstrumentCreated event is published when a new trading instrument is registered.
+// This event notifies services that a new instrument is available for trading and market data.
+message InstrumentCreated {
   // Unique event identifier for idempotency and deduplication.
   optional string event_id = 1;
 
   // Timestamp when this event was generated.
   optional google.protobuf.Timestamp timestamp = 2;
 
-  // Identifier of the actor (user, service, or system) that created the symbol.
+  // Identifier of the actor (user, service, or system) that created the instrument.
   // Format: "service:{service_name}" (e.g., "service:cqar"), or "user:{user_id}".
   optional string actor_id = 3;
 
-  // The newly created symbol.
-  optional cqc.markets.v1.Symbol symbol = 4;
+  // The newly created instrument.
+  optional cqc.markets.v1.Instrument instrument = 4;
+}
+
+// MarketCreated event is published when a new market listing is registered.
+// This event notifies services that a new market is available on a venue.
+message MarketCreated {
+  // Unique event identifier for idempotency and deduplication.
+  optional string event_id = 1;
+
+  // Timestamp when this event was generated.
+  optional google.protobuf.Timestamp timestamp = 2;
+
+  // Identifier of the actor (user, service, or system) that created the market.
+  // Format: "service:{service_name}" (e.g., "service:cqar"), or "user:{user_id}".
+  optional string actor_id = 3;
+
+  // The newly created market.
+  optional cqc.markets.v1.Market market = 4;
 }
 
 // PriceUpdated event is published when a new price observation is recorded.

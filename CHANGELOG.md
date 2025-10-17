@@ -5,6 +5,134 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-10-17
+
+### Changed - Major Architecture Refactor: Symbol → Instrument + Market
+
+**BREAKING CHANGES**: This release introduces a fundamental architectural change from Symbol-based to Instrument + Market architecture with string-based types instead of enums.
+
+#### Removed Files
+- **BREAKING**: Deleted `proto/markets/v1/symbol.proto` - Replaced with Instrument + Market pattern
+- **BREAKING**: Deleted `proto/markets/v1/symbol_identifier.proto` - Replaced with unified Identifier
+- **BREAKING**: Deleted `proto/venues/v1/venue_symbol.proto` - Replaced with Market (in markets domain)
+
+#### New Files - Instrument Domain (9 files)
+
+**Base Instrument**
+- Added `proto/markets/v1/instrument.proto` - Product-level abstraction independent of venue
+  - Fields: id, instrument_type (string), code, timestamps
+  - instrument_type values: "SPOT", "PERPETUAL", "FUTURE", "OPTION", "LENDING_DEPOSIT", "LENDING_BORROW"
+
+**Instrument Subtypes** (1:1 relationship with Instrument via instrument_id)
+- Added `proto/markets/v1/spot_instrument.proto` - Spot trading pairs (e.g., ETH/USDT)
+- Added `proto/markets/v1/perp_contract.proto` - Perpetual futures contracts
+- Added `proto/markets/v1/future_contract.proto` - Dated futures with expiry
+- Added `proto/markets/v1/option_series.proto` - Options contracts with strike/type/style
+- Added `proto/markets/v1/lending_deposit.proto` - Lending deposit products (e.g., Aave WETH)
+- Added `proto/markets/v1/lending_borrow.proto` - Lending borrow products (e.g., Aave USDC)
+
+**Market (Venue Listing)**
+- Added `proto/markets/v1/market.proto` - Venue-specific instrument listings
+  - Links instrument to venue with trading rules, fees, limits
+  - All decimal fields as strings (tick_size, lot_size, fees, etc.)
+  - Status field as string: "active", "suspended", "delisted"
+  - Metadata support for AMM pools, lending markets, perpetual contracts
+
+**Unified Identifiers**
+- Added `proto/identifiers/v1/identifier.proto` - Single identifier mapping for all entities
+  - Supports entity_type: "ASSET", "INSTRUMENT", "MARKET"
+  - Exactly one of asset_id, instrument_id, market_id must be set
+
+#### Service Updates
+
+**AssetRegistry Service** (`proto/services/v1/asset_registry.proto`)
+- **BREAKING**: Removed all Symbol-related RPCs (GetSymbol, ListSymbols, CreateSymbol, etc.)
+- **BREAKING**: Removed all SymbolIdentifier RPCs
+- **BREAKING**: Removed all VenueSymbol RPCs
+- Added 9 new RPCs:
+  - `GetInstrument` - Retrieve base instrument by ID
+  - `GetSpotInstrument` - Retrieve spot instrument details
+  - `GetPerpContract` - Retrieve perpetual contract details
+  - `GetFutureContract` - Retrieve future contract details
+  - `GetOptionSeries` - Retrieve option series details
+  - `GetLendingDeposit` - Retrieve lending deposit details
+  - `GetLendingBorrow` - Retrieve lending borrow details
+  - `GetMarket` - Retrieve market by market_id
+  - `ResolveMarket` - Resolve market by venue_id + venue_symbol
+
+**MarketData Service** (`proto/services/v1/market_data.proto`)
+- **BREAKING**: Replaced all `symbol_id` fields with `market_id` (venue-specific)
+- Added `instrument_id` support for product-level aggregation across venues
+- Added venue_id + venue_symbol resolver option in GetPrice request
+
+#### Market Data Messages
+
+**Price** (`proto/markets/v1/price.proto`)
+- **BREAKING**: Changed `symbol_id` → `market_id` in Price message
+- **BREAKING**: Changed `symbol_id` → `market_id` in VWAP message
+
+**Trade** (`proto/markets/v1/trade.proto`)
+- **BREAKING**: Changed `symbol_id` → `market_id` in Trade message
+- **BREAKING**: Changed `symbol_id` → `market_id` in Candle message
+
+**OrderBook** (`proto/markets/v1/orderbook.proto`)
+- **BREAKING**: Changed `symbol_id` → `market_id` in OrderBook message
+- **BREAKING**: Changed `symbol_id` → `market_id` in MarketDepth message
+
+#### Events
+
+**Market Events** (`proto/events/v1/market_events.proto`)
+- **BREAKING**: Removed `SymbolCreated` event
+- Added `InstrumentCreated` event - Published when new instrument is registered
+- Added `MarketCreated` event - Published when new market listing is created
+
+**Venue Events** (`proto/events/v1/venue_events.proto`)
+- **BREAKING**: Removed `VenueSymbolListed` and `VenueSymbolDelisted` events
+- Added `VenueMarketListed` event - Published when market becomes available on venue
+- Added `VenueMarketDelisted` event - Published when market is removed from venue
+
+#### Design Principles
+
+**String-based Types (No Enums)**
+- All type discriminators use strings to avoid breaking changes
+- instrument_type: "SPOT", "PERPETUAL", "FUTURE", "OPTION", "LENDING_DEPOSIT", "LENDING_BORROW"
+- option_type: "CALL", "PUT"
+- exercise_style: "european", "american"
+- market.status: "active", "suspended", "delisted"
+- identifier.entity_type: "ASSET", "INSTRUMENT", "MARKET"
+
+**Decimal Precision**
+- All monetary and decimal values stored as strings
+- Examples: strike_price, contract_multiplier, tick_size, lot_size, fees
+- Preserves precision, avoids floating-point errors
+
+**Separation of Concerns**
+- Instrument = Product definition (what is being traded)
+- Market = Venue listing (where and how it trades)
+- Clear distinction between product-level and venue-specific data
+
+#### Documentation
+
+- Updated `docs/BRIEF.md` with new Instrument + Market architecture
+- Updated `docs/SPEC.md` with detailed domain model explanations
+- Updated `docs/ROADMAP.md` with Commit 10 implementation summary
+- Added `docs/REFACTOR_VALIDATION_RESULTS.md` with comprehensive validation report
+
+#### Migration Guide
+
+**For Service Developers:**
+1. Replace imports of `symbol.proto` with `instrument.proto` and `market.proto`
+2. Change all `symbol_id` references to `market_id` for venue-specific operations
+3. Use `instrument_id` for product-level operations (cross-venue aggregation)
+4. Update to new AssetRegistry RPCs (GetInstrument, GetMarket, etc.)
+5. Handle string-based types instead of enums
+
+**For Database Schemas:**
+1. Split symbol tables into instrument and market tables
+2. Create subtype tables: spot_instruments, perp_contracts, future_contracts, option_series, lending_deposits, lending_borrows
+3. Update foreign keys from symbol_id to market_id or instrument_id as appropriate
+4. Migrate enum columns to string columns
+
 ## [0.3.1] - 2025-10-15
 
 ### Fixed

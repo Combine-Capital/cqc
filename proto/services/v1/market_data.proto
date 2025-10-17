@@ -61,8 +61,10 @@ service MarketData {
 
 // GetPriceRequest
 message GetPriceRequest {
-  optional string symbol_id = 1;
+  optional string market_id = 1;  // Venue-specific market identifier
+  // Alternative: resolve by venue + venue_symbol
   optional string venue_id = 2;
+  optional string venue_symbol = 3;
 }
 
 message GetPriceResponse {
@@ -71,8 +73,9 @@ message GetPriceResponse {
 
 // StreamPricesRequest
 message StreamPricesRequest {
-  repeated string symbol_ids = 1;
-  repeated string venue_ids = 2;
+  repeated string market_ids = 1;  // Venue-specific market identifiers
+  // Alternative: for product-level aggregation
+  repeated string instrument_ids = 2;
 }
 
 message StreamPricesResponse {
@@ -81,11 +84,10 @@ message StreamPricesResponse {
 
 // GetPriceHistoryRequest
 message GetPriceHistoryRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
-  optional google.protobuf.Timestamp start_time = 3;
-  optional google.protobuf.Timestamp end_time = 4;
-  optional int32 limit = 5;
+  optional string market_id = 1;  // Venue-specific market identifier
+  optional google.protobuf.Timestamp start_time = 2;
+  optional google.protobuf.Timestamp end_time = 3;
+  optional int32 limit = 4;
 }
 
 message GetPriceHistoryResponse {
@@ -94,10 +96,9 @@ message GetPriceHistoryResponse {
 
 // GetVWAPRequest
 message GetVWAPRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
-  optional google.protobuf.Timestamp start_time = 3;
-  optional google.protobuf.Timestamp end_time = 4;
+  optional string market_id = 1;  // Venue-specific market identifier
+  optional google.protobuf.Timestamp start_time = 2;
+  optional google.protobuf.Timestamp end_time = 3;
 }
 
 message GetVWAPResponse {
@@ -106,9 +107,8 @@ message GetVWAPResponse {
 
 // GetOrderBookRequest
 message GetOrderBookRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
-  optional int32 depth = 3;
+  optional string market_id = 1;  // Venue-specific market identifier
+  optional int32 depth = 2;
 }
 
 message GetOrderBookResponse {
@@ -117,9 +117,8 @@ message GetOrderBookResponse {
 
 // StreamOrderBookRequest
 message StreamOrderBookRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
-  optional int32 depth = 3;
+  optional string market_id = 1;  // Venue-specific market identifier
+  optional int32 depth = 2;
 }
 
 message StreamOrderBookResponse {
@@ -128,8 +127,7 @@ message StreamOrderBookResponse {
 
 // GetMarketDepthRequest
 message GetMarketDepthRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
+  optional string market_id = 1;  // Venue-specific market identifier
 }
 
 message GetMarketDepthResponse {
@@ -148,11 +146,10 @@ message GetTradeResponse {
 
 // ListTradesRequest
 message ListTradesRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
-  optional google.protobuf.Timestamp start_time = 3;
-  optional google.protobuf.Timestamp end_time = 4;
-  optional int32 limit = 5;
+  optional string market_id = 1;  // Venue-specific market identifier
+  optional google.protobuf.Timestamp start_time = 2;
+  optional google.protobuf.Timestamp end_time = 3;
+  optional int32 limit = 4;
 }
 
 message ListTradesResponse {
@@ -162,8 +159,7 @@ message ListTradesResponse {
 
 // StreamTradesRequest
 message StreamTradesRequest {
-  repeated string symbol_ids = 1;
-  repeated string venue_ids = 2;
+  repeated string market_ids = 1;  // Venue-specific market identifiers
 }
 
 message StreamTradesResponse {
@@ -172,10 +168,9 @@ message StreamTradesResponse {
 
 // GetCandleRequest
 message GetCandleRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
-  optional cqc.markets.v1.CandleInterval interval = 3;
-  optional google.protobuf.Timestamp timestamp = 4;
+  optional string market_id = 1;  // Venue-specific market identifier
+  optional cqc.markets.v1.CandleInterval interval = 2;
+  optional google.protobuf.Timestamp timestamp = 3;
 }
 
 message GetCandleResponse {
@@ -184,12 +179,11 @@ message GetCandleResponse {
 
 // ListCandlesRequest
 message ListCandlesRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
-  optional cqc.markets.v1.CandleInterval interval = 3;
-  optional google.protobuf.Timestamp start_time = 4;
-  optional google.protobuf.Timestamp end_time = 5;
-  optional int32 limit = 6;
+  optional string market_id = 1;  // Venue-specific market identifier
+  optional cqc.markets.v1.CandleInterval interval = 2;
+  optional google.protobuf.Timestamp start_time = 3;
+  optional google.protobuf.Timestamp end_time = 4;
+  optional int32 limit = 5;
 }
 
 message ListCandlesResponse {
@@ -198,8 +192,7 @@ message ListCandlesResponse {
 
 // GetLiquidityMetricsRequest
 message GetLiquidityMetricsRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
+  optional string market_id = 1;  // Venue-specific market identifier
 }
 
 message GetLiquidityMetricsResponse {
@@ -208,8 +201,8 @@ message GetLiquidityMetricsResponse {
 
 // GetMultiVenuePriceRequest
 message GetMultiVenuePriceRequest {
-  optional string symbol_id = 1;
-  repeated string venue_ids = 2;
+  optional string instrument_id = 1;  // Product-level identifier for cross-venue aggregation
+  repeated string market_ids = 2;  // Specific markets to include
 }
 
 message GetMultiVenuePriceResponse {
@@ -219,8 +212,7 @@ message GetMultiVenuePriceResponse {
 
 // GetMarketSummaryRequest
 message GetMarketSummaryRequest {
-  optional string symbol_id = 1;
-  optional string venue_id = 2;
+  optional string market_id = 1;  // Venue-specific market identifier
 }
 
 message GetMarketSummaryResponse {

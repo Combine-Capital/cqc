@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+
+// Instrument represents the base definition of any tradeable product.
+// This is the product-level abstraction, independent of where it trades.
+// instrument_type examples: "SPOT", "PERPETUAL", "FUTURE", "OPTION", "LENDING_DEPOSIT", "LENDING_BORROW"
+message Instrument {
+  // Unique instrument identifier (UUID).
+  optional string id = 1;
+
+  // Type of instrument (string, not enum).
+  // Examples: "SPOT", "PERPETUAL", "FUTURE", "OPTION", "LENDING_DEPOSIT", "LENDING_BORROW"
+  optional string instrument_type = 2;
+
+  // Human-readable instrument code (e.g., "BTC-PERPETUAL", "ETH-25DEC24-3000-C").
+  optional string code = 3;
+
+  // Timestamp when this instrument was created.
+  optional google.protobuf.Timestamp created_at = 4;
+
+  // Timestamp when this instrument was last updated.
+  optional google.protobuf.Timestamp updated_at = 5;
+}

@@ -7,6 +7,7 @@
 package eventsv1
 
 import (
+	v11 "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1"
 	v1 "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -199,39 +200,39 @@ func (x *VenueAssetDelisted) GetReason() string {
 	return ""
 }
 
-// VenueSymbolListed event is published when a trading symbol/market becomes available on a venue.
-// This event notifies services that a new symbol can be traded on a venue.
-type VenueSymbolListed struct {
+// VenueMarketListed event is published when a trading market becomes available on a venue.
+// This event notifies services that a new market can be traded on a venue.
+type VenueMarketListed struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique event identifier for idempotency and deduplication.
 	EventId *string `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3,oneof" json:"event_id,omitempty"`
 	// Timestamp when this event was generated.
 	Timestamp *timestamp.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3,oneof" json:"timestamp,omitempty"`
-	// Identifier of the actor (user, service, or system) that listed the symbol.
+	// Identifier of the actor (user, service, or system) that listed the market.
 	// Format: "service:{service_name}" (e.g., "service:cqar"), or "user:{user_id}".
 	ActorId *string `protobuf:"bytes,3,opt,name=actor_id,json=actorId,proto3,oneof" json:"actor_id,omitempty"`
-	// The venue symbol listing information.
-	VenueSymbol *v1.VenueSymbol `protobuf:"bytes,4,opt,name=venue_symbol,json=venueSymbol,proto3,oneof" json:"venue_symbol,omitempty"`
-	// Whether this is the first time this symbol is listed on this venue.
+	// The market information.
+	Market *v11.Market `protobuf:"bytes,4,opt,name=market,proto3,oneof" json:"market,omitempty"`
+	// Whether this is the first time this instrument is listed on this venue.
 	IsNewListing  *bool `protobuf:"varint,5,opt,name=is_new_listing,json=isNewListing,proto3,oneof" json:"is_new_listing,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *VenueSymbolListed) Reset() {
-	*x = VenueSymbolListed{}
+func (x *VenueMarketListed) Reset() {
+	*x = VenueMarketListed{}
 	mi := &file_proto_events_v1_venue_events_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *VenueSymbolListed) String() string {
+func (x *VenueMarketListed) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*VenueSymbolListed) ProtoMessage() {}
+func (*VenueMarketListed) ProtoMessage() {}
 
-func (x *VenueSymbolListed) ProtoReflect() protoreflect.Message {
+func (x *VenueMarketListed) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_events_v1_venue_events_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -243,80 +244,80 @@ func (x *VenueSymbolListed) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use VenueSymbolListed.ProtoReflect.Descriptor instead.
-func (*VenueSymbolListed) Descriptor() ([]byte, []int) {
+// Deprecated: Use VenueMarketListed.ProtoReflect.Descriptor instead.
+func (*VenueMarketListed) Descriptor() ([]byte, []int) {
 	return file_proto_events_v1_venue_events_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *VenueSymbolListed) GetEventId() string {
+func (x *VenueMarketListed) GetEventId() string {
 	if x != nil && x.EventId != nil {
 		return *x.EventId
 	}
 	return ""
 }
 
-func (x *VenueSymbolListed) GetTimestamp() *timestamp.Timestamp {
+func (x *VenueMarketListed) GetTimestamp() *timestamp.Timestamp {
 	if x != nil {
 		return x.Timestamp
 	}
 	return nil
 }
 
-func (x *VenueSymbolListed) GetActorId() string {
+func (x *VenueMarketListed) GetActorId() string {
 	if x != nil && x.ActorId != nil {
 		return *x.ActorId
 	}
 	return ""
 }
 
-func (x *VenueSymbolListed) GetVenueSymbol() *v1.VenueSymbol {
+func (x *VenueMarketListed) GetMarket() *v11.Market {
 	if x != nil {
-		return x.VenueSymbol
+		return x.Market
 	}
 	return nil
 }
 
-func (x *VenueSymbolListed) GetIsNewListing() bool {
+func (x *VenueMarketListed) GetIsNewListing() bool {
 	if x != nil && x.IsNewListing != nil {
 		return *x.IsNewListing
 	}
 	return false
 }
 
-// VenueSymbolDelisted event is published when a trading symbol is removed from a venue.
-// This event notifies services that a symbol is no longer tradeable on a venue.
-type VenueSymbolDelisted struct {
+// VenueMarketDelisted event is published when a trading market is removed from a venue.
+// This event notifies services that a market is no longer tradeable on a venue.
+type VenueMarketDelisted struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique event identifier for idempotency and deduplication.
 	EventId *string `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3,oneof" json:"event_id,omitempty"`
 	// Timestamp when this event was generated.
 	Timestamp *timestamp.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3,oneof" json:"timestamp,omitempty"`
-	// Identifier of the actor (user, service, or system) that delisted the symbol.
+	// Identifier of the actor (user, service, or system) that delisted the market.
 	ActorId *string `protobuf:"bytes,3,opt,name=actor_id,json=actorId,proto3,oneof" json:"actor_id,omitempty"`
-	// Venue identifier where the symbol was delisted.
+	// Venue identifier where the market was delisted.
 	VenueId *string `protobuf:"bytes,4,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	// Symbol identifier that was delisted.
-	SymbolId *string `protobuf:"bytes,5,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	// Market identifier that was delisted.
+	MarketId *string `protobuf:"bytes,5,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	// Reason for delisting (if available).
 	Reason        *string `protobuf:"bytes,6,opt,name=reason,proto3,oneof" json:"reason,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *VenueSymbolDelisted) Reset() {
-	*x = VenueSymbolDelisted{}
+func (x *VenueMarketDelisted) Reset() {
+	*x = VenueMarketDelisted{}
 	mi := &file_proto_events_v1_venue_events_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *VenueSymbolDelisted) String() string {
+func (x *VenueMarketDelisted) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*VenueSymbolDelisted) ProtoMessage() {}
+func (*VenueMarketDelisted) ProtoMessage() {}
 
-func (x *VenueSymbolDelisted) ProtoReflect() protoreflect.Message {
+func (x *VenueMarketDelisted) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_events_v1_venue_events_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -328,47 +329,47 @@ func (x *VenueSymbolDelisted) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use VenueSymbolDelisted.ProtoReflect.Descriptor instead.
-func (*VenueSymbolDelisted) Descriptor() ([]byte, []int) {
+// Deprecated: Use VenueMarketDelisted.ProtoReflect.Descriptor instead.
+func (*VenueMarketDelisted) Descriptor() ([]byte, []int) {
 	return file_proto_events_v1_venue_events_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *VenueSymbolDelisted) GetEventId() string {
+func (x *VenueMarketDelisted) GetEventId() string {
 	if x != nil && x.EventId != nil {
 		return *x.EventId
 	}
 	return ""
 }
 
-func (x *VenueSymbolDelisted) GetTimestamp() *timestamp.Timestamp {
+func (x *VenueMarketDelisted) GetTimestamp() *timestamp.Timestamp {
 	if x != nil {
 		return x.Timestamp
 	}
 	return nil
 }
 
-func (x *VenueSymbolDelisted) GetActorId() string {
+func (x *VenueMarketDelisted) GetActorId() string {
 	if x != nil && x.ActorId != nil {
 		return *x.ActorId
 	}
 	return ""
 }
 
-func (x *VenueSymbolDelisted) GetVenueId() string {
+func (x *VenueMarketDelisted) GetVenueId() string {
 	if x != nil && x.VenueId != nil {
 		return *x.VenueId
 	}
 	return ""
 }
 
-func (x *VenueSymbolDelisted) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *VenueMarketDelisted) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
 
-func (x *VenueSymbolDelisted) GetReason() string {
+func (x *VenueMarketDelisted) GetReason() string {
 	if x != nil && x.Reason != nil {
 		return *x.Reason
 	}
@@ -379,7 +380,7 @@ var File_proto_events_v1_venue_events_proto protoreflect.FileDescriptor
 
 const file_proto_events_v1_venue_events_proto_rawDesc = "" +
 	"\n" +
-	"\"proto/events/v1/venue_events.proto\x12\rcqc.events.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a!proto/venues/v1/venue_asset.proto\x1a\"proto/venues/v1/venue_symbol.proto\"\xc8\x02\n" +
+	"\"proto/events/v1/venue_events.proto\x12\rcqc.events.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a!proto/venues/v1/venue_asset.proto\x1a\x1dproto/markets/v1/market.proto\"\xc8\x02\n" +
 	"\x10VenueAssetListed\x12\x1e\n" +
 	"\bevent_id\x18\x01 \x01(\tH\x00R\aeventId\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\ttimestamp\x88\x01\x01\x12\x1e\n" +
@@ -406,25 +407,25 @@ const file_proto_events_v1_venue_events_proto_rawDesc = "" +
 	"\t_actor_idB\v\n" +
 	"\t_venue_idB\v\n" +
 	"\t_asset_idB\t\n" +
-	"\a_reason\"\xcd\x02\n" +
-	"\x11VenueSymbolListed\x12\x1e\n" +
+	"\a_reason\"\xb8\x02\n" +
+	"\x11VenueMarketListed\x12\x1e\n" +
 	"\bevent_id\x18\x01 \x01(\tH\x00R\aeventId\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\ttimestamp\x88\x01\x01\x12\x1e\n" +
-	"\bactor_id\x18\x03 \x01(\tH\x02R\aactorId\x88\x01\x01\x12B\n" +
-	"\fvenue_symbol\x18\x04 \x01(\v2\x1a.cqc.venues.v1.VenueSymbolH\x03R\vvenueSymbol\x88\x01\x01\x12)\n" +
+	"\bactor_id\x18\x03 \x01(\tH\x02R\aactorId\x88\x01\x01\x123\n" +
+	"\x06market\x18\x04 \x01(\v2\x16.cqc.markets.v1.MarketH\x03R\x06market\x88\x01\x01\x12)\n" +
 	"\x0eis_new_listing\x18\x05 \x01(\bH\x04R\fisNewListing\x88\x01\x01B\v\n" +
 	"\t_event_idB\f\n" +
 	"\n" +
 	"_timestampB\v\n" +
-	"\t_actor_idB\x0f\n" +
-	"\r_venue_symbolB\x11\n" +
+	"\t_actor_idB\t\n" +
+	"\a_marketB\x11\n" +
 	"\x0f_is_new_listing\"\xc1\x02\n" +
-	"\x13VenueSymbolDelisted\x12\x1e\n" +
+	"\x13VenueMarketDelisted\x12\x1e\n" +
 	"\bevent_id\x18\x01 \x01(\tH\x00R\aeventId\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\ttimestamp\x88\x01\x01\x12\x1e\n" +
 	"\bactor_id\x18\x03 \x01(\tH\x02R\aactorId\x88\x01\x01\x12\x1e\n" +
 	"\bvenue_id\x18\x04 \x01(\tH\x03R\avenueId\x88\x01\x01\x12 \n" +
-	"\tsymbol_id\x18\x05 \x01(\tH\x04R\bsymbolId\x88\x01\x01\x12\x1b\n" +
+	"\tmarket_id\x18\x05 \x01(\tH\x04R\bmarketId\x88\x01\x01\x12\x1b\n" +
 	"\x06reason\x18\x06 \x01(\tH\x05R\x06reason\x88\x01\x01B\v\n" +
 	"\t_event_idB\f\n" +
 	"\n" +
@@ -432,7 +433,7 @@ const file_proto_events_v1_venue_events_proto_rawDesc = "" +
 	"\t_actor_idB\v\n" +
 	"\t_venue_idB\f\n" +
 	"\n" +
-	"_symbol_idB\t\n" +
+	"_market_idB\t\n" +
 	"\a_reasonB>Z<github.com/Combine-Capital/cqc/gen/go/cqc/events/v1;eventsv1b\x06proto3"
 
 var (
@@ -451,19 +452,19 @@ var file_proto_events_v1_venue_events_proto_msgTypes = make([]protoimpl.MessageI
 var file_proto_events_v1_venue_events_proto_goTypes = []any{
 	(*VenueAssetListed)(nil),    // 0: cqc.events.v1.VenueAssetListed
 	(*VenueAssetDelisted)(nil),  // 1: cqc.events.v1.VenueAssetDelisted
-	(*VenueSymbolListed)(nil),   // 2: cqc.events.v1.VenueSymbolListed
-	(*VenueSymbolDelisted)(nil), // 3: cqc.events.v1.VenueSymbolDelisted
+	(*VenueMarketListed)(nil),   // 2: cqc.events.v1.VenueMarketListed
+	(*VenueMarketDelisted)(nil), // 3: cqc.events.v1.VenueMarketDelisted
 	(*timestamp.Timestamp)(nil), // 4: google.protobuf.Timestamp
 	(*v1.VenueAsset)(nil),       // 5: cqc.venues.v1.VenueAsset
-	(*v1.VenueSymbol)(nil),      // 6: cqc.venues.v1.VenueSymbol
+	(*v11.Market)(nil),          // 6: cqc.markets.v1.Market
 }
 var file_proto_events_v1_venue_events_proto_depIdxs = []int32{
 	4, // 0: cqc.events.v1.VenueAssetListed.timestamp:type_name -> google.protobuf.Timestamp
 	5, // 1: cqc.events.v1.VenueAssetListed.venue_asset:type_name -> cqc.venues.v1.VenueAsset
 	4, // 2: cqc.events.v1.VenueAssetDelisted.timestamp:type_name -> google.protobuf.Timestamp
-	4, // 3: cqc.events.v1.VenueSymbolListed.timestamp:type_name -> google.protobuf.Timestamp
-	6, // 4: cqc.events.v1.VenueSymbolListed.venue_symbol:type_name -> cqc.venues.v1.VenueSymbol
-	4, // 5: cqc.events.v1.VenueSymbolDelisted.timestamp:type_name -> google.protobuf.Timestamp
+	4, // 3: cqc.events.v1.VenueMarketListed.timestamp:type_name -> google.protobuf.Timestamp
+	6, // 4: cqc.events.v1.VenueMarketListed.market:type_name -> cqc.markets.v1.Market
+	4, // 5: cqc.events.v1.VenueMarketDelisted.timestamp:type_name -> google.protobuf.Timestamp
 	6, // [6:6] is the sub-list for method output_type
 	6, // [6:6] is the sub-list for method input_type
 	6, // [6:6] is the sub-list for extension type_name

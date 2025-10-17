@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// LendingDeposit represents a lending deposit product (e.g., Aave WETH deposit).
+// Has a 1:1 relationship with an Instrument where instrument_type = "LENDING_DEPOSIT".
+message LendingDeposit {
+  // Foreign key to Instrument.id (1:1 relationship).
+  optional string instrument_id = 1;
+
+  // Underlying asset identifier (UUID) - the asset being deposited/lent.
+  // For Aave WETH deposit, this is WETH.
+  optional string underlying_asset_id = 2;
+
+  // Additional lending-specific metadata (e.g., APY calculation method, collateral factor).
+  optional google.protobuf.Struct extensions = 3;
+
+  // Timestamp when this lending deposit product was created.
+  optional google.protobuf.Timestamp created_at = 4;
+
+  // Timestamp when this lending deposit product was last updated.
+  optional google.protobuf.Timestamp updated_at = 5;
+}

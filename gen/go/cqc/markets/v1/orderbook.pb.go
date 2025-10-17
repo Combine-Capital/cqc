@@ -86,13 +86,13 @@ func (x *OrderBookLevel) GetOrderCount() int32 {
 	return 0
 }
 
-// OrderBook represents a snapshot of the order book (bid/ask levels) for a trading symbol/market.
+// OrderBook represents a snapshot of the order book (bid/ask levels) for a trading market.
 // Order books show the current buy and sell orders at different price levels.
 type OrderBook struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Symbol identifier (UUID) for this order book.
-	// References the canonical symbol from the markets domain.
-	SymbolId *string `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	// Market identifier (UUID) for this order book.
+	// References a specific market (instrument listed on a venue).
+	MarketId *string `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	// Venue where this order book is from.
 	VenueId *string `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
 	// Venue-specific symbol representation (e.g., "BTCUSDT" on Binance).
@@ -148,9 +148,9 @@ func (*OrderBook) Descriptor() ([]byte, []int) {
 	return file_proto_markets_v1_orderbook_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *OrderBook) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *OrderBook) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -229,9 +229,9 @@ func (x *OrderBook) GetMidPrice() float64 {
 // This provides a view of how much volume can be executed at different price levels.
 type MarketDepth struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Symbol identifier (UUID) for this market depth data.
-	// References the canonical symbol from the markets domain.
-	SymbolId *string `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	// Market identifier (UUID) for this market depth data.
+	// References a specific market (instrument listed on a venue).
+	MarketId *string `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	// Venue where this depth data is from.
 	VenueId *string `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
 	// Venue-specific symbol representation.
@@ -297,9 +297,9 @@ func (*MarketDepth) Descriptor() ([]byte, []int) {
 	return file_proto_markets_v1_orderbook_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MarketDepth) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *MarketDepth) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -423,7 +423,7 @@ const file_proto_markets_v1_orderbook_proto_rawDesc = "" +
 	"\t_quantityB\x0e\n" +
 	"\f_order_count\"\xb6\x04\n" +
 	"\tOrderBook\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x1e\n" +
 	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12&\n" +
 	"\fvenue_symbol\x18\x03 \x01(\tH\x02R\vvenueSymbol\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\ttimestamp\x88\x01\x01\x12\x1f\n" +
@@ -436,7 +436,7 @@ const file_proto_markets_v1_orderbook_proto_rawDesc = "" +
 	" \x01(\x01H\aR\x06spread\x88\x01\x01\x12 \n" +
 	"\tmid_price\x18\v \x01(\x01H\bR\bmidPrice\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
+	"_market_idB\v\n" +
 	"\t_venue_idB\x0f\n" +
 	"\r_venue_symbolB\f\n" +
 	"\n" +
@@ -448,7 +448,7 @@ const file_proto_markets_v1_orderbook_proto_rawDesc = "" +
 	"\n" +
 	"_mid_price\"\xe6\a\n" +
 	"\vMarketDepth\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x1e\n" +
 	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12&\n" +
 	"\fvenue_symbol\x18\x03 \x01(\tH\x02R\vvenueSymbol\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\ttimestamp\x88\x01\x01\x12 \n" +
@@ -467,7 +467,7 @@ const file_proto_markets_v1_orderbook_proto_rawDesc = "" +
 	"\x0fask_level_count\x18\x0f \x01(\x05H\x0eR\raskLevelCount\x88\x01\x01\x12,\n" +
 	"\x0fimbalance_ratio\x18\x10 \x01(\x01H\x0fR\x0eimbalanceRatio\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
+	"_market_idB\v\n" +
 	"\t_venue_idB\x0f\n" +
 	"\r_venue_symbolB\f\n" +
 	"\n" +

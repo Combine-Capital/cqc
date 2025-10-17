@@ -23,37 +23,37 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// SymbolCreated event is published when a new trading symbol/market is registered.
-// This event notifies services that a new symbol is available for trading and market data.
-type SymbolCreated struct {
+// InstrumentCreated event is published when a new trading instrument is registered.
+// This event notifies services that a new instrument is available for trading and market data.
+type InstrumentCreated struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique event identifier for idempotency and deduplication.
 	EventId *string `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3,oneof" json:"event_id,omitempty"`
 	// Timestamp when this event was generated.
 	Timestamp *timestamp.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3,oneof" json:"timestamp,omitempty"`
-	// Identifier of the actor (user, service, or system) that created the symbol.
+	// Identifier of the actor (user, service, or system) that created the instrument.
 	// Format: "service:{service_name}" (e.g., "service:cqar"), or "user:{user_id}".
 	ActorId *string `protobuf:"bytes,3,opt,name=actor_id,json=actorId,proto3,oneof" json:"actor_id,omitempty"`
-	// The newly created symbol.
-	Symbol        *v1.Symbol `protobuf:"bytes,4,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
+	// The newly created instrument.
+	Instrument    *v1.Instrument `protobuf:"bytes,4,opt,name=instrument,proto3,oneof" json:"instrument,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SymbolCreated) Reset() {
-	*x = SymbolCreated{}
+func (x *InstrumentCreated) Reset() {
+	*x = InstrumentCreated{}
 	mi := &file_proto_events_v1_market_events_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SymbolCreated) String() string {
+func (x *InstrumentCreated) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SymbolCreated) ProtoMessage() {}
+func (*InstrumentCreated) ProtoMessage() {}
 
-func (x *SymbolCreated) ProtoReflect() protoreflect.Message {
+func (x *InstrumentCreated) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_events_v1_market_events_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -65,35 +65,110 @@ func (x *SymbolCreated) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SymbolCreated.ProtoReflect.Descriptor instead.
-func (*SymbolCreated) Descriptor() ([]byte, []int) {
+// Deprecated: Use InstrumentCreated.ProtoReflect.Descriptor instead.
+func (*InstrumentCreated) Descriptor() ([]byte, []int) {
 	return file_proto_events_v1_market_events_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SymbolCreated) GetEventId() string {
+func (x *InstrumentCreated) GetEventId() string {
 	if x != nil && x.EventId != nil {
 		return *x.EventId
 	}
 	return ""
 }
 
-func (x *SymbolCreated) GetTimestamp() *timestamp.Timestamp {
+func (x *InstrumentCreated) GetTimestamp() *timestamp.Timestamp {
 	if x != nil {
 		return x.Timestamp
 	}
 	return nil
 }
 
-func (x *SymbolCreated) GetActorId() string {
+func (x *InstrumentCreated) GetActorId() string {
 	if x != nil && x.ActorId != nil {
 		return *x.ActorId
 	}
 	return ""
 }
 
-func (x *SymbolCreated) GetSymbol() *v1.Symbol {
+func (x *InstrumentCreated) GetInstrument() *v1.Instrument {
 	if x != nil {
-		return x.Symbol
+		return x.Instrument
+	}
+	return nil
+}
+
+// MarketCreated event is published when a new market listing is registered.
+// This event notifies services that a new market is available on a venue.
+type MarketCreated struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique event identifier for idempotency and deduplication.
+	EventId *string `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3,oneof" json:"event_id,omitempty"`
+	// Timestamp when this event was generated.
+	Timestamp *timestamp.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3,oneof" json:"timestamp,omitempty"`
+	// Identifier of the actor (user, service, or system) that created the market.
+	// Format: "service:{service_name}" (e.g., "service:cqar"), or "user:{user_id}".
+	ActorId *string `protobuf:"bytes,3,opt,name=actor_id,json=actorId,proto3,oneof" json:"actor_id,omitempty"`
+	// The newly created market.
+	Market        *v1.Market `protobuf:"bytes,4,opt,name=market,proto3,oneof" json:"market,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarketCreated) Reset() {
+	*x = MarketCreated{}
+	mi := &file_proto_events_v1_market_events_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarketCreated) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarketCreated) ProtoMessage() {}
+
+func (x *MarketCreated) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_events_v1_market_events_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarketCreated.ProtoReflect.Descriptor instead.
+func (*MarketCreated) Descriptor() ([]byte, []int) {
+	return file_proto_events_v1_market_events_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *MarketCreated) GetEventId() string {
+	if x != nil && x.EventId != nil {
+		return *x.EventId
+	}
+	return ""
+}
+
+func (x *MarketCreated) GetTimestamp() *timestamp.Timestamp {
+	if x != nil {
+		return x.Timestamp
+	}
+	return nil
+}
+
+func (x *MarketCreated) GetActorId() string {
+	if x != nil && x.ActorId != nil {
+		return *x.ActorId
+	}
+	return ""
+}
+
+func (x *MarketCreated) GetMarket() *v1.Market {
+	if x != nil {
+		return x.Market
 	}
 	return nil
 }
@@ -136,7 +211,7 @@ type PriceUpdated struct {
 
 func (x *PriceUpdated) Reset() {
 	*x = PriceUpdated{}
-	mi := &file_proto_events_v1_market_events_proto_msgTypes[1]
+	mi := &file_proto_events_v1_market_events_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -148,7 +223,7 @@ func (x *PriceUpdated) String() string {
 func (*PriceUpdated) ProtoMessage() {}
 
 func (x *PriceUpdated) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_events_v1_market_events_proto_msgTypes[1]
+	mi := &file_proto_events_v1_market_events_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -161,7 +236,7 @@ func (x *PriceUpdated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PriceUpdated.ProtoReflect.Descriptor instead.
 func (*PriceUpdated) Descriptor() ([]byte, []int) {
-	return file_proto_events_v1_market_events_proto_rawDescGZIP(), []int{1}
+	return file_proto_events_v1_market_events_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *PriceUpdated) GetEventId() string {
@@ -238,17 +313,29 @@ var File_proto_events_v1_market_events_proto protoreflect.FileDescriptor
 
 const file_proto_events_v1_market_events_proto_rawDesc = "" +
 	"\n" +
-	"#proto/events/v1/market_events.proto\x12\rcqc.events.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1dproto/markets/v1/symbol.proto\x1a\x1cproto/markets/v1/price.proto\"\xf6\x01\n" +
-	"\rSymbolCreated\x12\x1e\n" +
+	"#proto/events/v1/market_events.proto\x12\rcqc.events.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a!proto/markets/v1/instrument.proto\x1a\x1dproto/markets/v1/market.proto\x1a\x1cproto/markets/v1/price.proto\"\x8a\x02\n" +
+	"\x11InstrumentCreated\x12\x1e\n" +
+	"\bevent_id\x18\x01 \x01(\tH\x00R\aeventId\x88\x01\x01\x12=\n" +
+	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\ttimestamp\x88\x01\x01\x12\x1e\n" +
+	"\bactor_id\x18\x03 \x01(\tH\x02R\aactorId\x88\x01\x01\x12?\n" +
+	"\n" +
+	"instrument\x18\x04 \x01(\v2\x1a.cqc.markets.v1.InstrumentH\x03R\n" +
+	"instrument\x88\x01\x01B\v\n" +
+	"\t_event_idB\f\n" +
+	"\n" +
+	"_timestampB\v\n" +
+	"\t_actor_idB\r\n" +
+	"\v_instrument\"\xf6\x01\n" +
+	"\rMarketCreated\x12\x1e\n" +
 	"\bevent_id\x18\x01 \x01(\tH\x00R\aeventId\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\ttimestamp\x88\x01\x01\x12\x1e\n" +
 	"\bactor_id\x18\x03 \x01(\tH\x02R\aactorId\x88\x01\x01\x123\n" +
-	"\x06symbol\x18\x04 \x01(\v2\x16.cqc.markets.v1.SymbolH\x03R\x06symbol\x88\x01\x01B\v\n" +
+	"\x06market\x18\x04 \x01(\v2\x16.cqc.markets.v1.MarketH\x03R\x06market\x88\x01\x01B\v\n" +
 	"\t_event_idB\f\n" +
 	"\n" +
 	"_timestampB\v\n" +
 	"\t_actor_idB\t\n" +
-	"\a_symbol\"\xcb\x04\n" +
+	"\a_market\"\xcb\x04\n" +
 	"\fPriceUpdated\x12\x1e\n" +
 	"\bevent_id\x18\x01 \x01(\tH\x00R\aeventId\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\ttimestamp\x88\x01\x01\x12\x1e\n" +
@@ -285,24 +372,28 @@ func file_proto_events_v1_market_events_proto_rawDescGZIP() []byte {
 	return file_proto_events_v1_market_events_proto_rawDescData
 }
 
-var file_proto_events_v1_market_events_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_events_v1_market_events_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_events_v1_market_events_proto_goTypes = []any{
-	(*SymbolCreated)(nil),       // 0: cqc.events.v1.SymbolCreated
-	(*PriceUpdated)(nil),        // 1: cqc.events.v1.PriceUpdated
-	(*timestamp.Timestamp)(nil), // 2: google.protobuf.Timestamp
-	(*v1.Symbol)(nil),           // 3: cqc.markets.v1.Symbol
-	(*v1.Price)(nil),            // 4: cqc.markets.v1.Price
+	(*InstrumentCreated)(nil),   // 0: cqc.events.v1.InstrumentCreated
+	(*MarketCreated)(nil),       // 1: cqc.events.v1.MarketCreated
+	(*PriceUpdated)(nil),        // 2: cqc.events.v1.PriceUpdated
+	(*timestamp.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	(*v1.Instrument)(nil),       // 4: cqc.markets.v1.Instrument
+	(*v1.Market)(nil),           // 5: cqc.markets.v1.Market
+	(*v1.Price)(nil),            // 6: cqc.markets.v1.Price
 }
 var file_proto_events_v1_market_events_proto_depIdxs = []int32{
-	2, // 0: cqc.events.v1.SymbolCreated.timestamp:type_name -> google.protobuf.Timestamp
-	3, // 1: cqc.events.v1.SymbolCreated.symbol:type_name -> cqc.markets.v1.Symbol
-	2, // 2: cqc.events.v1.PriceUpdated.timestamp:type_name -> google.protobuf.Timestamp
-	4, // 3: cqc.events.v1.PriceUpdated.price:type_name -> cqc.markets.v1.Price
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	3, // 0: cqc.events.v1.InstrumentCreated.timestamp:type_name -> google.protobuf.Timestamp
+	4, // 1: cqc.events.v1.InstrumentCreated.instrument:type_name -> cqc.markets.v1.Instrument
+	3, // 2: cqc.events.v1.MarketCreated.timestamp:type_name -> google.protobuf.Timestamp
+	5, // 3: cqc.events.v1.MarketCreated.market:type_name -> cqc.markets.v1.Market
+	3, // 4: cqc.events.v1.PriceUpdated.timestamp:type_name -> google.protobuf.Timestamp
+	6, // 5: cqc.events.v1.PriceUpdated.price:type_name -> cqc.markets.v1.Price
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_proto_events_v1_market_events_proto_init() }
@@ -312,13 +403,14 @@ func file_proto_events_v1_market_events_proto_init() {
 	}
 	file_proto_events_v1_market_events_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_events_v1_market_events_proto_msgTypes[1].OneofWrappers = []any{}
+	file_proto_events_v1_market_events_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_events_v1_market_events_proto_rawDesc), len(file_proto_events_v1_market_events_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

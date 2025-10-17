@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// LendingBorrow represents a lending borrow product (e.g., Aave USDC borrow).
+// Has a 1:1 relationship with an Instrument where instrument_type = "LENDING_BORROW".
+message LendingBorrow {
+  // Foreign key to Instrument.id (1:1 relationship).
+  optional string instrument_id = 1;
+
+  // Underlying asset identifier (UUID) - the asset being borrowed.
+  // For Aave USDC borrow, this is USDC.
+  optional string underlying_asset_id = 2;
+
+  // Additional lending-specific metadata (e.g., interest rate model, borrow cap).
+  optional google.protobuf.Struct extensions = 3;
+
+  // Timestamp when this lending borrow product was created.
+  optional google.protobuf.Timestamp created_at = 4;
+
+  // Timestamp when this lending borrow product was last updated.
+  optional google.protobuf.Timestamp updated_at = 5;
+}

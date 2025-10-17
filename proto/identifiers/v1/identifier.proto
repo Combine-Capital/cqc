@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package cqc.identifiers.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/identifiers/v1;identifiersv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// Identifier represents a unified external identifier mapping for any entity type.
+// Exactly one of asset_id, instrument_id, or market_id must be set.
+message Identifier {
+  // Unique identifier for this mapping (UUID).
+  optional string id = 1;
+
+  // Type of entity being identified (string, not enum).
+  // Examples: "ASSET", "INSTRUMENT", "MARKET"
+  optional string entity_type = 2;
+
+  // Foreign key to Asset.id (if entity_type = "ASSET").
+  // Exactly one of asset_id, instrument_id, market_id must be set.
+  optional string asset_id = 3;
+
+  // Foreign key to Instrument.id (if entity_type = "INSTRUMENT").
+  // Exactly one of asset_id, instrument_id, market_id must be set.
+  optional string instrument_id = 4;
+
+  // Foreign key to Market.id (if entity_type = "MARKET").
+  // Exactly one of asset_id, instrument_id, market_id must be set.
+  optional string market_id = 5;
+
+  // Source of the external identifier (e.g., "coingecko", "coinmarketcap", "messari", "venue:binance").
+  optional string source = 6;
+
+  // External identifier value from the source system.
+  // Examples: "bitcoin" (CoinGecko), "1" (CoinMarketCap), "BTCUSDT" (Binance symbol).
+  optional string external_id = 7;
+
+  // Whether this is the primary identifier for this entity from this source.
+  optional bool is_primary = 8;
+
+  // Additional identifier-specific metadata.
+  // May include API URLs, validation status, last sync time, etc.
+  optional google.protobuf.Struct metadata = 9;
+
+  // Timestamp when this identifier was verified/validated.
+  optional google.protobuf.Timestamp verified_at = 10;
+
+  // Timestamp when this identifier was created in our system.
+  optional google.protobuf.Timestamp created_at = 11;
+
+  // Timestamp when this identifier was last updated in our system.
+  optional google.protobuf.Timestamp updated_at = 12;
+}

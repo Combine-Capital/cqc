@@ -22,13 +22,13 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Price represents a point-in-time price observation for a trading symbol/market.
+// Price represents a point-in-time price observation for a trading market.
 // Prices can come from various venues (exchanges, AMMs, oracles) and sources.
 type Price struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Symbol identifier (UUID) for which this price is reported.
-	// References the canonical symbol from the markets domain (e.g., BTC/USDT spot, ETH-PERP).
-	SymbolId *string `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	// Market identifier (UUID) for which this price is reported.
+	// References a specific market (instrument listed on a venue).
+	MarketId *string `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	// Numeric price value in the quote currency.
 	// For symbols like BTC/USDT, this is the USDT price of 1 BTC.
 	Value *float64 `protobuf:"fixed64,2,opt,name=value,proto3,oneof" json:"value,omitempty"`
@@ -88,9 +88,9 @@ func (*Price) Descriptor() ([]byte, []int) {
 	return file_proto_markets_v1_price_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Price) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *Price) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -162,9 +162,9 @@ func (x *Price) GetConfidence() float64 {
 // VWAP is calculated as the sum of (price * volume) divided by total volume.
 type VWAP struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Symbol identifier (UUID) for which this VWAP is calculated.
-	// References the canonical symbol from the markets domain.
-	SymbolId *string `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	// Market identifier (UUID) for which this VWAP is calculated.
+	// References a specific market (instrument listed on a venue).
+	MarketId *string `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	// Volume-weighted average price value.
 	Value *float64 `protobuf:"fixed64,2,opt,name=value,proto3,oneof" json:"value,omitempty"`
 	// Start timestamp of the VWAP calculation period.
@@ -219,9 +219,9 @@ func (*VWAP) Descriptor() ([]byte, []int) {
 	return file_proto_markets_v1_price_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *VWAP) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *VWAP) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -302,7 +302,7 @@ const file_proto_markets_v1_price_proto_rawDesc = "" +
 	"\n" +
 	"\x1cproto/markets/v1/price.proto\x12\x0ecqc.markets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd1\x03\n" +
 	"\x05Price\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x19\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x19\n" +
 	"\x05value\x18\x02 \x01(\x01H\x01R\x05value\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\ttimestamp\x88\x01\x01\x12\x1e\n" +
 	"\bvenue_id\x18\x04 \x01(\tH\x03R\avenueId\x88\x01\x01\x12&\n" +
@@ -316,7 +316,7 @@ const file_proto_markets_v1_price_proto_rawDesc = "" +
 	" \x01(\x01H\tR\n" +
 	"confidence\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\b\n" +
+	"_market_idB\b\n" +
 	"\x06_valueB\f\n" +
 	"\n" +
 	"_timestampB\v\n" +
@@ -328,7 +328,7 @@ const file_proto_markets_v1_price_proto_rawDesc = "" +
 	"\x04_askB\r\n" +
 	"\v_confidence\"\xbf\x04\n" +
 	"\x04VWAP\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x19\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x19\n" +
 	"\x05value\x18\x02 \x01(\x01H\x01R\x05value\x88\x01\x01\x12B\n" +
 	"\fperiod_start\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\vperiodStart\x88\x01\x01\x12>\n" +
 	"\n" +
@@ -344,7 +344,7 @@ const file_proto_markets_v1_price_proto_rawDesc = "" +
 	"\x03low\x18\v \x01(\x01H\n" +
 	"R\x03low\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\b\n" +
+	"_market_idB\b\n" +
 	"\x06_valueB\x0f\n" +
 	"\r_period_startB\r\n" +
 	"\v_period_endB\x0f\n" +

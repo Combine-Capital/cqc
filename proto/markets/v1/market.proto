@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// Market represents a specific listing of an Instrument on a Venue.
+// This is the venue-specific representation with trading rules and fees.
+message Market {
+  // Unique market identifier (UUID).
+  optional string id = 1;
+
+  // Foreign key to Instrument.id - the product being traded.
+  optional string instrument_id = 2;
+
+  // Foreign key to Venue.id - where this instrument is listed.
+  optional string venue_id = 3;
+
+  // Venue-specific symbol name (e.g., "BTCUSDT" on Binance, "BTC-PERP" on Hyperliquid).
+  optional string venue_symbol = 4;
+
+  // Settlement asset identifier (UUID) - asset used for contract settlement.
+  // For perpetuals/futures, this is what profits/losses are paid in.
+  // May be null for spot markets (settlement is in base/quote assets directly).
+  optional string settlement_asset_id = 5;
+
+  // Price currency asset identifier (UUID) - the asset prices are quoted in.
+  // For BTC/USDT, this is USDT. For BTC-PERP quoted in USD, this is USD.
+  optional string price_currency_asset_id = 6;
+
+  // Minimum price increment (tick size) as string decimal.
+  // Example: "0.01" means price can move in increments of 0.01
+  optional string tick_size = 7;
+
+  // Minimum order size increment (lot size) in base asset units as string decimal.
+  // Example: "0.001" means you can trade in increments of 0.001 BTC
+  optional string lot_size = 8;
+
+  // Minimum order size in base asset units as string decimal.
+  // Example: "0.001" BTC minimum per order
+  optional string min_order_size = 9;
+
+  // Maximum order size in base asset units as string decimal.
+  // Null if no maximum limit.
+  optional string max_order_size = 10;
+
+  // Minimum notional value (price * quantity) in quote currency as string decimal.
+  // Example: "10.0" USDT minimum notional for an order
+  optional string min_notional = 11;
+
+  // Maker fee as string decimal (e.g., "0.0002" for 0.02%).
+  // Negative values indicate rebates.
+  optional string maker_fee = 12;
+
+  // Taker fee as string decimal (e.g., "0.0005" for 0.05%).
+  optional string taker_fee = 13;
+
+  // Funding interval in seconds (for perpetuals).
+  // Example: 28800 for 8-hour funding on most perp exchanges.
+  // Zero or null for non-perpetual instruments.
+  optional int32 funding_interval_secs = 14;
+
+  // Market status (string, not enum).
+  // Examples: "active", "suspended", "delisted"
+  optional string status = 15;
+
+  // Timestamp when this market was listed on the venue.
+  optional google.protobuf.Timestamp listed_at = 16;
+
+  // Timestamp when this market was delisted from the venue.
+  // Null if still listed.
+  optional google.protobuf.Timestamp delisted_at = 17;
+
+  // Additional market-specific metadata.
+  // 
+  // For AMM markets (Uniswap, etc.):
+  //   - pool_address: contract address
+  //   - fee_tier_bps: fee tier in basis points
+  //   - tick_spacing: tick spacing parameter
+  //   - token0: address of token0
+  //   - token1: address of token1
+  //
+  // For lending markets (Aave, Compound, etc.):
+  //   - reserve_address: reserve/market contract address
+  //   - aToken_address: aToken/cToken address for deposits
+  //   - debtToken_address: debt token address for borrows
+  //   - ltv: loan-to-value ratio
+  //   - liq_threshold: liquidation threshold
+  //
+  // For perp markets (Hyperliquid, dYdX, etc.):
+  //   - product_id: venue-specific product identifier
+  //   - index_oracle: oracle address/identifier for index price
+  //   - risk_tiers: JSON array of risk tier configurations
+  optional google.protobuf.Struct metadata = 18;
+
+  // Timestamp when this market was created in our system.
+  optional google.protobuf.Timestamp created_at = 19;
+
+  // Timestamp when this market was last updated in our system.
+  optional google.protobuf.Timestamp updated_at = 20;
+}

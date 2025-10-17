@@ -9,11 +9,17 @@ import "proto/assets/v1/deployment.proto";
 import "proto/assets/v1/relationship.proto";
 import "proto/assets/v1/quality.proto";
 import "proto/assets/v1/chain.proto";
-import "proto/markets/v1/symbol.proto";
-import "proto/markets/v1/symbol_identifier.proto";
+import "proto/markets/v1/instrument.proto";
+import "proto/markets/v1/spot_instrument.proto";
+import "proto/markets/v1/perp_contract.proto";
+import "proto/markets/v1/future_contract.proto";
+import "proto/markets/v1/option_series.proto";
+import "proto/markets/v1/lending_deposit.proto";
+import "proto/markets/v1/lending_borrow.proto";
+import "proto/markets/v1/market.proto";
+import "proto/identifiers/v1/identifier.proto";
 import "proto/venues/v1/venue.proto";
 import "proto/venues/v1/venue_asset.proto";
-import "proto/venues/v1/venue_symbol.proto";
 
 // AssetRegistry service provides methods for managing canonical assets,
 // their deployments across chains, identifiers, relationships, and quality flags.
@@ -90,32 +96,38 @@ service AssetRegistry {
   // ListChains lists all registered blockchain networks.
   rpc ListChains(ListChainsRequest) returns (ListChainsResponse);
 
-  // CreateSymbol creates a new trading symbol/market.
-  rpc CreateSymbol(CreateSymbolRequest) returns (CreateSymbolResponse);
+  // GetInstrument retrieves a specific instrument by ID.
+  rpc GetInstrument(GetInstrumentRequest) returns (GetInstrumentResponse);
 
-  // GetSymbol retrieves a specific symbol by ID.
-  rpc GetSymbol(GetSymbolRequest) returns (GetSymbolResponse);
+  // GetSpotInstrument retrieves a spot instrument by instrument_id.
+  rpc GetSpotInstrument(GetSpotInstrumentRequest) returns (GetSpotInstrumentResponse);
 
-  // UpdateSymbol updates an existing symbol's metadata.
-  rpc UpdateSymbol(UpdateSymbolRequest) returns (UpdateSymbolResponse);
+  // GetPerpContract retrieves a perpetual contract by instrument_id.
+  rpc GetPerpContract(GetPerpContractRequest) returns (GetPerpContractResponse);
 
-  // DeleteSymbol soft-deletes a symbol from the registry.
-  rpc DeleteSymbol(DeleteSymbolRequest) returns (DeleteSymbolResponse);
+  // GetFutureContract retrieves a future contract by instrument_id.
+  rpc GetFutureContract(GetFutureContractRequest) returns (GetFutureContractResponse);
 
-  // ListSymbols retrieves a paginated list of symbols with optional filtering.
-  rpc ListSymbols(ListSymbolsRequest) returns (ListSymbolsResponse);
+  // GetOptionSeries retrieves an option series by instrument_id.
+  rpc GetOptionSeries(GetOptionSeriesRequest) returns (GetOptionSeriesResponse);
 
-  // SearchSymbols searches for symbols by name or other criteria.
-  rpc SearchSymbols(SearchSymbolsRequest) returns (SearchSymbolsResponse);
+  // GetLendingDeposit retrieves a lending deposit product by instrument_id.
+  rpc GetLendingDeposit(GetLendingDepositRequest) returns (GetLendingDepositResponse);
 
-  // CreateSymbolIdentifier adds an external identifier mapping for a symbol.
-  rpc CreateSymbolIdentifier(CreateSymbolIdentifierRequest) returns (CreateSymbolIdentifierResponse);
+  // GetLendingBorrow retrieves a lending borrow product by instrument_id.
+  rpc GetLendingBorrow(GetLendingBorrowRequest) returns (GetLendingBorrowResponse);
 
-  // GetSymbolIdentifier retrieves a symbol identifier mapping.
-  rpc GetSymbolIdentifier(GetSymbolIdentifierRequest) returns (GetSymbolIdentifierResponse);
+  // GetMarket retrieves a specific market by market_id.
+  rpc GetMarket(GetMarketRequest) returns (GetMarketResponse);
 
-  // ListSymbolIdentifiers lists all identifier mappings for a symbol.
-  rpc ListSymbolIdentifiers(ListSymbolIdentifiersRequest) returns (ListSymbolIdentifiersResponse);
+  // ResolveMarket resolves a market by venue_id and venue_symbol.
+  rpc ResolveMarket(ResolveMarketRequest) returns (ResolveMarketResponse);
+
+  // GetIdentifier retrieves a specific identifier by ID.
+  rpc GetIdentifier(GetIdentifierRequest) returns (GetIdentifierResponse);
+
+  // ListIdentifiers lists all identifiers for a specific entity.
+  rpc ListIdentifiers(ListIdentifiersRequest) returns (ListIdentifiersResponse);
 
   // CreateVenue registers a new trading venue.
   rpc CreateVenue(CreateVenueRequest) returns (CreateVenueResponse);
@@ -134,15 +146,6 @@ service AssetRegistry {
 
   // ListVenueAssets lists all assets available on a venue or all venues for an asset.
   rpc ListVenueAssets(ListVenueAssetsRequest) returns (ListVenueAssetsResponse);
-
-  // CreateVenueSymbol maps a venue's trading symbol to a canonical symbol.
-  rpc CreateVenueSymbol(CreateVenueSymbolRequest) returns (CreateVenueSymbolResponse);
-
-  // GetVenueSymbol retrieves a venue symbol mapping.
-  rpc GetVenueSymbol(GetVenueSymbolRequest) returns (GetVenueSymbolResponse);
-
-  // ListVenueSymbols lists all symbol mappings for a venue or symbol.
-  rpc ListVenueSymbols(ListVenueSymbolsRequest) returns (ListVenueSymbolsResponse);
 }
 
 // CreateAssetRequest
@@ -410,106 +413,108 @@ message ListChainsResponse {
   repeated cqc.assets.v1.Chain chains = 1;
 }
 
-// CreateSymbolRequest
-message CreateSymbolRequest {
-  optional string symbol = 1;
-  optional cqc.markets.v1.SymbolType symbol_type = 2;
-  optional string base_asset_id = 3;
-  optional string quote_asset_id = 4;
-  optional string settlement_asset_id = 5;
-  optional double tick_size = 6;
-  optional double lot_size = 7;
+// GetInstrumentRequest
+message GetInstrumentRequest {
+  optional string instrument_id = 1;
 }
 
-message CreateSymbolResponse {
-  optional cqc.markets.v1.Symbol symbol = 1;
+message GetInstrumentResponse {
+  optional cqc.markets.v1.Instrument instrument = 1;
 }
 
-// GetSymbolRequest
-message GetSymbolRequest {
-  optional string symbol_id = 1;
+// GetSpotInstrumentRequest
+message GetSpotInstrumentRequest {
+  optional string instrument_id = 1;
 }
 
-message GetSymbolResponse {
-  optional cqc.markets.v1.Symbol symbol = 1;
+message GetSpotInstrumentResponse {
+  optional cqc.markets.v1.SpotInstrument spot_instrument = 1;
 }
 
-// UpdateSymbolRequest
-message UpdateSymbolRequest {
-  optional string symbol_id = 1;
-  optional string symbol = 2;
-  optional cqc.markets.v1.SymbolType symbol_type = 3;
-  optional double tick_size = 4;
-  optional double lot_size = 5;
-  optional bool is_active = 6;
+// GetPerpContractRequest
+message GetPerpContractRequest {
+  optional string instrument_id = 1;
 }
 
-message UpdateSymbolResponse {
-  optional cqc.markets.v1.Symbol symbol = 1;
+message GetPerpContractResponse {
+  optional cqc.markets.v1.PerpContract perp_contract = 1;
 }
 
-// DeleteSymbolRequest
-message DeleteSymbolRequest {
-  optional string symbol_id = 1;
+// GetFutureContractRequest
+message GetFutureContractRequest {
+  optional string instrument_id = 1;
 }
 
-message DeleteSymbolResponse {
-  optional bool success = 1;
+message GetFutureContractResponse {
+  optional cqc.markets.v1.FutureContract future_contract = 1;
 }
 
-// ListSymbolsRequest
-message ListSymbolsRequest {
-  optional int32 page_size = 1;
-  optional string page_token = 2;
-  optional cqc.markets.v1.SymbolType symbol_type = 3;
-  optional string base_asset_id = 4;
-  optional string quote_asset_id = 5;
+// GetOptionSeriesRequest
+message GetOptionSeriesRequest {
+  optional string instrument_id = 1;
 }
 
-message ListSymbolsResponse {
-  repeated cqc.markets.v1.Symbol symbols = 1;
-  optional string next_page_token = 2;
-  optional int32 total_count = 3;
+message GetOptionSeriesResponse {
+  optional cqc.markets.v1.OptionSeries option_series = 1;
 }
 
-// SearchSymbolsRequest
-message SearchSymbolsRequest {
-  optional string query = 1;
-  optional int32 limit = 2;
+// GetLendingDepositRequest
+message GetLendingDepositRequest {
+  optional string instrument_id = 1;
 }
 
-message SearchSymbolsResponse {
-  repeated cqc.markets.v1.Symbol symbols = 1;
+message GetLendingDepositResponse {
+  optional cqc.markets.v1.LendingDeposit lending_deposit = 1;
 }
 
-// CreateSymbolIdentifierRequest
-message CreateSymbolIdentifierRequest {
-  optional string symbol_id = 1;
-  optional cqc.markets.v1.DataSource data_source = 2;
-  optional string external_id = 3;
+// GetLendingBorrowRequest
+message GetLendingBorrowRequest {
+  optional string instrument_id = 1;
 }
 
-message CreateSymbolIdentifierResponse {
-  optional cqc.markets.v1.SymbolIdentifier identifier = 1;
+message GetLendingBorrowResponse {
+  optional cqc.markets.v1.LendingBorrow lending_borrow = 1;
 }
 
-// GetSymbolIdentifierRequest
-message GetSymbolIdentifierRequest {
-  optional string symbol_id = 1;
-  optional cqc.markets.v1.DataSource data_source = 2;
+// GetMarketRequest
+message GetMarketRequest {
+  optional string market_id = 1;
 }
 
-message GetSymbolIdentifierResponse {
-  optional cqc.markets.v1.SymbolIdentifier identifier = 1;
+message GetMarketResponse {
+  optional cqc.markets.v1.Market market = 1;
 }
 
-// ListSymbolIdentifiersRequest
-message ListSymbolIdentifiersRequest {
-  optional string symbol_id = 1;
+// ResolveMarketRequest
+message ResolveMarketRequest {
+  optional string venue_id = 1;
+  optional string venue_symbol = 2;
 }
 
-message ListSymbolIdentifiersResponse {
-  repeated cqc.markets.v1.SymbolIdentifier identifiers = 1;
+message ResolveMarketResponse {
+  optional string market_id = 1;
+  optional string instrument_id = 2;
+}
+
+// GetIdentifierRequest
+message GetIdentifierRequest {
+  optional string identifier_id = 1;
+}
+
+message GetIdentifierResponse {
+  optional cqc.identifiers.v1.Identifier identifier = 1;
+}
+
+// ListIdentifiersRequest
+message ListIdentifiersRequest {
+  optional string entity_type = 1;  // "ASSET", "INSTRUMENT", or "MARKET"
+  optional string asset_id = 2;
+  optional string instrument_id = 3;
+  optional string market_id = 4;
+}
+
+message ListIdentifiersResponse {
+  repeated cqc.identifiers.v1.Identifier identifiers = 1;
 }
 
 // CreateVenueRequest
@@ -577,37 +582,4 @@ message ListVenueAssetsRequest {
 
 message ListVenueAssetsResponse {
   repeated cqc.venues.v1.VenueAsset venue_assets = 1;
-}
-
-// CreateVenueSymbolRequest
-message CreateVenueSymbolRequest {
-  optional string venue_id = 1;
-  optional string symbol_id = 2;
-  optional string venue_symbol = 3;
-  optional double maker_fee = 4;
-  optional double taker_fee = 5;
-}
-
-message CreateVenueSymbolResponse {
-  optional cqc.venues.v1.VenueSymbol venue_symbol = 1;
-}
-
-// GetVenueSymbolRequest
-message GetVenueSymbolRequest {
-  optional string venue_id = 1;
-  optional string venue_symbol = 2;
-}
-
-message GetVenueSymbolResponse {
-  optional cqc.venues.v1.VenueSymbol venue_symbol = 1;
-}
-
-// ListVenueSymbolsRequest
-message ListVenueSymbolsRequest {
-  optional string venue_id = 1;
-  optional string symbol_id = 2;
-}
-
-message ListVenueSymbolsResponse {
-  repeated cqc.venues.v1.VenueSymbol venue_symbols = 1;
 }

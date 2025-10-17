@@ -10,6 +10,76 @@
 - [x] **Commit 7**: Build System & Code Generation
 - [x] **Commit 8**: Package Configuration & Documentation
 - [x] **Commit 9**: Domain Separation Migration (Asset/Symbol/Venue) ⭐ **COMPLETE**
+- [x] **Commit 10**: Instrument/Market Refactor (String-based types, no enums) ⭐ **COMPLETE**
+
+## Latest Changes (Commit 10)
+
+### Instrument/Market Refactor - Completed
+
+**Goal**: Refactor from Symbol-based architecture to Instrument + Market architecture with string-based types
+
+**What Changed**:
+1. **Replaced Symbol with Instrument + Subtypes**:
+   - Created base `Instrument` message (product-level abstraction)
+   - Created instrument subtypes: `SpotInstrument`, `PerpContract`, `FutureContract`, `OptionSeries`, `LendingDeposit`, `LendingBorrow`
+   - Each subtype has 1:1 relationship with an `Instrument` via `instrument_id`
+
+2. **Created Market message**:
+   - `Market` represents venue-specific listing of an `Instrument`
+   - Contains: `instrument_id`, `venue_id`, `venue_symbol`, fees, limits, trading rules
+   - Includes metadata for AMM pools, lending markets, and perpetual contracts
+
+3. **Unified Identifier system**:
+   - Created single `Identifier` message for all entity types
+   - Supports: `entity_type` = "ASSET", "INSTRUMENT", or "MARKET"
+   - Exactly one of `asset_id`, `instrument_id`, or `market_id` must be set
+
+4. **Removed Enums, Use Strings**:
+   - `instrument_type`: "SPOT", "PERPETUAL", "FUTURE", "OPTION", "LENDING_DEPOSIT", "LENDING_BORROW"
+   - `option_type`: "CALL", "PUT"
+   - `exercise_style`: "european", "american"
+   - `Market.status`: "active", "suspended", "delisted"
+
+5. **All Decimals as Strings**:
+   - Prices, fees, sizes, multipliers stored as strings (e.g., "0.0001" not 0.0001)
+   - Preserves precision, avoids floating-point errors
+
+6. **Updated Services**:
+   - AssetRegistry: Added `GetInstrument`, `GetSpotInstrument`, `GetPerpContract`, etc.
+   - AssetRegistry: Added `GetMarket`, `ResolveMarket` (by venue_id + venue_symbol)
+   - MarketData: All requests use `market_id` instead of `symbol_id`
+   - Events: Replaced `SymbolCreated` with `InstrumentCreated` and `MarketCreated`
+
+7. **Removed Files**:
+   - Deleted `proto/markets/v1/symbol.proto`
+   - Deleted `proto/markets/v1/symbol_identifier.proto`
+   - Deleted `proto/venues/v1/venue_symbol.proto`
+
+**Files Added**:
+- `proto/markets/v1/instrument.proto`
+- `proto/markets/v1/spot_instrument.proto`
+- `proto/markets/v1/perp_contract.proto`
+- `proto/markets/v1/future_contract.proto`
+- `proto/markets/v1/option_series.proto`
+- `proto/markets/v1/lending_deposit.proto`
+- `proto/markets/v1/lending_borrow.proto`
+- `proto/markets/v1/market.proto`
+- `proto/identifiers/v1/identifier.proto`
+
+**Files Modified**:
+- `proto/services/v1/asset_registry.proto` - Added new instrument/market RPCs
+- `proto/services/v1/market_data.proto` - Changed from symbol_id to market_id
+- `proto/markets/v1/price.proto` - Changed from symbol_id to market_id
+- `proto/markets/v1/trade.proto` - Changed from symbol_id to market_id
+- `proto/markets/v1/orderbook.proto` - Changed from symbol_id to market_id
+- `proto/events/v1/market_events.proto` - Changed from Symbol to Instrument/Market events
+- `proto/events/v1/venue_events.proto` - Changed from VenueSymbol to Market events
+
+**Success Verification**:
+- ✅ All proto files compile successfully with `make generate`
+- ✅ Generated Go code builds without errors
+- ✅ No references to deleted proto files remain
+- ✅ Documentation updated in BRIEF.md and SPEC.md
 
 ## Implementation Sequence
 

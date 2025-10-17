@@ -25,9 +25,11 @@ const (
 
 // GetPriceRequest
 type GetPriceRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	MarketId *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	// Alternative: resolve by venue + venue_symbol
+	VenueId       *string `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
+	VenueSymbol   *string `protobuf:"bytes,3,opt,name=venue_symbol,json=venueSymbol,proto3,oneof" json:"venue_symbol,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -62,9 +64,9 @@ func (*GetPriceRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GetPriceRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *GetPriceRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -72,6 +74,13 @@ func (x *GetPriceRequest) GetSymbolId() string {
 func (x *GetPriceRequest) GetVenueId() string {
 	if x != nil && x.VenueId != nil {
 		return *x.VenueId
+	}
+	return ""
+}
+
+func (x *GetPriceRequest) GetVenueSymbol() string {
+	if x != nil && x.VenueSymbol != nil {
+		return *x.VenueSymbol
 	}
 	return ""
 }
@@ -122,9 +131,10 @@ func (x *GetPriceResponse) GetPrice() *v1.Price {
 
 // StreamPricesRequest
 type StreamPricesRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolIds     []string               `protobuf:"bytes,1,rep,name=symbol_ids,json=symbolIds,proto3" json:"symbol_ids,omitempty"`
-	VenueIds      []string               `protobuf:"bytes,2,rep,name=venue_ids,json=venueIds,proto3" json:"venue_ids,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	MarketIds []string               `protobuf:"bytes,1,rep,name=market_ids,json=marketIds,proto3" json:"market_ids,omitempty"` // Venue-specific market identifiers
+	// Alternative: for product-level aggregation
+	InstrumentIds []string `protobuf:"bytes,2,rep,name=instrument_ids,json=instrumentIds,proto3" json:"instrument_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -159,16 +169,16 @@ func (*StreamPricesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *StreamPricesRequest) GetSymbolIds() []string {
+func (x *StreamPricesRequest) GetMarketIds() []string {
 	if x != nil {
-		return x.SymbolIds
+		return x.MarketIds
 	}
 	return nil
 }
 
-func (x *StreamPricesRequest) GetVenueIds() []string {
+func (x *StreamPricesRequest) GetInstrumentIds() []string {
 	if x != nil {
-		return x.VenueIds
+		return x.InstrumentIds
 	}
 	return nil
 }
@@ -220,11 +230,10 @@ func (x *StreamPricesResponse) GetPrice() *v1.Price {
 // GetPriceHistoryRequest
 type GetPriceHistoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	StartTime     *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
-	EndTime       *timestamp.Timestamp   `protobuf:"bytes,4,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
-	Limit         *int32                 `protobuf:"varint,5,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	StartTime     *timestamp.Timestamp   `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
+	EndTime       *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
+	Limit         *int32                 `protobuf:"varint,4,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -259,16 +268,9 @@ func (*GetPriceHistoryRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetPriceHistoryRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *GetPriceHistoryRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *GetPriceHistoryRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -341,10 +343,9 @@ func (x *GetPriceHistoryResponse) GetPrices() []*v1.Price {
 // GetVWAPRequest
 type GetVWAPRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	StartTime     *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
-	EndTime       *timestamp.Timestamp   `protobuf:"bytes,4,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	StartTime     *timestamp.Timestamp   `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
+	EndTime       *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -379,16 +380,9 @@ func (*GetVWAPRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GetVWAPRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *GetVWAPRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *GetVWAPRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -454,9 +448,8 @@ func (x *GetVWAPResponse) GetVwap() *v1.VWAP {
 // GetOrderBookRequest
 type GetOrderBookRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	Depth         *int32                 `protobuf:"varint,3,opt,name=depth,proto3,oneof" json:"depth,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	Depth         *int32                 `protobuf:"varint,2,opt,name=depth,proto3,oneof" json:"depth,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -491,16 +484,9 @@ func (*GetOrderBookRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GetOrderBookRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *GetOrderBookRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *GetOrderBookRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -559,9 +545,8 @@ func (x *GetOrderBookResponse) GetOrderBook() *v1.OrderBook {
 // StreamOrderBookRequest
 type StreamOrderBookRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	Depth         *int32                 `protobuf:"varint,3,opt,name=depth,proto3,oneof" json:"depth,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	Depth         *int32                 `protobuf:"varint,2,opt,name=depth,proto3,oneof" json:"depth,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -596,16 +581,9 @@ func (*StreamOrderBookRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *StreamOrderBookRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *StreamOrderBookRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *StreamOrderBookRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -664,8 +642,7 @@ func (x *StreamOrderBookResponse) GetOrderBook() *v1.OrderBook {
 // GetMarketDepthRequest
 type GetMarketDepthRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -700,16 +677,9 @@ func (*GetMarketDepthRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *GetMarketDepthRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *GetMarketDepthRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *GetMarketDepthRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -858,11 +828,10 @@ func (x *GetTradeResponse) GetTrade() *v1.Trade {
 // ListTradesRequest
 type ListTradesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	StartTime     *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
-	EndTime       *timestamp.Timestamp   `protobuf:"bytes,4,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
-	Limit         *int32                 `protobuf:"varint,5,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	StartTime     *timestamp.Timestamp   `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
+	EndTime       *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
+	Limit         *int32                 `protobuf:"varint,4,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -897,16 +866,9 @@ func (*ListTradesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *ListTradesRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *ListTradesRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *ListTradesRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -987,8 +949,7 @@ func (x *ListTradesResponse) GetNextPageToken() string {
 // StreamTradesRequest
 type StreamTradesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolIds     []string               `protobuf:"bytes,1,rep,name=symbol_ids,json=symbolIds,proto3" json:"symbol_ids,omitempty"`
-	VenueIds      []string               `protobuf:"bytes,2,rep,name=venue_ids,json=venueIds,proto3" json:"venue_ids,omitempty"`
+	MarketIds     []string               `protobuf:"bytes,1,rep,name=market_ids,json=marketIds,proto3" json:"market_ids,omitempty"` // Venue-specific market identifiers
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1023,16 +984,9 @@ func (*StreamTradesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{18}
 }
 
-func (x *StreamTradesRequest) GetSymbolIds() []string {
+func (x *StreamTradesRequest) GetMarketIds() []string {
 	if x != nil {
-		return x.SymbolIds
-	}
-	return nil
-}
-
-func (x *StreamTradesRequest) GetVenueIds() []string {
-	if x != nil {
-		return x.VenueIds
+		return x.MarketIds
 	}
 	return nil
 }
@@ -1084,10 +1038,9 @@ func (x *StreamTradesResponse) GetTrade() *v1.Trade {
 // GetCandleRequest
 type GetCandleRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	Interval      *v1.CandleInterval     `protobuf:"varint,3,opt,name=interval,proto3,enum=cqc.markets.v1.CandleInterval,oneof" json:"interval,omitempty"`
-	Timestamp     *timestamp.Timestamp   `protobuf:"bytes,4,opt,name=timestamp,proto3,oneof" json:"timestamp,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	Interval      *v1.CandleInterval     `protobuf:"varint,2,opt,name=interval,proto3,enum=cqc.markets.v1.CandleInterval,oneof" json:"interval,omitempty"`
+	Timestamp     *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=timestamp,proto3,oneof" json:"timestamp,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1122,16 +1075,9 @@ func (*GetCandleRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{20}
 }
 
-func (x *GetCandleRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *GetCandleRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *GetCandleRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -1197,12 +1143,11 @@ func (x *GetCandleResponse) GetCandle() *v1.Candle {
 // ListCandlesRequest
 type ListCandlesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	Interval      *v1.CandleInterval     `protobuf:"varint,3,opt,name=interval,proto3,enum=cqc.markets.v1.CandleInterval,oneof" json:"interval,omitempty"`
-	StartTime     *timestamp.Timestamp   `protobuf:"bytes,4,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
-	EndTime       *timestamp.Timestamp   `protobuf:"bytes,5,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
-	Limit         *int32                 `protobuf:"varint,6,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
+	Interval      *v1.CandleInterval     `protobuf:"varint,2,opt,name=interval,proto3,enum=cqc.markets.v1.CandleInterval,oneof" json:"interval,omitempty"`
+	StartTime     *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
+	EndTime       *timestamp.Timestamp   `protobuf:"bytes,4,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
+	Limit         *int32                 `protobuf:"varint,5,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1237,16 +1182,9 @@ func (*ListCandlesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *ListCandlesRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *ListCandlesRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *ListCandlesRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -1326,8 +1264,7 @@ func (x *ListCandlesResponse) GetCandles() []*v1.Candle {
 // GetLiquidityMetricsRequest
 type GetLiquidityMetricsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1362,16 +1299,9 @@ func (*GetLiquidityMetricsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{24}
 }
 
-func (x *GetLiquidityMetricsRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *GetLiquidityMetricsRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *GetLiquidityMetricsRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -1423,8 +1353,8 @@ func (x *GetLiquidityMetricsResponse) GetMetrics() *v1.LiquidityMetrics {
 // GetMultiVenuePriceRequest
 type GetMultiVenuePriceRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueIds      []string               `protobuf:"bytes,2,rep,name=venue_ids,json=venueIds,proto3" json:"venue_ids,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"` // Product-level identifier for cross-venue aggregation
+	MarketIds     []string               `protobuf:"bytes,2,rep,name=market_ids,json=marketIds,proto3" json:"market_ids,omitempty"`                // Specific markets to include
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1459,16 +1389,16 @@ func (*GetMultiVenuePriceRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{26}
 }
 
-func (x *GetMultiVenuePriceRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *GetMultiVenuePriceRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-func (x *GetMultiVenuePriceRequest) GetVenueIds() []string {
+func (x *GetMultiVenuePriceRequest) GetMarketIds() []string {
 	if x != nil {
-		return x.VenueIds
+		return x.MarketIds
 	}
 	return nil
 }
@@ -1528,8 +1458,7 @@ func (x *GetMultiVenuePriceResponse) GetAggregatedPrice() *v1.Price {
 // GetMarketSummaryRequest
 type GetMarketSummaryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueId       *string                `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"` // Venue-specific market identifier
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1564,16 +1493,9 @@ func (*GetMarketSummaryRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_market_data_proto_rawDescGZIP(), []int{28}
 }
 
-func (x *GetMarketSummaryRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *GetMarketSummaryRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
+func (x *GetMarketSummaryRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -1690,82 +1612,74 @@ var File_proto_services_v1_market_data_proto protoreflect.FileDescriptor
 
 const file_proto_services_v1_market_data_proto_rawDesc = "" +
 	"\n" +
-	"#proto/services/v1/market_data.proto\x12\x0fcqc.services.v1\x1a\x1cproto/markets/v1/price.proto\x1a proto/markets/v1/orderbook.proto\x1a\x1cproto/markets/v1/trade.proto\x1a proto/markets/v1/liquidity.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"n\n" +
+	"#proto/services/v1/market_data.proto\x12\x0fcqc.services.v1\x1a\x1cproto/markets/v1/price.proto\x1a proto/markets/v1/orderbook.proto\x1a\x1cproto/markets/v1/trade.proto\x1a proto/markets/v1/liquidity.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa7\x01\n" +
 	"\x0fGetPriceRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01B\f\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x1e\n" +
+	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12&\n" +
+	"\fvenue_symbol\x18\x03 \x01(\tH\x02R\vvenueSymbol\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_id\"N\n" +
+	"_market_idB\v\n" +
+	"\t_venue_idB\x0f\n" +
+	"\r_venue_symbol\"N\n" +
 	"\x10GetPriceResponse\x120\n" +
 	"\x05price\x18\x01 \x01(\v2\x15.cqc.markets.v1.PriceH\x00R\x05price\x88\x01\x01B\b\n" +
-	"\x06_price\"Q\n" +
+	"\x06_price\"[\n" +
 	"\x13StreamPricesRequest\x12\x1d\n" +
 	"\n" +
-	"symbol_ids\x18\x01 \x03(\tR\tsymbolIds\x12\x1b\n" +
-	"\tvenue_ids\x18\x02 \x03(\tR\bvenueIds\"R\n" +
+	"market_ids\x18\x01 \x03(\tR\tmarketIds\x12%\n" +
+	"\x0einstrument_ids\x18\x02 \x03(\tR\rinstrumentIds\"R\n" +
 	"\x14StreamPricesResponse\x120\n" +
 	"\x05price\x18\x01 \x01(\v2\x15.cqc.markets.v1.PriceH\x00R\x05price\x88\x01\x01B\b\n" +
-	"\x06_price\"\xb2\x02\n" +
+	"\x06_price\"\x85\x02\n" +
 	"\x16GetPriceHistoryRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12>\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12>\n" +
 	"\n" +
-	"start_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\tstartTime\x88\x01\x01\x12:\n" +
-	"\bend_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\aendTime\x88\x01\x01\x12\x19\n" +
-	"\x05limit\x18\x05 \x01(\x05H\x04R\x05limit\x88\x01\x01B\f\n" +
+	"start_time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\tstartTime\x88\x01\x01\x12:\n" +
+	"\bend_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\aendTime\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x04 \x01(\x05H\x03R\x05limit\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_idB\r\n" +
+	"_market_idB\r\n" +
 	"\v_start_timeB\v\n" +
 	"\t_end_timeB\b\n" +
 	"\x06_limit\"H\n" +
 	"\x17GetPriceHistoryResponse\x12-\n" +
-	"\x06prices\x18\x01 \x03(\v2\x15.cqc.markets.v1.PriceR\x06prices\"\x85\x02\n" +
+	"\x06prices\x18\x01 \x03(\v2\x15.cqc.markets.v1.PriceR\x06prices\"\xd8\x01\n" +
 	"\x0eGetVWAPRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12>\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12>\n" +
 	"\n" +
-	"start_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\tstartTime\x88\x01\x01\x12:\n" +
-	"\bend_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\aendTime\x88\x01\x01B\f\n" +
+	"start_time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\tstartTime\x88\x01\x01\x12:\n" +
+	"\bend_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\aendTime\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_idB\r\n" +
+	"_market_idB\r\n" +
 	"\v_start_timeB\v\n" +
 	"\t_end_time\"I\n" +
 	"\x0fGetVWAPResponse\x12-\n" +
 	"\x04vwap\x18\x01 \x01(\v2\x14.cqc.markets.v1.VWAPH\x00R\x04vwap\x88\x01\x01B\a\n" +
-	"\x05_vwap\"\x97\x01\n" +
+	"\x05_vwap\"j\n" +
 	"\x13GetOrderBookRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12\x19\n" +
-	"\x05depth\x18\x03 \x01(\x05H\x02R\x05depth\x88\x01\x01B\f\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x19\n" +
+	"\x05depth\x18\x02 \x01(\x05H\x01R\x05depth\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_idB\b\n" +
+	"_market_idB\b\n" +
 	"\x06_depth\"d\n" +
 	"\x14GetOrderBookResponse\x12=\n" +
 	"\n" +
 	"order_book\x18\x01 \x01(\v2\x19.cqc.markets.v1.OrderBookH\x00R\torderBook\x88\x01\x01B\r\n" +
-	"\v_order_book\"\x9a\x01\n" +
+	"\v_order_book\"m\n" +
 	"\x16StreamOrderBookRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12\x19\n" +
-	"\x05depth\x18\x03 \x01(\x05H\x02R\x05depth\x88\x01\x01B\f\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x19\n" +
+	"\x05depth\x18\x02 \x01(\x05H\x01R\x05depth\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_idB\b\n" +
+	"_market_idB\b\n" +
 	"\x06_depth\"g\n" +
 	"\x17StreamOrderBookResponse\x12=\n" +
 	"\n" +
 	"order_book\x18\x01 \x01(\v2\x19.cqc.markets.v1.OrderBookH\x00R\torderBook\x88\x01\x01B\r\n" +
-	"\v_order_book\"t\n" +
+	"\v_order_book\"G\n" +
 	"\x15GetMarketDepthRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01B\f\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_id\"n\n" +
+	"_market_id\"n\n" +
 	"\x16GetMarketDepthResponse\x12C\n" +
 	"\fmarket_depth\x18\x01 \x01(\v2\x1b.cqc.markets.v1.MarketDepthH\x00R\vmarketDepth\x88\x01\x01B\x0f\n" +
 	"\r_market_depth\"k\n" +
@@ -1776,87 +1690,76 @@ const file_proto_services_v1_market_data_proto_rawDesc = "" +
 	"\t_venue_id\"N\n" +
 	"\x10GetTradeResponse\x120\n" +
 	"\x05trade\x18\x01 \x01(\v2\x15.cqc.markets.v1.TradeH\x00R\x05trade\x88\x01\x01B\b\n" +
-	"\x06_trade\"\xad\x02\n" +
+	"\x06_trade\"\x80\x02\n" +
 	"\x11ListTradesRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12>\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12>\n" +
 	"\n" +
-	"start_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\tstartTime\x88\x01\x01\x12:\n" +
-	"\bend_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\aendTime\x88\x01\x01\x12\x19\n" +
-	"\x05limit\x18\x05 \x01(\x05H\x04R\x05limit\x88\x01\x01B\f\n" +
+	"start_time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\tstartTime\x88\x01\x01\x12:\n" +
+	"\bend_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\aendTime\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x04 \x01(\x05H\x03R\x05limit\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_idB\r\n" +
+	"_market_idB\r\n" +
 	"\v_start_timeB\v\n" +
 	"\t_end_timeB\b\n" +
 	"\x06_limit\"\x84\x01\n" +
 	"\x12ListTradesResponse\x12-\n" +
 	"\x06trades\x18\x01 \x03(\v2\x15.cqc.markets.v1.TradeR\x06trades\x12+\n" +
 	"\x0fnext_page_token\x18\x02 \x01(\tH\x00R\rnextPageToken\x88\x01\x01B\x12\n" +
-	"\x10_next_page_token\"Q\n" +
+	"\x10_next_page_token\"4\n" +
 	"\x13StreamTradesRequest\x12\x1d\n" +
 	"\n" +
-	"symbol_ids\x18\x01 \x03(\tR\tsymbolIds\x12\x1b\n" +
-	"\tvenue_ids\x18\x02 \x03(\tR\bvenueIds\"R\n" +
+	"market_ids\x18\x01 \x03(\tR\tmarketIds\"R\n" +
 	"\x14StreamTradesResponse\x120\n" +
 	"\x05trade\x18\x01 \x01(\v2\x15.cqc.markets.v1.TradeH\x00R\x05trade\x88\x01\x01B\b\n" +
-	"\x06_trade\"\x8a\x02\n" +
+	"\x06_trade\"\xdd\x01\n" +
 	"\x10GetCandleRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12?\n" +
-	"\binterval\x18\x03 \x01(\x0e2\x1e.cqc.markets.v1.CandleIntervalH\x02R\binterval\x88\x01\x01\x12=\n" +
-	"\ttimestamp\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\ttimestamp\x88\x01\x01B\f\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12?\n" +
+	"\binterval\x18\x02 \x01(\x0e2\x1e.cqc.markets.v1.CandleIntervalH\x01R\binterval\x88\x01\x01\x12=\n" +
+	"\ttimestamp\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\ttimestamp\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_idB\v\n" +
+	"_market_idB\v\n" +
 	"\t_intervalB\f\n" +
 	"\n" +
 	"_timestamp\"S\n" +
 	"\x11GetCandleResponse\x123\n" +
 	"\x06candle\x18\x01 \x01(\v2\x16.cqc.markets.v1.CandleH\x00R\x06candle\x88\x01\x01B\t\n" +
-	"\a_candle\"\xfc\x02\n" +
+	"\a_candle\"\xcf\x02\n" +
 	"\x12ListCandlesRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12?\n" +
-	"\binterval\x18\x03 \x01(\x0e2\x1e.cqc.markets.v1.CandleIntervalH\x02R\binterval\x88\x01\x01\x12>\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12?\n" +
+	"\binterval\x18\x02 \x01(\x0e2\x1e.cqc.markets.v1.CandleIntervalH\x01R\binterval\x88\x01\x01\x12>\n" +
 	"\n" +
-	"start_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\tstartTime\x88\x01\x01\x12:\n" +
-	"\bend_time\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\aendTime\x88\x01\x01\x12\x19\n" +
-	"\x05limit\x18\x06 \x01(\x05H\x05R\x05limit\x88\x01\x01B\f\n" +
+	"start_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\tstartTime\x88\x01\x01\x12:\n" +
+	"\bend_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\aendTime\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x05 \x01(\x05H\x04R\x05limit\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_idB\v\n" +
+	"_market_idB\v\n" +
 	"\t_intervalB\r\n" +
 	"\v_start_timeB\v\n" +
 	"\t_end_timeB\b\n" +
 	"\x06_limit\"G\n" +
 	"\x13ListCandlesResponse\x120\n" +
-	"\acandles\x18\x01 \x03(\v2\x16.cqc.markets.v1.CandleR\acandles\"y\n" +
+	"\acandles\x18\x01 \x03(\v2\x16.cqc.markets.v1.CandleR\acandles\"L\n" +
 	"\x1aGetLiquidityMetricsRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01B\f\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_id\"j\n" +
+	"_market_id\"j\n" +
 	"\x1bGetLiquidityMetricsResponse\x12?\n" +
 	"\ametrics\x18\x01 \x01(\v2 .cqc.markets.v1.LiquidityMetricsH\x00R\ametrics\x88\x01\x01B\n" +
 	"\n" +
-	"\b_metrics\"h\n" +
-	"\x19GetMultiVenuePriceRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1b\n" +
-	"\tvenue_ids\x18\x02 \x03(\tR\bvenueIdsB\f\n" +
+	"\b_metrics\"v\n" +
+	"\x19GetMultiVenuePriceRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"_symbol_id\"\xa7\x01\n" +
+	"market_ids\x18\x02 \x03(\tR\tmarketIdsB\x10\n" +
+	"\x0e_instrument_id\"\xa7\x01\n" +
 	"\x1aGetMultiVenuePriceResponse\x12-\n" +
 	"\x06prices\x18\x01 \x03(\v2\x15.cqc.markets.v1.PriceR\x06prices\x12E\n" +
 	"\x10aggregated_price\x18\x02 \x01(\v2\x15.cqc.markets.v1.PriceH\x00R\x0faggregatedPrice\x88\x01\x01B\x13\n" +
-	"\x11_aggregated_price\"v\n" +
+	"\x11_aggregated_price\"I\n" +
 	"\x17GetMarketSummaryRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
-	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01B\f\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
-	"\t_venue_id\"\x89\x05\n" +
+	"_market_id\"\x89\x05\n" +
 	"\x18GetMarketSummaryResponse\x12?\n" +
 	"\rcurrent_price\x18\x01 \x01(\v2\x15.cqc.markets.v1.PriceH\x00R\fcurrentPrice\x88\x01\x01\x12>\n" +
 	"\rprice_24h_ago\x18\x02 \x01(\v2\x15.cqc.markets.v1.PriceH\x01R\vprice24hAgo\x88\x01\x01\x12-\n" +

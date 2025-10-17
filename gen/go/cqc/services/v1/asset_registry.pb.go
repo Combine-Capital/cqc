@@ -8,8 +8,9 @@ package servicesv1
 
 import (
 	v1 "github.com/Combine-Capital/cqc/gen/go/cqc/assets/v1"
+	v12 "github.com/Combine-Capital/cqc/gen/go/cqc/identifiers/v1"
 	v11 "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1"
-	v12 "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1"
+	v13 "github.com/Combine-Capital/cqc/gen/go/cqc/venues/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -2552,34 +2553,28 @@ func (x *ListChainsResponse) GetChains() []*v1.Chain {
 	return nil
 }
 
-// CreateSymbolRequest
-type CreateSymbolRequest struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	Symbol            *string                `protobuf:"bytes,1,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
-	SymbolType        *v11.SymbolType        `protobuf:"varint,2,opt,name=symbol_type,json=symbolType,proto3,enum=cqc.markets.v1.SymbolType,oneof" json:"symbol_type,omitempty"`
-	BaseAssetId       *string                `protobuf:"bytes,3,opt,name=base_asset_id,json=baseAssetId,proto3,oneof" json:"base_asset_id,omitempty"`
-	QuoteAssetId      *string                `protobuf:"bytes,4,opt,name=quote_asset_id,json=quoteAssetId,proto3,oneof" json:"quote_asset_id,omitempty"`
-	SettlementAssetId *string                `protobuf:"bytes,5,opt,name=settlement_asset_id,json=settlementAssetId,proto3,oneof" json:"settlement_asset_id,omitempty"`
-	TickSize          *float64               `protobuf:"fixed64,6,opt,name=tick_size,json=tickSize,proto3,oneof" json:"tick_size,omitempty"`
-	LotSize           *float64               `protobuf:"fixed64,7,opt,name=lot_size,json=lotSize,proto3,oneof" json:"lot_size,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+// GetInstrumentRequest
+type GetInstrumentRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateSymbolRequest) Reset() {
-	*x = CreateSymbolRequest{}
+func (x *GetInstrumentRequest) Reset() {
+	*x = GetInstrumentRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateSymbolRequest) String() string {
+func (x *GetInstrumentRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateSymbolRequest) ProtoMessage() {}
+func (*GetInstrumentRequest) ProtoMessage() {}
 
-func (x *CreateSymbolRequest) ProtoReflect() protoreflect.Message {
+func (x *GetInstrumentRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2591,81 +2586,39 @@ func (x *CreateSymbolRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateSymbolRequest.ProtoReflect.Descriptor instead.
-func (*CreateSymbolRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetInstrumentRequest.ProtoReflect.Descriptor instead.
+func (*GetInstrumentRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{48}
 }
 
-func (x *CreateSymbolRequest) GetSymbol() string {
-	if x != nil && x.Symbol != nil {
-		return *x.Symbol
+func (x *GetInstrumentRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-func (x *CreateSymbolRequest) GetSymbolType() v11.SymbolType {
-	if x != nil && x.SymbolType != nil {
-		return *x.SymbolType
-	}
-	return v11.SymbolType(0)
-}
-
-func (x *CreateSymbolRequest) GetBaseAssetId() string {
-	if x != nil && x.BaseAssetId != nil {
-		return *x.BaseAssetId
-	}
-	return ""
-}
-
-func (x *CreateSymbolRequest) GetQuoteAssetId() string {
-	if x != nil && x.QuoteAssetId != nil {
-		return *x.QuoteAssetId
-	}
-	return ""
-}
-
-func (x *CreateSymbolRequest) GetSettlementAssetId() string {
-	if x != nil && x.SettlementAssetId != nil {
-		return *x.SettlementAssetId
-	}
-	return ""
-}
-
-func (x *CreateSymbolRequest) GetTickSize() float64 {
-	if x != nil && x.TickSize != nil {
-		return *x.TickSize
-	}
-	return 0
-}
-
-func (x *CreateSymbolRequest) GetLotSize() float64 {
-	if x != nil && x.LotSize != nil {
-		return *x.LotSize
-	}
-	return 0
-}
-
-type CreateSymbolResponse struct {
+type GetInstrumentResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Symbol        *v11.Symbol            `protobuf:"bytes,1,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
+	Instrument    *v11.Instrument        `protobuf:"bytes,1,opt,name=instrument,proto3,oneof" json:"instrument,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateSymbolResponse) Reset() {
-	*x = CreateSymbolResponse{}
+func (x *GetInstrumentResponse) Reset() {
+	*x = GetInstrumentResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateSymbolResponse) String() string {
+func (x *GetInstrumentResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateSymbolResponse) ProtoMessage() {}
+func (*GetInstrumentResponse) ProtoMessage() {}
 
-func (x *CreateSymbolResponse) ProtoReflect() protoreflect.Message {
+func (x *GetInstrumentResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2677,40 +2630,40 @@ func (x *CreateSymbolResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateSymbolResponse.ProtoReflect.Descriptor instead.
-func (*CreateSymbolResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetInstrumentResponse.ProtoReflect.Descriptor instead.
+func (*GetInstrumentResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{49}
 }
 
-func (x *CreateSymbolResponse) GetSymbol() *v11.Symbol {
+func (x *GetInstrumentResponse) GetInstrument() *v11.Instrument {
 	if x != nil {
-		return x.Symbol
+		return x.Instrument
 	}
 	return nil
 }
 
-// GetSymbolRequest
-type GetSymbolRequest struct {
+// GetSpotInstrumentRequest
+type GetSpotInstrumentRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetSymbolRequest) Reset() {
-	*x = GetSymbolRequest{}
+func (x *GetSpotInstrumentRequest) Reset() {
+	*x = GetSpotInstrumentRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetSymbolRequest) String() string {
+func (x *GetSpotInstrumentRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetSymbolRequest) ProtoMessage() {}
+func (*GetSpotInstrumentRequest) ProtoMessage() {}
 
-func (x *GetSymbolRequest) ProtoReflect() protoreflect.Message {
+func (x *GetSpotInstrumentRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2722,39 +2675,39 @@ func (x *GetSymbolRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetSymbolRequest.ProtoReflect.Descriptor instead.
-func (*GetSymbolRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetSpotInstrumentRequest.ProtoReflect.Descriptor instead.
+func (*GetSpotInstrumentRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{50}
 }
 
-func (x *GetSymbolRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *GetSpotInstrumentRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-type GetSymbolResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Symbol        *v11.Symbol            `protobuf:"bytes,1,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type GetSpotInstrumentResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SpotInstrument *v11.SpotInstrument    `protobuf:"bytes,1,opt,name=spot_instrument,json=spotInstrument,proto3,oneof" json:"spot_instrument,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
-func (x *GetSymbolResponse) Reset() {
-	*x = GetSymbolResponse{}
+func (x *GetSpotInstrumentResponse) Reset() {
+	*x = GetSpotInstrumentResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetSymbolResponse) String() string {
+func (x *GetSpotInstrumentResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetSymbolResponse) ProtoMessage() {}
+func (*GetSpotInstrumentResponse) ProtoMessage() {}
 
-func (x *GetSymbolResponse) ProtoReflect() protoreflect.Message {
+func (x *GetSpotInstrumentResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2766,45 +2719,40 @@ func (x *GetSymbolResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetSymbolResponse.ProtoReflect.Descriptor instead.
-func (*GetSymbolResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetSpotInstrumentResponse.ProtoReflect.Descriptor instead.
+func (*GetSpotInstrumentResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{51}
 }
 
-func (x *GetSymbolResponse) GetSymbol() *v11.Symbol {
+func (x *GetSpotInstrumentResponse) GetSpotInstrument() *v11.SpotInstrument {
 	if x != nil {
-		return x.Symbol
+		return x.SpotInstrument
 	}
 	return nil
 }
 
-// UpdateSymbolRequest
-type UpdateSymbolRequest struct {
+// GetPerpContractRequest
+type GetPerpContractRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	Symbol        *string                `protobuf:"bytes,2,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
-	SymbolType    *v11.SymbolType        `protobuf:"varint,3,opt,name=symbol_type,json=symbolType,proto3,enum=cqc.markets.v1.SymbolType,oneof" json:"symbol_type,omitempty"`
-	TickSize      *float64               `protobuf:"fixed64,4,opt,name=tick_size,json=tickSize,proto3,oneof" json:"tick_size,omitempty"`
-	LotSize       *float64               `protobuf:"fixed64,5,opt,name=lot_size,json=lotSize,proto3,oneof" json:"lot_size,omitempty"`
-	IsActive      *bool                  `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateSymbolRequest) Reset() {
-	*x = UpdateSymbolRequest{}
+func (x *GetPerpContractRequest) Reset() {
+	*x = GetPerpContractRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateSymbolRequest) String() string {
+func (x *GetPerpContractRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateSymbolRequest) ProtoMessage() {}
+func (*GetPerpContractRequest) ProtoMessage() {}
 
-func (x *UpdateSymbolRequest) ProtoReflect() protoreflect.Message {
+func (x *GetPerpContractRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2816,74 +2764,39 @@ func (x *UpdateSymbolRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateSymbolRequest.ProtoReflect.Descriptor instead.
-func (*UpdateSymbolRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetPerpContractRequest.ProtoReflect.Descriptor instead.
+func (*GetPerpContractRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{52}
 }
 
-func (x *UpdateSymbolRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *GetPerpContractRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-func (x *UpdateSymbolRequest) GetSymbol() string {
-	if x != nil && x.Symbol != nil {
-		return *x.Symbol
-	}
-	return ""
-}
-
-func (x *UpdateSymbolRequest) GetSymbolType() v11.SymbolType {
-	if x != nil && x.SymbolType != nil {
-		return *x.SymbolType
-	}
-	return v11.SymbolType(0)
-}
-
-func (x *UpdateSymbolRequest) GetTickSize() float64 {
-	if x != nil && x.TickSize != nil {
-		return *x.TickSize
-	}
-	return 0
-}
-
-func (x *UpdateSymbolRequest) GetLotSize() float64 {
-	if x != nil && x.LotSize != nil {
-		return *x.LotSize
-	}
-	return 0
-}
-
-func (x *UpdateSymbolRequest) GetIsActive() bool {
-	if x != nil && x.IsActive != nil {
-		return *x.IsActive
-	}
-	return false
-}
-
-type UpdateSymbolResponse struct {
+type GetPerpContractResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Symbol        *v11.Symbol            `protobuf:"bytes,1,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
+	PerpContract  *v11.PerpContract      `protobuf:"bytes,1,opt,name=perp_contract,json=perpContract,proto3,oneof" json:"perp_contract,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateSymbolResponse) Reset() {
-	*x = UpdateSymbolResponse{}
+func (x *GetPerpContractResponse) Reset() {
+	*x = GetPerpContractResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateSymbolResponse) String() string {
+func (x *GetPerpContractResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateSymbolResponse) ProtoMessage() {}
+func (*GetPerpContractResponse) ProtoMessage() {}
 
-func (x *UpdateSymbolResponse) ProtoReflect() protoreflect.Message {
+func (x *GetPerpContractResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2895,40 +2808,40 @@ func (x *UpdateSymbolResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateSymbolResponse.ProtoReflect.Descriptor instead.
-func (*UpdateSymbolResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetPerpContractResponse.ProtoReflect.Descriptor instead.
+func (*GetPerpContractResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{53}
 }
 
-func (x *UpdateSymbolResponse) GetSymbol() *v11.Symbol {
+func (x *GetPerpContractResponse) GetPerpContract() *v11.PerpContract {
 	if x != nil {
-		return x.Symbol
+		return x.PerpContract
 	}
 	return nil
 }
 
-// DeleteSymbolRequest
-type DeleteSymbolRequest struct {
+// GetFutureContractRequest
+type GetFutureContractRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DeleteSymbolRequest) Reset() {
-	*x = DeleteSymbolRequest{}
+func (x *GetFutureContractRequest) Reset() {
+	*x = GetFutureContractRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteSymbolRequest) String() string {
+func (x *GetFutureContractRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteSymbolRequest) ProtoMessage() {}
+func (*GetFutureContractRequest) ProtoMessage() {}
 
-func (x *DeleteSymbolRequest) ProtoReflect() protoreflect.Message {
+func (x *GetFutureContractRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2940,39 +2853,39 @@ func (x *DeleteSymbolRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteSymbolRequest.ProtoReflect.Descriptor instead.
-func (*DeleteSymbolRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetFutureContractRequest.ProtoReflect.Descriptor instead.
+func (*GetFutureContractRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{54}
 }
 
-func (x *DeleteSymbolRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *GetFutureContractRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-type DeleteSymbolResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       *bool                  `protobuf:"varint,1,opt,name=success,proto3,oneof" json:"success,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type GetFutureContractResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	FutureContract *v11.FutureContract    `protobuf:"bytes,1,opt,name=future_contract,json=futureContract,proto3,oneof" json:"future_contract,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
-func (x *DeleteSymbolResponse) Reset() {
-	*x = DeleteSymbolResponse{}
+func (x *GetFutureContractResponse) Reset() {
+	*x = GetFutureContractResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteSymbolResponse) String() string {
+func (x *GetFutureContractResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteSymbolResponse) ProtoMessage() {}
+func (*GetFutureContractResponse) ProtoMessage() {}
 
-func (x *DeleteSymbolResponse) ProtoReflect() protoreflect.Message {
+func (x *GetFutureContractResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2984,44 +2897,40 @@ func (x *DeleteSymbolResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteSymbolResponse.ProtoReflect.Descriptor instead.
-func (*DeleteSymbolResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetFutureContractResponse.ProtoReflect.Descriptor instead.
+func (*GetFutureContractResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{55}
 }
 
-func (x *DeleteSymbolResponse) GetSuccess() bool {
-	if x != nil && x.Success != nil {
-		return *x.Success
+func (x *GetFutureContractResponse) GetFutureContract() *v11.FutureContract {
+	if x != nil {
+		return x.FutureContract
 	}
-	return false
+	return nil
 }
 
-// ListSymbolsRequest
-type ListSymbolsRequest struct {
+// GetOptionSeriesRequest
+type GetOptionSeriesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PageSize      *int32                 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3,oneof" json:"page_size,omitempty"`
-	PageToken     *string                `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3,oneof" json:"page_token,omitempty"`
-	SymbolType    *v11.SymbolType        `protobuf:"varint,3,opt,name=symbol_type,json=symbolType,proto3,enum=cqc.markets.v1.SymbolType,oneof" json:"symbol_type,omitempty"`
-	BaseAssetId   *string                `protobuf:"bytes,4,opt,name=base_asset_id,json=baseAssetId,proto3,oneof" json:"base_asset_id,omitempty"`
-	QuoteAssetId  *string                `protobuf:"bytes,5,opt,name=quote_asset_id,json=quoteAssetId,proto3,oneof" json:"quote_asset_id,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListSymbolsRequest) Reset() {
-	*x = ListSymbolsRequest{}
+func (x *GetOptionSeriesRequest) Reset() {
+	*x = GetOptionSeriesRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListSymbolsRequest) String() string {
+func (x *GetOptionSeriesRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListSymbolsRequest) ProtoMessage() {}
+func (*GetOptionSeriesRequest) ProtoMessage() {}
 
-func (x *ListSymbolsRequest) ProtoReflect() protoreflect.Message {
+func (x *GetOptionSeriesRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3033,69 +2942,39 @@ func (x *ListSymbolsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListSymbolsRequest.ProtoReflect.Descriptor instead.
-func (*ListSymbolsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetOptionSeriesRequest.ProtoReflect.Descriptor instead.
+func (*GetOptionSeriesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{56}
 }
 
-func (x *ListSymbolsRequest) GetPageSize() int32 {
-	if x != nil && x.PageSize != nil {
-		return *x.PageSize
-	}
-	return 0
-}
-
-func (x *ListSymbolsRequest) GetPageToken() string {
-	if x != nil && x.PageToken != nil {
-		return *x.PageToken
+func (x *GetOptionSeriesRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-func (x *ListSymbolsRequest) GetSymbolType() v11.SymbolType {
-	if x != nil && x.SymbolType != nil {
-		return *x.SymbolType
-	}
-	return v11.SymbolType(0)
-}
-
-func (x *ListSymbolsRequest) GetBaseAssetId() string {
-	if x != nil && x.BaseAssetId != nil {
-		return *x.BaseAssetId
-	}
-	return ""
-}
-
-func (x *ListSymbolsRequest) GetQuoteAssetId() string {
-	if x != nil && x.QuoteAssetId != nil {
-		return *x.QuoteAssetId
-	}
-	return ""
-}
-
-type ListSymbolsResponse struct {
+type GetOptionSeriesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Symbols       []*v11.Symbol          `protobuf:"bytes,1,rep,name=symbols,proto3" json:"symbols,omitempty"`
-	NextPageToken *string                `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3,oneof" json:"next_page_token,omitempty"`
-	TotalCount    *int32                 `protobuf:"varint,3,opt,name=total_count,json=totalCount,proto3,oneof" json:"total_count,omitempty"`
+	OptionSeries  *v11.OptionSeries      `protobuf:"bytes,1,opt,name=option_series,json=optionSeries,proto3,oneof" json:"option_series,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListSymbolsResponse) Reset() {
-	*x = ListSymbolsResponse{}
+func (x *GetOptionSeriesResponse) Reset() {
+	*x = GetOptionSeriesResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListSymbolsResponse) String() string {
+func (x *GetOptionSeriesResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListSymbolsResponse) ProtoMessage() {}
+func (*GetOptionSeriesResponse) ProtoMessage() {}
 
-func (x *ListSymbolsResponse) ProtoReflect() protoreflect.Message {
+func (x *GetOptionSeriesResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3107,55 +2986,40 @@ func (x *ListSymbolsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListSymbolsResponse.ProtoReflect.Descriptor instead.
-func (*ListSymbolsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetOptionSeriesResponse.ProtoReflect.Descriptor instead.
+func (*GetOptionSeriesResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{57}
 }
 
-func (x *ListSymbolsResponse) GetSymbols() []*v11.Symbol {
+func (x *GetOptionSeriesResponse) GetOptionSeries() *v11.OptionSeries {
 	if x != nil {
-		return x.Symbols
+		return x.OptionSeries
 	}
 	return nil
 }
 
-func (x *ListSymbolsResponse) GetNextPageToken() string {
-	if x != nil && x.NextPageToken != nil {
-		return *x.NextPageToken
-	}
-	return ""
-}
-
-func (x *ListSymbolsResponse) GetTotalCount() int32 {
-	if x != nil && x.TotalCount != nil {
-		return *x.TotalCount
-	}
-	return 0
-}
-
-// SearchSymbolsRequest
-type SearchSymbolsRequest struct {
+// GetLendingDepositRequest
+type GetLendingDepositRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Query         *string                `protobuf:"bytes,1,opt,name=query,proto3,oneof" json:"query,omitempty"`
-	Limit         *int32                 `protobuf:"varint,2,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SearchSymbolsRequest) Reset() {
-	*x = SearchSymbolsRequest{}
+func (x *GetLendingDepositRequest) Reset() {
+	*x = GetLendingDepositRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SearchSymbolsRequest) String() string {
+func (x *GetLendingDepositRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SearchSymbolsRequest) ProtoMessage() {}
+func (*GetLendingDepositRequest) ProtoMessage() {}
 
-func (x *SearchSymbolsRequest) ProtoReflect() protoreflect.Message {
+func (x *GetLendingDepositRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3167,46 +3031,39 @@ func (x *SearchSymbolsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SearchSymbolsRequest.ProtoReflect.Descriptor instead.
-func (*SearchSymbolsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetLendingDepositRequest.ProtoReflect.Descriptor instead.
+func (*GetLendingDepositRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{58}
 }
 
-func (x *SearchSymbolsRequest) GetQuery() string {
-	if x != nil && x.Query != nil {
-		return *x.Query
+func (x *GetLendingDepositRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-func (x *SearchSymbolsRequest) GetLimit() int32 {
-	if x != nil && x.Limit != nil {
-		return *x.Limit
-	}
-	return 0
+type GetLendingDepositResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	LendingDeposit *v11.LendingDeposit    `protobuf:"bytes,1,opt,name=lending_deposit,json=lendingDeposit,proto3,oneof" json:"lending_deposit,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
-type SearchSymbolsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Symbols       []*v11.Symbol          `protobuf:"bytes,1,rep,name=symbols,proto3" json:"symbols,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SearchSymbolsResponse) Reset() {
-	*x = SearchSymbolsResponse{}
+func (x *GetLendingDepositResponse) Reset() {
+	*x = GetLendingDepositResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SearchSymbolsResponse) String() string {
+func (x *GetLendingDepositResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SearchSymbolsResponse) ProtoMessage() {}
+func (*GetLendingDepositResponse) ProtoMessage() {}
 
-func (x *SearchSymbolsResponse) ProtoReflect() protoreflect.Message {
+func (x *GetLendingDepositResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3218,42 +3075,40 @@ func (x *SearchSymbolsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SearchSymbolsResponse.ProtoReflect.Descriptor instead.
-func (*SearchSymbolsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetLendingDepositResponse.ProtoReflect.Descriptor instead.
+func (*GetLendingDepositResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{59}
 }
 
-func (x *SearchSymbolsResponse) GetSymbols() []*v11.Symbol {
+func (x *GetLendingDepositResponse) GetLendingDeposit() *v11.LendingDeposit {
 	if x != nil {
-		return x.Symbols
+		return x.LendingDeposit
 	}
 	return nil
 }
 
-// CreateSymbolIdentifierRequest
-type CreateSymbolIdentifierRequest struct {
+// GetLendingBorrowRequest
+type GetLendingBorrowRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	DataSource    *v11.DataSource        `protobuf:"varint,2,opt,name=data_source,json=dataSource,proto3,enum=cqc.markets.v1.DataSource,oneof" json:"data_source,omitempty"`
-	ExternalId    *string                `protobuf:"bytes,3,opt,name=external_id,json=externalId,proto3,oneof" json:"external_id,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,1,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateSymbolIdentifierRequest) Reset() {
-	*x = CreateSymbolIdentifierRequest{}
+func (x *GetLendingBorrowRequest) Reset() {
+	*x = GetLendingBorrowRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateSymbolIdentifierRequest) String() string {
+func (x *GetLendingBorrowRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateSymbolIdentifierRequest) ProtoMessage() {}
+func (*GetLendingBorrowRequest) ProtoMessage() {}
 
-func (x *CreateSymbolIdentifierRequest) ProtoReflect() protoreflect.Message {
+func (x *GetLendingBorrowRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3265,53 +3120,39 @@ func (x *CreateSymbolIdentifierRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateSymbolIdentifierRequest.ProtoReflect.Descriptor instead.
-func (*CreateSymbolIdentifierRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetLendingBorrowRequest.ProtoReflect.Descriptor instead.
+func (*GetLendingBorrowRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{60}
 }
 
-func (x *CreateSymbolIdentifierRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *GetLendingBorrowRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
 	}
 	return ""
 }
 
-func (x *CreateSymbolIdentifierRequest) GetDataSource() v11.DataSource {
-	if x != nil && x.DataSource != nil {
-		return *x.DataSource
-	}
-	return v11.DataSource(0)
-}
-
-func (x *CreateSymbolIdentifierRequest) GetExternalId() string {
-	if x != nil && x.ExternalId != nil {
-		return *x.ExternalId
-	}
-	return ""
-}
-
-type CreateSymbolIdentifierResponse struct {
+type GetLendingBorrowResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Identifier    *v11.SymbolIdentifier  `protobuf:"bytes,1,opt,name=identifier,proto3,oneof" json:"identifier,omitempty"`
+	LendingBorrow *v11.LendingBorrow     `protobuf:"bytes,1,opt,name=lending_borrow,json=lendingBorrow,proto3,oneof" json:"lending_borrow,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateSymbolIdentifierResponse) Reset() {
-	*x = CreateSymbolIdentifierResponse{}
+func (x *GetLendingBorrowResponse) Reset() {
+	*x = GetLendingBorrowResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateSymbolIdentifierResponse) String() string {
+func (x *GetLendingBorrowResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateSymbolIdentifierResponse) ProtoMessage() {}
+func (*GetLendingBorrowResponse) ProtoMessage() {}
 
-func (x *CreateSymbolIdentifierResponse) ProtoReflect() protoreflect.Message {
+func (x *GetLendingBorrowResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3323,41 +3164,40 @@ func (x *CreateSymbolIdentifierResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateSymbolIdentifierResponse.ProtoReflect.Descriptor instead.
-func (*CreateSymbolIdentifierResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetLendingBorrowResponse.ProtoReflect.Descriptor instead.
+func (*GetLendingBorrowResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{61}
 }
 
-func (x *CreateSymbolIdentifierResponse) GetIdentifier() *v11.SymbolIdentifier {
+func (x *GetLendingBorrowResponse) GetLendingBorrow() *v11.LendingBorrow {
 	if x != nil {
-		return x.Identifier
+		return x.LendingBorrow
 	}
 	return nil
 }
 
-// GetSymbolIdentifierRequest
-type GetSymbolIdentifierRequest struct {
+// GetMarketRequest
+type GetMarketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	DataSource    *v11.DataSource        `protobuf:"varint,2,opt,name=data_source,json=dataSource,proto3,enum=cqc.markets.v1.DataSource,oneof" json:"data_source,omitempty"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetSymbolIdentifierRequest) Reset() {
-	*x = GetSymbolIdentifierRequest{}
+func (x *GetMarketRequest) Reset() {
+	*x = GetMarketRequest{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetSymbolIdentifierRequest) String() string {
+func (x *GetMarketRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetSymbolIdentifierRequest) ProtoMessage() {}
+func (*GetMarketRequest) ProtoMessage() {}
 
-func (x *GetSymbolIdentifierRequest) ProtoReflect() protoreflect.Message {
+func (x *GetMarketRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3369,46 +3209,39 @@ func (x *GetSymbolIdentifierRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetSymbolIdentifierRequest.ProtoReflect.Descriptor instead.
-func (*GetSymbolIdentifierRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetMarketRequest.ProtoReflect.Descriptor instead.
+func (*GetMarketRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{62}
 }
 
-func (x *GetSymbolIdentifierRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *GetMarketRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
 
-func (x *GetSymbolIdentifierRequest) GetDataSource() v11.DataSource {
-	if x != nil && x.DataSource != nil {
-		return *x.DataSource
-	}
-	return v11.DataSource(0)
-}
-
-type GetSymbolIdentifierResponse struct {
+type GetMarketResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Identifier    *v11.SymbolIdentifier  `protobuf:"bytes,1,opt,name=identifier,proto3,oneof" json:"identifier,omitempty"`
+	Market        *v11.Market            `protobuf:"bytes,1,opt,name=market,proto3,oneof" json:"market,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetSymbolIdentifierResponse) Reset() {
-	*x = GetSymbolIdentifierResponse{}
+func (x *GetMarketResponse) Reset() {
+	*x = GetMarketResponse{}
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetSymbolIdentifierResponse) String() string {
+func (x *GetMarketResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetSymbolIdentifierResponse) ProtoMessage() {}
+func (*GetMarketResponse) ProtoMessage() {}
 
-func (x *GetSymbolIdentifierResponse) ProtoReflect() protoreflect.Message {
+func (x *GetMarketResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3420,41 +3253,238 @@ func (x *GetSymbolIdentifierResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetSymbolIdentifierResponse.ProtoReflect.Descriptor instead.
-func (*GetSymbolIdentifierResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetMarketResponse.ProtoReflect.Descriptor instead.
+func (*GetMarketResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{63}
 }
 
-func (x *GetSymbolIdentifierResponse) GetIdentifier() *v11.SymbolIdentifier {
+func (x *GetMarketResponse) GetMarket() *v11.Market {
+	if x != nil {
+		return x.Market
+	}
+	return nil
+}
+
+// ResolveMarketRequest
+type ResolveMarketRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	VenueId       *string                `protobuf:"bytes,1,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
+	VenueSymbol   *string                `protobuf:"bytes,2,opt,name=venue_symbol,json=venueSymbol,proto3,oneof" json:"venue_symbol,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResolveMarketRequest) Reset() {
+	*x = ResolveMarketRequest{}
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[64]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResolveMarketRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResolveMarketRequest) ProtoMessage() {}
+
+func (x *ResolveMarketRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[64]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResolveMarketRequest.ProtoReflect.Descriptor instead.
+func (*ResolveMarketRequest) Descriptor() ([]byte, []int) {
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{64}
+}
+
+func (x *ResolveMarketRequest) GetVenueId() string {
+	if x != nil && x.VenueId != nil {
+		return *x.VenueId
+	}
+	return ""
+}
+
+func (x *ResolveMarketRequest) GetVenueSymbol() string {
+	if x != nil && x.VenueSymbol != nil {
+		return *x.VenueSymbol
+	}
+	return ""
+}
+
+type ResolveMarketResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	MarketId      *string                `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,2,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResolveMarketResponse) Reset() {
+	*x = ResolveMarketResponse{}
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[65]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResolveMarketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResolveMarketResponse) ProtoMessage() {}
+
+func (x *ResolveMarketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[65]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResolveMarketResponse.ProtoReflect.Descriptor instead.
+func (*ResolveMarketResponse) Descriptor() ([]byte, []int) {
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{65}
+}
+
+func (x *ResolveMarketResponse) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
+	}
+	return ""
+}
+
+func (x *ResolveMarketResponse) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
+	}
+	return ""
+}
+
+// GetIdentifierRequest
+type GetIdentifierRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IdentifierId  *string                `protobuf:"bytes,1,opt,name=identifier_id,json=identifierId,proto3,oneof" json:"identifier_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetIdentifierRequest) Reset() {
+	*x = GetIdentifierRequest{}
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[66]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetIdentifierRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetIdentifierRequest) ProtoMessage() {}
+
+func (x *GetIdentifierRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[66]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetIdentifierRequest.ProtoReflect.Descriptor instead.
+func (*GetIdentifierRequest) Descriptor() ([]byte, []int) {
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{66}
+}
+
+func (x *GetIdentifierRequest) GetIdentifierId() string {
+	if x != nil && x.IdentifierId != nil {
+		return *x.IdentifierId
+	}
+	return ""
+}
+
+type GetIdentifierResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Identifier    *v12.Identifier        `protobuf:"bytes,1,opt,name=identifier,proto3,oneof" json:"identifier,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetIdentifierResponse) Reset() {
+	*x = GetIdentifierResponse{}
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[67]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetIdentifierResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetIdentifierResponse) ProtoMessage() {}
+
+func (x *GetIdentifierResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[67]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetIdentifierResponse.ProtoReflect.Descriptor instead.
+func (*GetIdentifierResponse) Descriptor() ([]byte, []int) {
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{67}
+}
+
+func (x *GetIdentifierResponse) GetIdentifier() *v12.Identifier {
 	if x != nil {
 		return x.Identifier
 	}
 	return nil
 }
 
-// ListSymbolIdentifiersRequest
-type ListSymbolIdentifiersRequest struct {
+// ListIdentifiersRequest
+type ListIdentifiersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SymbolId      *string                `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	EntityType    *string                `protobuf:"bytes,1,opt,name=entity_type,json=entityType,proto3,oneof" json:"entity_type,omitempty"` // "ASSET", "INSTRUMENT", or "MARKET"
+	AssetId       *string                `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3,oneof" json:"asset_id,omitempty"`
+	InstrumentId  *string                `protobuf:"bytes,3,opt,name=instrument_id,json=instrumentId,proto3,oneof" json:"instrument_id,omitempty"`
+	MarketId      *string                `protobuf:"bytes,4,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListSymbolIdentifiersRequest) Reset() {
-	*x = ListSymbolIdentifiersRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[64]
+func (x *ListIdentifiersRequest) Reset() {
+	*x = ListIdentifiersRequest{}
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListSymbolIdentifiersRequest) String() string {
+func (x *ListIdentifiersRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListSymbolIdentifiersRequest) ProtoMessage() {}
+func (*ListIdentifiersRequest) ProtoMessage() {}
 
-func (x *ListSymbolIdentifiersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[64]
+func (x *ListIdentifiersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3465,40 +3495,61 @@ func (x *ListSymbolIdentifiersRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListSymbolIdentifiersRequest.ProtoReflect.Descriptor instead.
-func (*ListSymbolIdentifiersRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{64}
+// Deprecated: Use ListIdentifiersRequest.ProtoReflect.Descriptor instead.
+func (*ListIdentifiersRequest) Descriptor() ([]byte, []int) {
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{68}
 }
 
-func (x *ListSymbolIdentifiersRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *ListIdentifiersRequest) GetEntityType() string {
+	if x != nil && x.EntityType != nil {
+		return *x.EntityType
 	}
 	return ""
 }
 
-type ListSymbolIdentifiersResponse struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Identifiers   []*v11.SymbolIdentifier `protobuf:"bytes,1,rep,name=identifiers,proto3" json:"identifiers,omitempty"`
+func (x *ListIdentifiersRequest) GetAssetId() string {
+	if x != nil && x.AssetId != nil {
+		return *x.AssetId
+	}
+	return ""
+}
+
+func (x *ListIdentifiersRequest) GetInstrumentId() string {
+	if x != nil && x.InstrumentId != nil {
+		return *x.InstrumentId
+	}
+	return ""
+}
+
+func (x *ListIdentifiersRequest) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
+	}
+	return ""
+}
+
+type ListIdentifiersResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Identifiers   []*v12.Identifier      `protobuf:"bytes,1,rep,name=identifiers,proto3" json:"identifiers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListSymbolIdentifiersResponse) Reset() {
-	*x = ListSymbolIdentifiersResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[65]
+func (x *ListIdentifiersResponse) Reset() {
+	*x = ListIdentifiersResponse{}
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListSymbolIdentifiersResponse) String() string {
+func (x *ListIdentifiersResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListSymbolIdentifiersResponse) ProtoMessage() {}
+func (*ListIdentifiersResponse) ProtoMessage() {}
 
-func (x *ListSymbolIdentifiersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[65]
+func (x *ListIdentifiersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3509,12 +3560,12 @@ func (x *ListSymbolIdentifiersResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListSymbolIdentifiersResponse.ProtoReflect.Descriptor instead.
-func (*ListSymbolIdentifiersResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{65}
+// Deprecated: Use ListIdentifiersResponse.ProtoReflect.Descriptor instead.
+func (*ListIdentifiersResponse) Descriptor() ([]byte, []int) {
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{69}
 }
 
-func (x *ListSymbolIdentifiersResponse) GetIdentifiers() []*v11.SymbolIdentifier {
+func (x *ListIdentifiersResponse) GetIdentifiers() []*v12.Identifier {
 	if x != nil {
 		return x.Identifiers
 	}
@@ -3525,7 +3576,7 @@ func (x *ListSymbolIdentifiersResponse) GetIdentifiers() []*v11.SymbolIdentifier
 type CreateVenueRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	VenueType     *v12.VenueType         `protobuf:"varint,2,opt,name=venue_type,json=venueType,proto3,enum=cqc.venues.v1.VenueType,oneof" json:"venue_type,omitempty"`
+	VenueType     *v13.VenueType         `protobuf:"varint,2,opt,name=venue_type,json=venueType,proto3,enum=cqc.venues.v1.VenueType,oneof" json:"venue_type,omitempty"`
 	ChainId       *string                `protobuf:"bytes,3,opt,name=chain_id,json=chainId,proto3,oneof" json:"chain_id,omitempty"`
 	ApiEndpoint   *string                `protobuf:"bytes,4,opt,name=api_endpoint,json=apiEndpoint,proto3,oneof" json:"api_endpoint,omitempty"`
 	WebsiteUrl    *string                `protobuf:"bytes,5,opt,name=website_url,json=websiteUrl,proto3,oneof" json:"website_url,omitempty"`
@@ -3535,7 +3586,7 @@ type CreateVenueRequest struct {
 
 func (x *CreateVenueRequest) Reset() {
 	*x = CreateVenueRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[66]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3547,7 +3598,7 @@ func (x *CreateVenueRequest) String() string {
 func (*CreateVenueRequest) ProtoMessage() {}
 
 func (x *CreateVenueRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[66]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3560,7 +3611,7 @@ func (x *CreateVenueRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateVenueRequest.ProtoReflect.Descriptor instead.
 func (*CreateVenueRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{66}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *CreateVenueRequest) GetName() string {
@@ -3570,11 +3621,11 @@ func (x *CreateVenueRequest) GetName() string {
 	return ""
 }
 
-func (x *CreateVenueRequest) GetVenueType() v12.VenueType {
+func (x *CreateVenueRequest) GetVenueType() v13.VenueType {
 	if x != nil && x.VenueType != nil {
 		return *x.VenueType
 	}
-	return v12.VenueType(0)
+	return v13.VenueType(0)
 }
 
 func (x *CreateVenueRequest) GetChainId() string {
@@ -3600,14 +3651,14 @@ func (x *CreateVenueRequest) GetWebsiteUrl() string {
 
 type CreateVenueResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Venue         *v12.Venue             `protobuf:"bytes,1,opt,name=venue,proto3,oneof" json:"venue,omitempty"`
+	Venue         *v13.Venue             `protobuf:"bytes,1,opt,name=venue,proto3,oneof" json:"venue,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateVenueResponse) Reset() {
 	*x = CreateVenueResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[67]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3619,7 +3670,7 @@ func (x *CreateVenueResponse) String() string {
 func (*CreateVenueResponse) ProtoMessage() {}
 
 func (x *CreateVenueResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[67]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3632,10 +3683,10 @@ func (x *CreateVenueResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateVenueResponse.ProtoReflect.Descriptor instead.
 func (*CreateVenueResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{67}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{71}
 }
 
-func (x *CreateVenueResponse) GetVenue() *v12.Venue {
+func (x *CreateVenueResponse) GetVenue() *v13.Venue {
 	if x != nil {
 		return x.Venue
 	}
@@ -3652,7 +3703,7 @@ type GetVenueRequest struct {
 
 func (x *GetVenueRequest) Reset() {
 	*x = GetVenueRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[68]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3664,7 +3715,7 @@ func (x *GetVenueRequest) String() string {
 func (*GetVenueRequest) ProtoMessage() {}
 
 func (x *GetVenueRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[68]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3677,7 +3728,7 @@ func (x *GetVenueRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVenueRequest.ProtoReflect.Descriptor instead.
 func (*GetVenueRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{68}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *GetVenueRequest) GetVenueId() string {
@@ -3689,14 +3740,14 @@ func (x *GetVenueRequest) GetVenueId() string {
 
 type GetVenueResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Venue         *v12.Venue             `protobuf:"bytes,1,opt,name=venue,proto3,oneof" json:"venue,omitempty"`
+	Venue         *v13.Venue             `protobuf:"bytes,1,opt,name=venue,proto3,oneof" json:"venue,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetVenueResponse) Reset() {
 	*x = GetVenueResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[69]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3708,7 +3759,7 @@ func (x *GetVenueResponse) String() string {
 func (*GetVenueResponse) ProtoMessage() {}
 
 func (x *GetVenueResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[69]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3721,10 +3772,10 @@ func (x *GetVenueResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVenueResponse.ProtoReflect.Descriptor instead.
 func (*GetVenueResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{69}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{73}
 }
 
-func (x *GetVenueResponse) GetVenue() *v12.Venue {
+func (x *GetVenueResponse) GetVenue() *v13.Venue {
 	if x != nil {
 		return x.Venue
 	}
@@ -3734,7 +3785,7 @@ func (x *GetVenueResponse) GetVenue() *v12.Venue {
 // ListVenuesRequest
 type ListVenuesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueType     *v12.VenueType         `protobuf:"varint,1,opt,name=venue_type,json=venueType,proto3,enum=cqc.venues.v1.VenueType,oneof" json:"venue_type,omitempty"`
+	VenueType     *v13.VenueType         `protobuf:"varint,1,opt,name=venue_type,json=venueType,proto3,enum=cqc.venues.v1.VenueType,oneof" json:"venue_type,omitempty"`
 	ChainId       *string                `protobuf:"bytes,2,opt,name=chain_id,json=chainId,proto3,oneof" json:"chain_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -3742,7 +3793,7 @@ type ListVenuesRequest struct {
 
 func (x *ListVenuesRequest) Reset() {
 	*x = ListVenuesRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[70]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3754,7 +3805,7 @@ func (x *ListVenuesRequest) String() string {
 func (*ListVenuesRequest) ProtoMessage() {}
 
 func (x *ListVenuesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[70]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3767,14 +3818,14 @@ func (x *ListVenuesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVenuesRequest.ProtoReflect.Descriptor instead.
 func (*ListVenuesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{70}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{74}
 }
 
-func (x *ListVenuesRequest) GetVenueType() v12.VenueType {
+func (x *ListVenuesRequest) GetVenueType() v13.VenueType {
 	if x != nil && x.VenueType != nil {
 		return *x.VenueType
 	}
-	return v12.VenueType(0)
+	return v13.VenueType(0)
 }
 
 func (x *ListVenuesRequest) GetChainId() string {
@@ -3786,14 +3837,14 @@ func (x *ListVenuesRequest) GetChainId() string {
 
 type ListVenuesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Venues        []*v12.Venue           `protobuf:"bytes,1,rep,name=venues,proto3" json:"venues,omitempty"`
+	Venues        []*v13.Venue           `protobuf:"bytes,1,rep,name=venues,proto3" json:"venues,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ListVenuesResponse) Reset() {
 	*x = ListVenuesResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[71]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3805,7 +3856,7 @@ func (x *ListVenuesResponse) String() string {
 func (*ListVenuesResponse) ProtoMessage() {}
 
 func (x *ListVenuesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[71]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3818,10 +3869,10 @@ func (x *ListVenuesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVenuesResponse.ProtoReflect.Descriptor instead.
 func (*ListVenuesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{71}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{75}
 }
 
-func (x *ListVenuesResponse) GetVenues() []*v12.Venue {
+func (x *ListVenuesResponse) GetVenues() []*v13.Venue {
 	if x != nil {
 		return x.Venues
 	}
@@ -3844,7 +3895,7 @@ type CreateVenueAssetRequest struct {
 
 func (x *CreateVenueAssetRequest) Reset() {
 	*x = CreateVenueAssetRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[72]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3856,7 +3907,7 @@ func (x *CreateVenueAssetRequest) String() string {
 func (*CreateVenueAssetRequest) ProtoMessage() {}
 
 func (x *CreateVenueAssetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[72]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3869,7 +3920,7 @@ func (x *CreateVenueAssetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateVenueAssetRequest.ProtoReflect.Descriptor instead.
 func (*CreateVenueAssetRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{72}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *CreateVenueAssetRequest) GetVenueId() string {
@@ -3923,14 +3974,14 @@ func (x *CreateVenueAssetRequest) GetTradingEnabled() bool {
 
 type CreateVenueAssetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueAsset    *v12.VenueAsset        `protobuf:"bytes,1,opt,name=venue_asset,json=venueAsset,proto3,oneof" json:"venue_asset,omitempty"`
+	VenueAsset    *v13.VenueAsset        `protobuf:"bytes,1,opt,name=venue_asset,json=venueAsset,proto3,oneof" json:"venue_asset,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateVenueAssetResponse) Reset() {
 	*x = CreateVenueAssetResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[73]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3942,7 +3993,7 @@ func (x *CreateVenueAssetResponse) String() string {
 func (*CreateVenueAssetResponse) ProtoMessage() {}
 
 func (x *CreateVenueAssetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[73]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3955,10 +4006,10 @@ func (x *CreateVenueAssetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateVenueAssetResponse.ProtoReflect.Descriptor instead.
 func (*CreateVenueAssetResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{73}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{77}
 }
 
-func (x *CreateVenueAssetResponse) GetVenueAsset() *v12.VenueAsset {
+func (x *CreateVenueAssetResponse) GetVenueAsset() *v13.VenueAsset {
 	if x != nil {
 		return x.VenueAsset
 	}
@@ -3976,7 +4027,7 @@ type GetVenueAssetRequest struct {
 
 func (x *GetVenueAssetRequest) Reset() {
 	*x = GetVenueAssetRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[74]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3988,7 +4039,7 @@ func (x *GetVenueAssetRequest) String() string {
 func (*GetVenueAssetRequest) ProtoMessage() {}
 
 func (x *GetVenueAssetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[74]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4001,7 +4052,7 @@ func (x *GetVenueAssetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVenueAssetRequest.ProtoReflect.Descriptor instead.
 func (*GetVenueAssetRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{74}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *GetVenueAssetRequest) GetVenueId() string {
@@ -4020,14 +4071,14 @@ func (x *GetVenueAssetRequest) GetAssetId() string {
 
 type GetVenueAssetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueAsset    *v12.VenueAsset        `protobuf:"bytes,1,opt,name=venue_asset,json=venueAsset,proto3,oneof" json:"venue_asset,omitempty"`
+	VenueAsset    *v13.VenueAsset        `protobuf:"bytes,1,opt,name=venue_asset,json=venueAsset,proto3,oneof" json:"venue_asset,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetVenueAssetResponse) Reset() {
 	*x = GetVenueAssetResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[75]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4039,7 +4090,7 @@ func (x *GetVenueAssetResponse) String() string {
 func (*GetVenueAssetResponse) ProtoMessage() {}
 
 func (x *GetVenueAssetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[75]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4052,10 +4103,10 @@ func (x *GetVenueAssetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVenueAssetResponse.ProtoReflect.Descriptor instead.
 func (*GetVenueAssetResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{75}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{79}
 }
 
-func (x *GetVenueAssetResponse) GetVenueAsset() *v12.VenueAsset {
+func (x *GetVenueAssetResponse) GetVenueAsset() *v13.VenueAsset {
 	if x != nil {
 		return x.VenueAsset
 	}
@@ -4073,7 +4124,7 @@ type ListVenueAssetsRequest struct {
 
 func (x *ListVenueAssetsRequest) Reset() {
 	*x = ListVenueAssetsRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[76]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4085,7 +4136,7 @@ func (x *ListVenueAssetsRequest) String() string {
 func (*ListVenueAssetsRequest) ProtoMessage() {}
 
 func (x *ListVenueAssetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[76]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4098,7 +4149,7 @@ func (x *ListVenueAssetsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVenueAssetsRequest.ProtoReflect.Descriptor instead.
 func (*ListVenueAssetsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{76}
+	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *ListVenueAssetsRequest) GetVenueId() string {
@@ -4117,14 +4168,14 @@ func (x *ListVenueAssetsRequest) GetAssetId() string {
 
 type ListVenueAssetsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueAssets   []*v12.VenueAsset      `protobuf:"bytes,1,rep,name=venue_assets,json=venueAssets,proto3" json:"venue_assets,omitempty"`
+	VenueAssets   []*v13.VenueAsset      `protobuf:"bytes,1,rep,name=venue_assets,json=venueAssets,proto3" json:"venue_assets,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ListVenueAssetsResponse) Reset() {
 	*x = ListVenueAssetsResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[77]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4136,7 +4187,7 @@ func (x *ListVenueAssetsResponse) String() string {
 func (*ListVenueAssetsResponse) ProtoMessage() {}
 
 func (x *ListVenueAssetsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[77]
+	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4149,327 +4200,12 @@ func (x *ListVenueAssetsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVenueAssetsResponse.ProtoReflect.Descriptor instead.
 func (*ListVenueAssetsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{77}
-}
-
-func (x *ListVenueAssetsResponse) GetVenueAssets() []*v12.VenueAsset {
-	if x != nil {
-		return x.VenueAssets
-	}
-	return nil
-}
-
-// CreateVenueSymbolRequest
-type CreateVenueSymbolRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueId       *string                `protobuf:"bytes,1,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	SymbolId      *string                `protobuf:"bytes,2,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	VenueSymbol   *string                `protobuf:"bytes,3,opt,name=venue_symbol,json=venueSymbol,proto3,oneof" json:"venue_symbol,omitempty"`
-	MakerFee      *float64               `protobuf:"fixed64,4,opt,name=maker_fee,json=makerFee,proto3,oneof" json:"maker_fee,omitempty"`
-	TakerFee      *float64               `protobuf:"fixed64,5,opt,name=taker_fee,json=takerFee,proto3,oneof" json:"taker_fee,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CreateVenueSymbolRequest) Reset() {
-	*x = CreateVenueSymbolRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[78]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CreateVenueSymbolRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateVenueSymbolRequest) ProtoMessage() {}
-
-func (x *CreateVenueSymbolRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[78]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateVenueSymbolRequest.ProtoReflect.Descriptor instead.
-func (*CreateVenueSymbolRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{78}
-}
-
-func (x *CreateVenueSymbolRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
-	}
-	return ""
-}
-
-func (x *CreateVenueSymbolRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-func (x *CreateVenueSymbolRequest) GetVenueSymbol() string {
-	if x != nil && x.VenueSymbol != nil {
-		return *x.VenueSymbol
-	}
-	return ""
-}
-
-func (x *CreateVenueSymbolRequest) GetMakerFee() float64 {
-	if x != nil && x.MakerFee != nil {
-		return *x.MakerFee
-	}
-	return 0
-}
-
-func (x *CreateVenueSymbolRequest) GetTakerFee() float64 {
-	if x != nil && x.TakerFee != nil {
-		return *x.TakerFee
-	}
-	return 0
-}
-
-type CreateVenueSymbolResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueSymbol   *v12.VenueSymbol       `protobuf:"bytes,1,opt,name=venue_symbol,json=venueSymbol,proto3,oneof" json:"venue_symbol,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CreateVenueSymbolResponse) Reset() {
-	*x = CreateVenueSymbolResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[79]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CreateVenueSymbolResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateVenueSymbolResponse) ProtoMessage() {}
-
-func (x *CreateVenueSymbolResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[79]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateVenueSymbolResponse.ProtoReflect.Descriptor instead.
-func (*CreateVenueSymbolResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{79}
-}
-
-func (x *CreateVenueSymbolResponse) GetVenueSymbol() *v12.VenueSymbol {
-	if x != nil {
-		return x.VenueSymbol
-	}
-	return nil
-}
-
-// GetVenueSymbolRequest
-type GetVenueSymbolRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueId       *string                `protobuf:"bytes,1,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	VenueSymbol   *string                `protobuf:"bytes,2,opt,name=venue_symbol,json=venueSymbol,proto3,oneof" json:"venue_symbol,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetVenueSymbolRequest) Reset() {
-	*x = GetVenueSymbolRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[80]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetVenueSymbolRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetVenueSymbolRequest) ProtoMessage() {}
-
-func (x *GetVenueSymbolRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[80]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetVenueSymbolRequest.ProtoReflect.Descriptor instead.
-func (*GetVenueSymbolRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{80}
-}
-
-func (x *GetVenueSymbolRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
-	}
-	return ""
-}
-
-func (x *GetVenueSymbolRequest) GetVenueSymbol() string {
-	if x != nil && x.VenueSymbol != nil {
-		return *x.VenueSymbol
-	}
-	return ""
-}
-
-type GetVenueSymbolResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueSymbol   *v12.VenueSymbol       `protobuf:"bytes,1,opt,name=venue_symbol,json=venueSymbol,proto3,oneof" json:"venue_symbol,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetVenueSymbolResponse) Reset() {
-	*x = GetVenueSymbolResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[81]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetVenueSymbolResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetVenueSymbolResponse) ProtoMessage() {}
-
-func (x *GetVenueSymbolResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[81]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetVenueSymbolResponse.ProtoReflect.Descriptor instead.
-func (*GetVenueSymbolResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{81}
 }
 
-func (x *GetVenueSymbolResponse) GetVenueSymbol() *v12.VenueSymbol {
+func (x *ListVenueAssetsResponse) GetVenueAssets() []*v13.VenueAsset {
 	if x != nil {
-		return x.VenueSymbol
-	}
-	return nil
-}
-
-// ListVenueSymbolsRequest
-type ListVenueSymbolsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueId       *string                `protobuf:"bytes,1,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
-	SymbolId      *string                `protobuf:"bytes,2,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListVenueSymbolsRequest) Reset() {
-	*x = ListVenueSymbolsRequest{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[82]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListVenueSymbolsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListVenueSymbolsRequest) ProtoMessage() {}
-
-func (x *ListVenueSymbolsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[82]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListVenueSymbolsRequest.ProtoReflect.Descriptor instead.
-func (*ListVenueSymbolsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{82}
-}
-
-func (x *ListVenueSymbolsRequest) GetVenueId() string {
-	if x != nil && x.VenueId != nil {
-		return *x.VenueId
-	}
-	return ""
-}
-
-func (x *ListVenueSymbolsRequest) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
-	}
-	return ""
-}
-
-type ListVenueSymbolsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	VenueSymbols  []*v12.VenueSymbol     `protobuf:"bytes,1,rep,name=venue_symbols,json=venueSymbols,proto3" json:"venue_symbols,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListVenueSymbolsResponse) Reset() {
-	*x = ListVenueSymbolsResponse{}
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[83]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListVenueSymbolsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListVenueSymbolsResponse) ProtoMessage() {}
-
-func (x *ListVenueSymbolsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_v1_asset_registry_proto_msgTypes[83]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListVenueSymbolsResponse.ProtoReflect.Descriptor instead.
-func (*ListVenueSymbolsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_v1_asset_registry_proto_rawDescGZIP(), []int{83}
-}
-
-func (x *ListVenueSymbolsResponse) GetVenueSymbols() []*v12.VenueSymbol {
-	if x != nil {
-		return x.VenueSymbols
+		return x.VenueAssets
 	}
 	return nil
 }
@@ -4478,7 +4214,7 @@ var File_proto_services_v1_asset_registry_proto protoreflect.FileDescriptor
 
 const file_proto_services_v1_asset_registry_proto_rawDesc = "" +
 	"\n" +
-	"&proto/services/v1/asset_registry.proto\x12\x0fcqc.services.v1\x1a\x1bproto/assets/v1/asset.proto\x1a proto/assets/v1/deployment.proto\x1a\"proto/assets/v1/relationship.proto\x1a\x1dproto/assets/v1/quality.proto\x1a\x1bproto/assets/v1/chain.proto\x1a\x1dproto/markets/v1/symbol.proto\x1a(proto/markets/v1/symbol_identifier.proto\x1a\x1bproto/venues/v1/venue.proto\x1a!proto/venues/v1/venue_asset.proto\x1a\"proto/venues/v1/venue_symbol.proto\"\xf3\x02\n" +
+	"&proto/services/v1/asset_registry.proto\x12\x0fcqc.services.v1\x1a\x1bproto/assets/v1/asset.proto\x1a proto/assets/v1/deployment.proto\x1a\"proto/assets/v1/relationship.proto\x1a\x1dproto/assets/v1/quality.proto\x1a\x1bproto/assets/v1/chain.proto\x1a!proto/markets/v1/instrument.proto\x1a&proto/markets/v1/spot_instrument.proto\x1a$proto/markets/v1/perp_contract.proto\x1a&proto/markets/v1/future_contract.proto\x1a$proto/markets/v1/option_series.proto\x1a&proto/markets/v1/lending_deposit.proto\x1a%proto/markets/v1/lending_borrow.proto\x1a\x1dproto/markets/v1/market.proto\x1a%proto/identifiers/v1/identifier.proto\x1a\x1bproto/venues/v1/venue.proto\x1a!proto/venues/v1/venue_asset.proto\"\xf3\x02\n" +
 	"\x12CreateAssetRequest\x12\x1b\n" +
 	"\x06symbol\x18\x01 \x01(\tH\x00R\x06symbol\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01\x12<\n" +
@@ -4741,123 +4477,90 @@ const file_proto_services_v1_asset_registry_proto_rawDesc = "" +
 	"chain_type\x18\x01 \x01(\tH\x00R\tchainType\x88\x01\x01B\r\n" +
 	"\v_chain_type\"B\n" +
 	"\x12ListChainsResponse\x12,\n" +
-	"\x06chains\x18\x01 \x03(\v2\x14.cqc.assets.v1.ChainR\x06chains\"\xb2\x03\n" +
-	"\x13CreateSymbolRequest\x12\x1b\n" +
-	"\x06symbol\x18\x01 \x01(\tH\x00R\x06symbol\x88\x01\x01\x12@\n" +
-	"\vsymbol_type\x18\x02 \x01(\x0e2\x1a.cqc.markets.v1.SymbolTypeH\x01R\n" +
-	"symbolType\x88\x01\x01\x12'\n" +
-	"\rbase_asset_id\x18\x03 \x01(\tH\x02R\vbaseAssetId\x88\x01\x01\x12)\n" +
-	"\x0equote_asset_id\x18\x04 \x01(\tH\x03R\fquoteAssetId\x88\x01\x01\x123\n" +
-	"\x13settlement_asset_id\x18\x05 \x01(\tH\x04R\x11settlementAssetId\x88\x01\x01\x12 \n" +
-	"\ttick_size\x18\x06 \x01(\x01H\x05R\btickSize\x88\x01\x01\x12\x1e\n" +
-	"\blot_size\x18\a \x01(\x01H\x06R\alotSize\x88\x01\x01B\t\n" +
-	"\a_symbolB\x0e\n" +
-	"\f_symbol_typeB\x10\n" +
-	"\x0e_base_asset_idB\x11\n" +
-	"\x0f_quote_asset_idB\x16\n" +
-	"\x14_settlement_asset_idB\f\n" +
+	"\x06chains\x18\x01 \x03(\v2\x14.cqc.assets.v1.ChainR\x06chains\"R\n" +
+	"\x14GetInstrumentRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01B\x10\n" +
+	"\x0e_instrument_id\"g\n" +
+	"\x15GetInstrumentResponse\x12?\n" +
 	"\n" +
-	"_tick_sizeB\v\n" +
-	"\t_lot_size\"V\n" +
-	"\x14CreateSymbolResponse\x123\n" +
-	"\x06symbol\x18\x01 \x01(\v2\x16.cqc.markets.v1.SymbolH\x00R\x06symbol\x88\x01\x01B\t\n" +
-	"\a_symbol\"B\n" +
-	"\x10GetSymbolRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01B\f\n" +
+	"instrument\x18\x01 \x01(\v2\x1a.cqc.markets.v1.InstrumentH\x00R\n" +
+	"instrument\x88\x01\x01B\r\n" +
+	"\v_instrument\"V\n" +
+	"\x18GetSpotInstrumentRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01B\x10\n" +
+	"\x0e_instrument_id\"}\n" +
+	"\x19GetSpotInstrumentResponse\x12L\n" +
+	"\x0fspot_instrument\x18\x01 \x01(\v2\x1e.cqc.markets.v1.SpotInstrumentH\x00R\x0espotInstrument\x88\x01\x01B\x12\n" +
+	"\x10_spot_instrument\"T\n" +
+	"\x16GetPerpContractRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01B\x10\n" +
+	"\x0e_instrument_id\"s\n" +
+	"\x17GetPerpContractResponse\x12F\n" +
+	"\rperp_contract\x18\x01 \x01(\v2\x1c.cqc.markets.v1.PerpContractH\x00R\fperpContract\x88\x01\x01B\x10\n" +
+	"\x0e_perp_contract\"V\n" +
+	"\x18GetFutureContractRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01B\x10\n" +
+	"\x0e_instrument_id\"}\n" +
+	"\x19GetFutureContractResponse\x12L\n" +
+	"\x0ffuture_contract\x18\x01 \x01(\v2\x1e.cqc.markets.v1.FutureContractH\x00R\x0efutureContract\x88\x01\x01B\x12\n" +
+	"\x10_future_contract\"T\n" +
+	"\x16GetOptionSeriesRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01B\x10\n" +
+	"\x0e_instrument_id\"s\n" +
+	"\x17GetOptionSeriesResponse\x12F\n" +
+	"\roption_series\x18\x01 \x01(\v2\x1c.cqc.markets.v1.OptionSeriesH\x00R\foptionSeries\x88\x01\x01B\x10\n" +
+	"\x0e_option_series\"V\n" +
+	"\x18GetLendingDepositRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01B\x10\n" +
+	"\x0e_instrument_id\"}\n" +
+	"\x19GetLendingDepositResponse\x12L\n" +
+	"\x0flending_deposit\x18\x01 \x01(\v2\x1e.cqc.markets.v1.LendingDepositH\x00R\x0elendingDeposit\x88\x01\x01B\x12\n" +
+	"\x10_lending_deposit\"U\n" +
+	"\x17GetLendingBorrowRequest\x12(\n" +
+	"\rinstrument_id\x18\x01 \x01(\tH\x00R\finstrumentId\x88\x01\x01B\x10\n" +
+	"\x0e_instrument_id\"x\n" +
+	"\x18GetLendingBorrowResponse\x12I\n" +
+	"\x0elending_borrow\x18\x01 \x01(\v2\x1d.cqc.markets.v1.LendingBorrowH\x00R\rlendingBorrow\x88\x01\x01B\x11\n" +
+	"\x0f_lending_borrow\"B\n" +
+	"\x10GetMarketRequest\x12 \n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_id\"S\n" +
-	"\x11GetSymbolResponse\x123\n" +
-	"\x06symbol\x18\x01 \x01(\v2\x16.cqc.markets.v1.SymbolH\x00R\x06symbol\x88\x01\x01B\t\n" +
-	"\a_symbol\"\xcc\x02\n" +
-	"\x13UpdateSymbolRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1b\n" +
-	"\x06symbol\x18\x02 \x01(\tH\x01R\x06symbol\x88\x01\x01\x12@\n" +
-	"\vsymbol_type\x18\x03 \x01(\x0e2\x1a.cqc.markets.v1.SymbolTypeH\x02R\n" +
-	"symbolType\x88\x01\x01\x12 \n" +
-	"\ttick_size\x18\x04 \x01(\x01H\x03R\btickSize\x88\x01\x01\x12\x1e\n" +
-	"\blot_size\x18\x05 \x01(\x01H\x04R\alotSize\x88\x01\x01\x12 \n" +
-	"\tis_active\x18\x06 \x01(\bH\x05R\bisActive\x88\x01\x01B\f\n" +
+	"_market_id\"S\n" +
+	"\x11GetMarketResponse\x123\n" +
+	"\x06market\x18\x01 \x01(\v2\x16.cqc.markets.v1.MarketH\x00R\x06market\x88\x01\x01B\t\n" +
+	"\a_market\"|\n" +
+	"\x14ResolveMarketRequest\x12\x1e\n" +
+	"\bvenue_id\x18\x01 \x01(\tH\x00R\avenueId\x88\x01\x01\x12&\n" +
+	"\fvenue_symbol\x18\x02 \x01(\tH\x01R\vvenueSymbol\x88\x01\x01B\v\n" +
+	"\t_venue_idB\x0f\n" +
+	"\r_venue_symbol\"\x83\x01\n" +
+	"\x15ResolveMarketResponse\x12 \n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12(\n" +
+	"\rinstrument_id\x18\x02 \x01(\tH\x01R\finstrumentId\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\t\n" +
-	"\a_symbolB\x0e\n" +
-	"\f_symbol_typeB\f\n" +
+	"_market_idB\x10\n" +
+	"\x0e_instrument_id\"R\n" +
+	"\x14GetIdentifierRequest\x12(\n" +
+	"\ridentifier_id\x18\x01 \x01(\tH\x00R\fidentifierId\x88\x01\x01B\x10\n" +
+	"\x0e_identifier_id\"k\n" +
+	"\x15GetIdentifierResponse\x12C\n" +
 	"\n" +
-	"_tick_sizeB\v\n" +
-	"\t_lot_sizeB\f\n" +
-	"\n" +
-	"_is_active\"V\n" +
-	"\x14UpdateSymbolResponse\x123\n" +
-	"\x06symbol\x18\x01 \x01(\v2\x16.cqc.markets.v1.SymbolH\x00R\x06symbol\x88\x01\x01B\t\n" +
-	"\a_symbol\"E\n" +
-	"\x13DeleteSymbolRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01B\f\n" +
-	"\n" +
-	"_symbol_id\"A\n" +
-	"\x14DeleteSymbolResponse\x12\x1d\n" +
-	"\asuccess\x18\x01 \x01(\bH\x00R\asuccess\x88\x01\x01B\n" +
-	"\n" +
-	"\b_success\"\xc2\x02\n" +
-	"\x12ListSymbolsRequest\x12 \n" +
-	"\tpage_size\x18\x01 \x01(\x05H\x00R\bpageSize\x88\x01\x01\x12\"\n" +
-	"\n" +
-	"page_token\x18\x02 \x01(\tH\x01R\tpageToken\x88\x01\x01\x12@\n" +
-	"\vsymbol_type\x18\x03 \x01(\x0e2\x1a.cqc.markets.v1.SymbolTypeH\x02R\n" +
-	"symbolType\x88\x01\x01\x12'\n" +
-	"\rbase_asset_id\x18\x04 \x01(\tH\x03R\vbaseAssetId\x88\x01\x01\x12)\n" +
-	"\x0equote_asset_id\x18\x05 \x01(\tH\x04R\fquoteAssetId\x88\x01\x01B\f\n" +
-	"\n" +
-	"_page_sizeB\r\n" +
-	"\v_page_tokenB\x0e\n" +
-	"\f_symbol_typeB\x10\n" +
-	"\x0e_base_asset_idB\x11\n" +
-	"\x0f_quote_asset_id\"\xbe\x01\n" +
-	"\x13ListSymbolsResponse\x120\n" +
-	"\asymbols\x18\x01 \x03(\v2\x16.cqc.markets.v1.SymbolR\asymbols\x12+\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tH\x00R\rnextPageToken\x88\x01\x01\x12$\n" +
-	"\vtotal_count\x18\x03 \x01(\x05H\x01R\n" +
-	"totalCount\x88\x01\x01B\x12\n" +
-	"\x10_next_page_tokenB\x0e\n" +
-	"\f_total_count\"`\n" +
-	"\x14SearchSymbolsRequest\x12\x19\n" +
-	"\x05query\x18\x01 \x01(\tH\x00R\x05query\x88\x01\x01\x12\x19\n" +
-	"\x05limit\x18\x02 \x01(\x05H\x01R\x05limit\x88\x01\x01B\b\n" +
-	"\x06_queryB\b\n" +
-	"\x06_limit\"I\n" +
-	"\x15SearchSymbolsResponse\x120\n" +
-	"\asymbols\x18\x01 \x03(\v2\x16.cqc.markets.v1.SymbolR\asymbols\"\xd7\x01\n" +
-	"\x1dCreateSymbolIdentifierRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12@\n" +
-	"\vdata_source\x18\x02 \x01(\x0e2\x1a.cqc.markets.v1.DataSourceH\x01R\n" +
-	"dataSource\x88\x01\x01\x12$\n" +
-	"\vexternal_id\x18\x03 \x01(\tH\x02R\n" +
-	"externalId\x88\x01\x01B\f\n" +
-	"\n" +
-	"_symbol_idB\x0e\n" +
-	"\f_data_sourceB\x0e\n" +
-	"\f_external_id\"v\n" +
-	"\x1eCreateSymbolIdentifierResponse\x12E\n" +
-	"\n" +
-	"identifier\x18\x01 \x01(\v2 .cqc.markets.v1.SymbolIdentifierH\x00R\n" +
+	"identifier\x18\x01 \x01(\v2\x1e.cqc.identifiers.v1.IdentifierH\x00R\n" +
 	"identifier\x88\x01\x01B\r\n" +
-	"\v_identifier\"\x9e\x01\n" +
-	"\x1aGetSymbolIdentifierRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12@\n" +
-	"\vdata_source\x18\x02 \x01(\x0e2\x1a.cqc.markets.v1.DataSourceH\x01R\n" +
-	"dataSource\x88\x01\x01B\f\n" +
+	"\v_identifier\"\xe7\x01\n" +
+	"\x16ListIdentifiersRequest\x12$\n" +
+	"\ventity_type\x18\x01 \x01(\tH\x00R\n" +
+	"entityType\x88\x01\x01\x12\x1e\n" +
+	"\basset_id\x18\x02 \x01(\tH\x01R\aassetId\x88\x01\x01\x12(\n" +
+	"\rinstrument_id\x18\x03 \x01(\tH\x02R\finstrumentId\x88\x01\x01\x12 \n" +
+	"\tmarket_id\x18\x04 \x01(\tH\x03R\bmarketId\x88\x01\x01B\x0e\n" +
+	"\f_entity_typeB\v\n" +
+	"\t_asset_idB\x10\n" +
+	"\x0e_instrument_idB\f\n" +
 	"\n" +
-	"_symbol_idB\x0e\n" +
-	"\f_data_source\"s\n" +
-	"\x1bGetSymbolIdentifierResponse\x12E\n" +
-	"\n" +
-	"identifier\x18\x01 \x01(\v2 .cqc.markets.v1.SymbolIdentifierH\x00R\n" +
-	"identifier\x88\x01\x01B\r\n" +
-	"\v_identifier\"N\n" +
-	"\x1cListSymbolIdentifiersRequest\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01B\f\n" +
-	"\n" +
-	"_symbol_id\"c\n" +
-	"\x1dListSymbolIdentifiersResponse\x12B\n" +
-	"\videntifiers\x18\x01 \x03(\v2 .cqc.markets.v1.SymbolIdentifierR\videntifiers\"\x9f\x02\n" +
+	"_market_id\"[\n" +
+	"\x17ListIdentifiersResponse\x12@\n" +
+	"\videntifiers\x18\x01 \x03(\v2\x1e.cqc.identifiers.v1.IdentifierR\videntifiers\"\x9f\x02\n" +
 	"\x12CreateVenueRequest\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12<\n" +
 	"\n" +
@@ -4922,40 +4625,7 @@ const file_proto_services_v1_asset_registry_proto_rawDesc = "" +
 	"\t_venue_idB\v\n" +
 	"\t_asset_id\"W\n" +
 	"\x17ListVenueAssetsResponse\x12<\n" +
-	"\fvenue_assets\x18\x01 \x03(\v2\x19.cqc.venues.v1.VenueAssetR\vvenueAssets\"\x90\x02\n" +
-	"\x18CreateVenueSymbolRequest\x12\x1e\n" +
-	"\bvenue_id\x18\x01 \x01(\tH\x00R\avenueId\x88\x01\x01\x12 \n" +
-	"\tsymbol_id\x18\x02 \x01(\tH\x01R\bsymbolId\x88\x01\x01\x12&\n" +
-	"\fvenue_symbol\x18\x03 \x01(\tH\x02R\vvenueSymbol\x88\x01\x01\x12 \n" +
-	"\tmaker_fee\x18\x04 \x01(\x01H\x03R\bmakerFee\x88\x01\x01\x12 \n" +
-	"\ttaker_fee\x18\x05 \x01(\x01H\x04R\btakerFee\x88\x01\x01B\v\n" +
-	"\t_venue_idB\f\n" +
-	"\n" +
-	"_symbol_idB\x0f\n" +
-	"\r_venue_symbolB\f\n" +
-	"\n" +
-	"_maker_feeB\f\n" +
-	"\n" +
-	"_taker_fee\"p\n" +
-	"\x19CreateVenueSymbolResponse\x12B\n" +
-	"\fvenue_symbol\x18\x01 \x01(\v2\x1a.cqc.venues.v1.VenueSymbolH\x00R\vvenueSymbol\x88\x01\x01B\x0f\n" +
-	"\r_venue_symbol\"}\n" +
-	"\x15GetVenueSymbolRequest\x12\x1e\n" +
-	"\bvenue_id\x18\x01 \x01(\tH\x00R\avenueId\x88\x01\x01\x12&\n" +
-	"\fvenue_symbol\x18\x02 \x01(\tH\x01R\vvenueSymbol\x88\x01\x01B\v\n" +
-	"\t_venue_idB\x0f\n" +
-	"\r_venue_symbol\"m\n" +
-	"\x16GetVenueSymbolResponse\x12B\n" +
-	"\fvenue_symbol\x18\x01 \x01(\v2\x1a.cqc.venues.v1.VenueSymbolH\x00R\vvenueSymbol\x88\x01\x01B\x0f\n" +
-	"\r_venue_symbol\"v\n" +
-	"\x17ListVenueSymbolsRequest\x12\x1e\n" +
-	"\bvenue_id\x18\x01 \x01(\tH\x00R\avenueId\x88\x01\x01\x12 \n" +
-	"\tsymbol_id\x18\x02 \x01(\tH\x01R\bsymbolId\x88\x01\x01B\v\n" +
-	"\t_venue_idB\f\n" +
-	"\n" +
-	"_symbol_id\"[\n" +
-	"\x18ListVenueSymbolsResponse\x12?\n" +
-	"\rvenue_symbols\x18\x01 \x03(\v2\x1a.cqc.venues.v1.VenueSymbolR\fvenueSymbols2\xad!\n" +
+	"\fvenue_assets\x18\x01 \x03(\v2\x19.cqc.venues.v1.VenueAssetR\vvenueAssets2\xbe \n" +
 	"\rAssetRegistry\x12X\n" +
 	"\vCreateAsset\x12#.cqc.services.v1.CreateAssetRequest\x1a$.cqc.services.v1.CreateAssetResponse\x12O\n" +
 	"\bGetAsset\x12 .cqc.services.v1.GetAssetRequest\x1a!.cqc.services.v1.GetAssetResponse\x12X\n" +
@@ -4982,26 +4652,25 @@ const file_proto_services_v1_asset_registry_proto_rawDesc = "" +
 	"\vCreateChain\x12#.cqc.services.v1.CreateChainRequest\x1a$.cqc.services.v1.CreateChainResponse\x12O\n" +
 	"\bGetChain\x12 .cqc.services.v1.GetChainRequest\x1a!.cqc.services.v1.GetChainResponse\x12U\n" +
 	"\n" +
-	"ListChains\x12\".cqc.services.v1.ListChainsRequest\x1a#.cqc.services.v1.ListChainsResponse\x12[\n" +
-	"\fCreateSymbol\x12$.cqc.services.v1.CreateSymbolRequest\x1a%.cqc.services.v1.CreateSymbolResponse\x12R\n" +
-	"\tGetSymbol\x12!.cqc.services.v1.GetSymbolRequest\x1a\".cqc.services.v1.GetSymbolResponse\x12[\n" +
-	"\fUpdateSymbol\x12$.cqc.services.v1.UpdateSymbolRequest\x1a%.cqc.services.v1.UpdateSymbolResponse\x12[\n" +
-	"\fDeleteSymbol\x12$.cqc.services.v1.DeleteSymbolRequest\x1a%.cqc.services.v1.DeleteSymbolResponse\x12X\n" +
-	"\vListSymbols\x12#.cqc.services.v1.ListSymbolsRequest\x1a$.cqc.services.v1.ListSymbolsResponse\x12^\n" +
-	"\rSearchSymbols\x12%.cqc.services.v1.SearchSymbolsRequest\x1a&.cqc.services.v1.SearchSymbolsResponse\x12y\n" +
-	"\x16CreateSymbolIdentifier\x12..cqc.services.v1.CreateSymbolIdentifierRequest\x1a/.cqc.services.v1.CreateSymbolIdentifierResponse\x12p\n" +
-	"\x13GetSymbolIdentifier\x12+.cqc.services.v1.GetSymbolIdentifierRequest\x1a,.cqc.services.v1.GetSymbolIdentifierResponse\x12v\n" +
-	"\x15ListSymbolIdentifiers\x12-.cqc.services.v1.ListSymbolIdentifiersRequest\x1a..cqc.services.v1.ListSymbolIdentifiersResponse\x12X\n" +
+	"ListChains\x12\".cqc.services.v1.ListChainsRequest\x1a#.cqc.services.v1.ListChainsResponse\x12^\n" +
+	"\rGetInstrument\x12%.cqc.services.v1.GetInstrumentRequest\x1a&.cqc.services.v1.GetInstrumentResponse\x12j\n" +
+	"\x11GetSpotInstrument\x12).cqc.services.v1.GetSpotInstrumentRequest\x1a*.cqc.services.v1.GetSpotInstrumentResponse\x12d\n" +
+	"\x0fGetPerpContract\x12'.cqc.services.v1.GetPerpContractRequest\x1a(.cqc.services.v1.GetPerpContractResponse\x12j\n" +
+	"\x11GetFutureContract\x12).cqc.services.v1.GetFutureContractRequest\x1a*.cqc.services.v1.GetFutureContractResponse\x12d\n" +
+	"\x0fGetOptionSeries\x12'.cqc.services.v1.GetOptionSeriesRequest\x1a(.cqc.services.v1.GetOptionSeriesResponse\x12j\n" +
+	"\x11GetLendingDeposit\x12).cqc.services.v1.GetLendingDepositRequest\x1a*.cqc.services.v1.GetLendingDepositResponse\x12g\n" +
+	"\x10GetLendingBorrow\x12(.cqc.services.v1.GetLendingBorrowRequest\x1a).cqc.services.v1.GetLendingBorrowResponse\x12R\n" +
+	"\tGetMarket\x12!.cqc.services.v1.GetMarketRequest\x1a\".cqc.services.v1.GetMarketResponse\x12^\n" +
+	"\rResolveMarket\x12%.cqc.services.v1.ResolveMarketRequest\x1a&.cqc.services.v1.ResolveMarketResponse\x12^\n" +
+	"\rGetIdentifier\x12%.cqc.services.v1.GetIdentifierRequest\x1a&.cqc.services.v1.GetIdentifierResponse\x12d\n" +
+	"\x0fListIdentifiers\x12'.cqc.services.v1.ListIdentifiersRequest\x1a(.cqc.services.v1.ListIdentifiersResponse\x12X\n" +
 	"\vCreateVenue\x12#.cqc.services.v1.CreateVenueRequest\x1a$.cqc.services.v1.CreateVenueResponse\x12O\n" +
 	"\bGetVenue\x12 .cqc.services.v1.GetVenueRequest\x1a!.cqc.services.v1.GetVenueResponse\x12U\n" +
 	"\n" +
 	"ListVenues\x12\".cqc.services.v1.ListVenuesRequest\x1a#.cqc.services.v1.ListVenuesResponse\x12g\n" +
 	"\x10CreateVenueAsset\x12(.cqc.services.v1.CreateVenueAssetRequest\x1a).cqc.services.v1.CreateVenueAssetResponse\x12^\n" +
 	"\rGetVenueAsset\x12%.cqc.services.v1.GetVenueAssetRequest\x1a&.cqc.services.v1.GetVenueAssetResponse\x12d\n" +
-	"\x0fListVenueAssets\x12'.cqc.services.v1.ListVenueAssetsRequest\x1a(.cqc.services.v1.ListVenueAssetsResponse\x12j\n" +
-	"\x11CreateVenueSymbol\x12).cqc.services.v1.CreateVenueSymbolRequest\x1a*.cqc.services.v1.CreateVenueSymbolResponse\x12a\n" +
-	"\x0eGetVenueSymbol\x12&.cqc.services.v1.GetVenueSymbolRequest\x1a'.cqc.services.v1.GetVenueSymbolResponse\x12g\n" +
-	"\x10ListVenueSymbols\x12(.cqc.services.v1.ListVenueSymbolsRequest\x1a).cqc.services.v1.ListVenueSymbolsResponseBBZ@github.com/Combine-Capital/cqc/gen/go/cqc/services/v1;servicesv1b\x06proto3"
+	"\x0fListVenueAssets\x12'.cqc.services.v1.ListVenueAssetsRequest\x1a(.cqc.services.v1.ListVenueAssetsResponseBBZ@github.com/Combine-Capital/cqc/gen/go/cqc/services/v1;servicesv1b\x06proto3"
 
 var (
 	file_proto_services_v1_asset_registry_proto_rawDescOnce sync.Once
@@ -5015,7 +4684,7 @@ func file_proto_services_v1_asset_registry_proto_rawDescGZIP() []byte {
 	return file_proto_services_v1_asset_registry_proto_rawDescData
 }
 
-var file_proto_services_v1_asset_registry_proto_msgTypes = make([]protoimpl.MessageInfo, 84)
+var file_proto_services_v1_asset_registry_proto_msgTypes = make([]protoimpl.MessageInfo, 82)
 var file_proto_services_v1_asset_registry_proto_goTypes = []any{
 	(*CreateAssetRequest)(nil),              // 0: cqc.services.v1.CreateAssetRequest
 	(*CreateAssetResponse)(nil),             // 1: cqc.services.v1.CreateAssetResponse
@@ -5065,210 +4734,204 @@ var file_proto_services_v1_asset_registry_proto_goTypes = []any{
 	(*GetChainResponse)(nil),                // 45: cqc.services.v1.GetChainResponse
 	(*ListChainsRequest)(nil),               // 46: cqc.services.v1.ListChainsRequest
 	(*ListChainsResponse)(nil),              // 47: cqc.services.v1.ListChainsResponse
-	(*CreateSymbolRequest)(nil),             // 48: cqc.services.v1.CreateSymbolRequest
-	(*CreateSymbolResponse)(nil),            // 49: cqc.services.v1.CreateSymbolResponse
-	(*GetSymbolRequest)(nil),                // 50: cqc.services.v1.GetSymbolRequest
-	(*GetSymbolResponse)(nil),               // 51: cqc.services.v1.GetSymbolResponse
-	(*UpdateSymbolRequest)(nil),             // 52: cqc.services.v1.UpdateSymbolRequest
-	(*UpdateSymbolResponse)(nil),            // 53: cqc.services.v1.UpdateSymbolResponse
-	(*DeleteSymbolRequest)(nil),             // 54: cqc.services.v1.DeleteSymbolRequest
-	(*DeleteSymbolResponse)(nil),            // 55: cqc.services.v1.DeleteSymbolResponse
-	(*ListSymbolsRequest)(nil),              // 56: cqc.services.v1.ListSymbolsRequest
-	(*ListSymbolsResponse)(nil),             // 57: cqc.services.v1.ListSymbolsResponse
-	(*SearchSymbolsRequest)(nil),            // 58: cqc.services.v1.SearchSymbolsRequest
-	(*SearchSymbolsResponse)(nil),           // 59: cqc.services.v1.SearchSymbolsResponse
-	(*CreateSymbolIdentifierRequest)(nil),   // 60: cqc.services.v1.CreateSymbolIdentifierRequest
-	(*CreateSymbolIdentifierResponse)(nil),  // 61: cqc.services.v1.CreateSymbolIdentifierResponse
-	(*GetSymbolIdentifierRequest)(nil),      // 62: cqc.services.v1.GetSymbolIdentifierRequest
-	(*GetSymbolIdentifierResponse)(nil),     // 63: cqc.services.v1.GetSymbolIdentifierResponse
-	(*ListSymbolIdentifiersRequest)(nil),    // 64: cqc.services.v1.ListSymbolIdentifiersRequest
-	(*ListSymbolIdentifiersResponse)(nil),   // 65: cqc.services.v1.ListSymbolIdentifiersResponse
-	(*CreateVenueRequest)(nil),              // 66: cqc.services.v1.CreateVenueRequest
-	(*CreateVenueResponse)(nil),             // 67: cqc.services.v1.CreateVenueResponse
-	(*GetVenueRequest)(nil),                 // 68: cqc.services.v1.GetVenueRequest
-	(*GetVenueResponse)(nil),                // 69: cqc.services.v1.GetVenueResponse
-	(*ListVenuesRequest)(nil),               // 70: cqc.services.v1.ListVenuesRequest
-	(*ListVenuesResponse)(nil),              // 71: cqc.services.v1.ListVenuesResponse
-	(*CreateVenueAssetRequest)(nil),         // 72: cqc.services.v1.CreateVenueAssetRequest
-	(*CreateVenueAssetResponse)(nil),        // 73: cqc.services.v1.CreateVenueAssetResponse
-	(*GetVenueAssetRequest)(nil),            // 74: cqc.services.v1.GetVenueAssetRequest
-	(*GetVenueAssetResponse)(nil),           // 75: cqc.services.v1.GetVenueAssetResponse
-	(*ListVenueAssetsRequest)(nil),          // 76: cqc.services.v1.ListVenueAssetsRequest
-	(*ListVenueAssetsResponse)(nil),         // 77: cqc.services.v1.ListVenueAssetsResponse
-	(*CreateVenueSymbolRequest)(nil),        // 78: cqc.services.v1.CreateVenueSymbolRequest
-	(*CreateVenueSymbolResponse)(nil),       // 79: cqc.services.v1.CreateVenueSymbolResponse
-	(*GetVenueSymbolRequest)(nil),           // 80: cqc.services.v1.GetVenueSymbolRequest
-	(*GetVenueSymbolResponse)(nil),          // 81: cqc.services.v1.GetVenueSymbolResponse
-	(*ListVenueSymbolsRequest)(nil),         // 82: cqc.services.v1.ListVenueSymbolsRequest
-	(*ListVenueSymbolsResponse)(nil),        // 83: cqc.services.v1.ListVenueSymbolsResponse
-	(v1.AssetType)(0),                       // 84: cqc.assets.v1.AssetType
-	(*v1.Asset)(nil),                        // 85: cqc.assets.v1.Asset
-	(*v1.AssetDeployment)(nil),              // 86: cqc.assets.v1.AssetDeployment
-	(v1.DataSource)(0),                      // 87: cqc.assets.v1.DataSource
-	(*v1.AssetIdentifier)(nil),              // 88: cqc.assets.v1.AssetIdentifier
-	(v1.RelationshipType)(0),                // 89: cqc.assets.v1.RelationshipType
-	(*v1.AssetRelationship)(nil),            // 90: cqc.assets.v1.AssetRelationship
-	(*v1.AssetGroup)(nil),                   // 91: cqc.assets.v1.AssetGroup
-	(*v1.AssetGroupMember)(nil),             // 92: cqc.assets.v1.AssetGroupMember
-	(v1.FlagType)(0),                        // 93: cqc.assets.v1.FlagType
-	(v1.FlagSeverity)(0),                    // 94: cqc.assets.v1.FlagSeverity
-	(*v1.AssetQualityFlag)(nil),             // 95: cqc.assets.v1.AssetQualityFlag
-	(*v1.Chain)(nil),                        // 96: cqc.assets.v1.Chain
-	(v11.SymbolType)(0),                     // 97: cqc.markets.v1.SymbolType
-	(*v11.Symbol)(nil),                      // 98: cqc.markets.v1.Symbol
-	(v11.DataSource)(0),                     // 99: cqc.markets.v1.DataSource
-	(*v11.SymbolIdentifier)(nil),            // 100: cqc.markets.v1.SymbolIdentifier
-	(v12.VenueType)(0),                      // 101: cqc.venues.v1.VenueType
-	(*v12.Venue)(nil),                       // 102: cqc.venues.v1.Venue
-	(*v12.VenueAsset)(nil),                  // 103: cqc.venues.v1.VenueAsset
-	(*v12.VenueSymbol)(nil),                 // 104: cqc.venues.v1.VenueSymbol
+	(*GetInstrumentRequest)(nil),            // 48: cqc.services.v1.GetInstrumentRequest
+	(*GetInstrumentResponse)(nil),           // 49: cqc.services.v1.GetInstrumentResponse
+	(*GetSpotInstrumentRequest)(nil),        // 50: cqc.services.v1.GetSpotInstrumentRequest
+	(*GetSpotInstrumentResponse)(nil),       // 51: cqc.services.v1.GetSpotInstrumentResponse
+	(*GetPerpContractRequest)(nil),          // 52: cqc.services.v1.GetPerpContractRequest
+	(*GetPerpContractResponse)(nil),         // 53: cqc.services.v1.GetPerpContractResponse
+	(*GetFutureContractRequest)(nil),        // 54: cqc.services.v1.GetFutureContractRequest
+	(*GetFutureContractResponse)(nil),       // 55: cqc.services.v1.GetFutureContractResponse
+	(*GetOptionSeriesRequest)(nil),          // 56: cqc.services.v1.GetOptionSeriesRequest
+	(*GetOptionSeriesResponse)(nil),         // 57: cqc.services.v1.GetOptionSeriesResponse
+	(*GetLendingDepositRequest)(nil),        // 58: cqc.services.v1.GetLendingDepositRequest
+	(*GetLendingDepositResponse)(nil),       // 59: cqc.services.v1.GetLendingDepositResponse
+	(*GetLendingBorrowRequest)(nil),         // 60: cqc.services.v1.GetLendingBorrowRequest
+	(*GetLendingBorrowResponse)(nil),        // 61: cqc.services.v1.GetLendingBorrowResponse
+	(*GetMarketRequest)(nil),                // 62: cqc.services.v1.GetMarketRequest
+	(*GetMarketResponse)(nil),               // 63: cqc.services.v1.GetMarketResponse
+	(*ResolveMarketRequest)(nil),            // 64: cqc.services.v1.ResolveMarketRequest
+	(*ResolveMarketResponse)(nil),           // 65: cqc.services.v1.ResolveMarketResponse
+	(*GetIdentifierRequest)(nil),            // 66: cqc.services.v1.GetIdentifierRequest
+	(*GetIdentifierResponse)(nil),           // 67: cqc.services.v1.GetIdentifierResponse
+	(*ListIdentifiersRequest)(nil),          // 68: cqc.services.v1.ListIdentifiersRequest
+	(*ListIdentifiersResponse)(nil),         // 69: cqc.services.v1.ListIdentifiersResponse
+	(*CreateVenueRequest)(nil),              // 70: cqc.services.v1.CreateVenueRequest
+	(*CreateVenueResponse)(nil),             // 71: cqc.services.v1.CreateVenueResponse
+	(*GetVenueRequest)(nil),                 // 72: cqc.services.v1.GetVenueRequest
+	(*GetVenueResponse)(nil),                // 73: cqc.services.v1.GetVenueResponse
+	(*ListVenuesRequest)(nil),               // 74: cqc.services.v1.ListVenuesRequest
+	(*ListVenuesResponse)(nil),              // 75: cqc.services.v1.ListVenuesResponse
+	(*CreateVenueAssetRequest)(nil),         // 76: cqc.services.v1.CreateVenueAssetRequest
+	(*CreateVenueAssetResponse)(nil),        // 77: cqc.services.v1.CreateVenueAssetResponse
+	(*GetVenueAssetRequest)(nil),            // 78: cqc.services.v1.GetVenueAssetRequest
+	(*GetVenueAssetResponse)(nil),           // 79: cqc.services.v1.GetVenueAssetResponse
+	(*ListVenueAssetsRequest)(nil),          // 80: cqc.services.v1.ListVenueAssetsRequest
+	(*ListVenueAssetsResponse)(nil),         // 81: cqc.services.v1.ListVenueAssetsResponse
+	(v1.AssetType)(0),                       // 82: cqc.assets.v1.AssetType
+	(*v1.Asset)(nil),                        // 83: cqc.assets.v1.Asset
+	(*v1.AssetDeployment)(nil),              // 84: cqc.assets.v1.AssetDeployment
+	(v1.DataSource)(0),                      // 85: cqc.assets.v1.DataSource
+	(*v1.AssetIdentifier)(nil),              // 86: cqc.assets.v1.AssetIdentifier
+	(v1.RelationshipType)(0),                // 87: cqc.assets.v1.RelationshipType
+	(*v1.AssetRelationship)(nil),            // 88: cqc.assets.v1.AssetRelationship
+	(*v1.AssetGroup)(nil),                   // 89: cqc.assets.v1.AssetGroup
+	(*v1.AssetGroupMember)(nil),             // 90: cqc.assets.v1.AssetGroupMember
+	(v1.FlagType)(0),                        // 91: cqc.assets.v1.FlagType
+	(v1.FlagSeverity)(0),                    // 92: cqc.assets.v1.FlagSeverity
+	(*v1.AssetQualityFlag)(nil),             // 93: cqc.assets.v1.AssetQualityFlag
+	(*v1.Chain)(nil),                        // 94: cqc.assets.v1.Chain
+	(*v11.Instrument)(nil),                  // 95: cqc.markets.v1.Instrument
+	(*v11.SpotInstrument)(nil),              // 96: cqc.markets.v1.SpotInstrument
+	(*v11.PerpContract)(nil),                // 97: cqc.markets.v1.PerpContract
+	(*v11.FutureContract)(nil),              // 98: cqc.markets.v1.FutureContract
+	(*v11.OptionSeries)(nil),                // 99: cqc.markets.v1.OptionSeries
+	(*v11.LendingDeposit)(nil),              // 100: cqc.markets.v1.LendingDeposit
+	(*v11.LendingBorrow)(nil),               // 101: cqc.markets.v1.LendingBorrow
+	(*v11.Market)(nil),                      // 102: cqc.markets.v1.Market
+	(*v12.Identifier)(nil),                  // 103: cqc.identifiers.v1.Identifier
+	(v13.VenueType)(0),                      // 104: cqc.venues.v1.VenueType
+	(*v13.Venue)(nil),                       // 105: cqc.venues.v1.Venue
+	(*v13.VenueAsset)(nil),                  // 106: cqc.venues.v1.VenueAsset
 }
 var file_proto_services_v1_asset_registry_proto_depIdxs = []int32{
-	84,  // 0: cqc.services.v1.CreateAssetRequest.asset_type:type_name -> cqc.assets.v1.AssetType
-	85,  // 1: cqc.services.v1.CreateAssetResponse.asset:type_name -> cqc.assets.v1.Asset
-	85,  // 2: cqc.services.v1.GetAssetResponse.asset:type_name -> cqc.assets.v1.Asset
-	84,  // 3: cqc.services.v1.UpdateAssetRequest.asset_type:type_name -> cqc.assets.v1.AssetType
-	85,  // 4: cqc.services.v1.UpdateAssetResponse.asset:type_name -> cqc.assets.v1.Asset
-	84,  // 5: cqc.services.v1.ListAssetsRequest.asset_type:type_name -> cqc.assets.v1.AssetType
-	85,  // 6: cqc.services.v1.ListAssetsResponse.assets:type_name -> cqc.assets.v1.Asset
-	85,  // 7: cqc.services.v1.SearchAssetsResponse.assets:type_name -> cqc.assets.v1.Asset
-	86,  // 8: cqc.services.v1.CreateAssetDeploymentResponse.deployment:type_name -> cqc.assets.v1.AssetDeployment
-	86,  // 9: cqc.services.v1.GetAssetDeploymentResponse.deployment:type_name -> cqc.assets.v1.AssetDeployment
-	86,  // 10: cqc.services.v1.ListAssetDeploymentsResponse.deployments:type_name -> cqc.assets.v1.AssetDeployment
-	87,  // 11: cqc.services.v1.CreateAssetIdentifierRequest.source:type_name -> cqc.assets.v1.DataSource
-	88,  // 12: cqc.services.v1.CreateAssetIdentifierResponse.identifier:type_name -> cqc.assets.v1.AssetIdentifier
-	87,  // 13: cqc.services.v1.GetAssetIdentifierRequest.source:type_name -> cqc.assets.v1.DataSource
-	88,  // 14: cqc.services.v1.GetAssetIdentifierResponse.identifier:type_name -> cqc.assets.v1.AssetIdentifier
-	88,  // 15: cqc.services.v1.ListAssetIdentifiersResponse.identifiers:type_name -> cqc.assets.v1.AssetIdentifier
-	89,  // 16: cqc.services.v1.CreateAssetRelationshipRequest.relationship_type:type_name -> cqc.assets.v1.RelationshipType
-	90,  // 17: cqc.services.v1.CreateAssetRelationshipResponse.relationship:type_name -> cqc.assets.v1.AssetRelationship
-	89,  // 18: cqc.services.v1.ListAssetRelationshipsRequest.relationship_type:type_name -> cqc.assets.v1.RelationshipType
-	90,  // 19: cqc.services.v1.ListAssetRelationshipsResponse.relationships:type_name -> cqc.assets.v1.AssetRelationship
-	91,  // 20: cqc.services.v1.CreateAssetGroupResponse.group:type_name -> cqc.assets.v1.AssetGroup
-	91,  // 21: cqc.services.v1.GetAssetGroupResponse.group:type_name -> cqc.assets.v1.AssetGroup
-	92,  // 22: cqc.services.v1.AddAssetToGroupResponse.member:type_name -> cqc.assets.v1.AssetGroupMember
-	93,  // 23: cqc.services.v1.RaiseQualityFlagRequest.flag_type:type_name -> cqc.assets.v1.FlagType
-	94,  // 24: cqc.services.v1.RaiseQualityFlagRequest.severity:type_name -> cqc.assets.v1.FlagSeverity
-	95,  // 25: cqc.services.v1.RaiseQualityFlagResponse.flag:type_name -> cqc.assets.v1.AssetQualityFlag
-	95,  // 26: cqc.services.v1.ResolveQualityFlagResponse.flag:type_name -> cqc.assets.v1.AssetQualityFlag
-	94,  // 27: cqc.services.v1.ListQualityFlagsRequest.min_severity:type_name -> cqc.assets.v1.FlagSeverity
-	95,  // 28: cqc.services.v1.ListQualityFlagsResponse.flags:type_name -> cqc.assets.v1.AssetQualityFlag
-	96,  // 29: cqc.services.v1.CreateChainResponse.chain:type_name -> cqc.assets.v1.Chain
-	96,  // 30: cqc.services.v1.GetChainResponse.chain:type_name -> cqc.assets.v1.Chain
-	96,  // 31: cqc.services.v1.ListChainsResponse.chains:type_name -> cqc.assets.v1.Chain
-	97,  // 32: cqc.services.v1.CreateSymbolRequest.symbol_type:type_name -> cqc.markets.v1.SymbolType
-	98,  // 33: cqc.services.v1.CreateSymbolResponse.symbol:type_name -> cqc.markets.v1.Symbol
-	98,  // 34: cqc.services.v1.GetSymbolResponse.symbol:type_name -> cqc.markets.v1.Symbol
-	97,  // 35: cqc.services.v1.UpdateSymbolRequest.symbol_type:type_name -> cqc.markets.v1.SymbolType
-	98,  // 36: cqc.services.v1.UpdateSymbolResponse.symbol:type_name -> cqc.markets.v1.Symbol
-	97,  // 37: cqc.services.v1.ListSymbolsRequest.symbol_type:type_name -> cqc.markets.v1.SymbolType
-	98,  // 38: cqc.services.v1.ListSymbolsResponse.symbols:type_name -> cqc.markets.v1.Symbol
-	98,  // 39: cqc.services.v1.SearchSymbolsResponse.symbols:type_name -> cqc.markets.v1.Symbol
-	99,  // 40: cqc.services.v1.CreateSymbolIdentifierRequest.data_source:type_name -> cqc.markets.v1.DataSource
-	100, // 41: cqc.services.v1.CreateSymbolIdentifierResponse.identifier:type_name -> cqc.markets.v1.SymbolIdentifier
-	99,  // 42: cqc.services.v1.GetSymbolIdentifierRequest.data_source:type_name -> cqc.markets.v1.DataSource
-	100, // 43: cqc.services.v1.GetSymbolIdentifierResponse.identifier:type_name -> cqc.markets.v1.SymbolIdentifier
-	100, // 44: cqc.services.v1.ListSymbolIdentifiersResponse.identifiers:type_name -> cqc.markets.v1.SymbolIdentifier
-	101, // 45: cqc.services.v1.CreateVenueRequest.venue_type:type_name -> cqc.venues.v1.VenueType
-	102, // 46: cqc.services.v1.CreateVenueResponse.venue:type_name -> cqc.venues.v1.Venue
-	102, // 47: cqc.services.v1.GetVenueResponse.venue:type_name -> cqc.venues.v1.Venue
-	101, // 48: cqc.services.v1.ListVenuesRequest.venue_type:type_name -> cqc.venues.v1.VenueType
-	102, // 49: cqc.services.v1.ListVenuesResponse.venues:type_name -> cqc.venues.v1.Venue
-	103, // 50: cqc.services.v1.CreateVenueAssetResponse.venue_asset:type_name -> cqc.venues.v1.VenueAsset
-	103, // 51: cqc.services.v1.GetVenueAssetResponse.venue_asset:type_name -> cqc.venues.v1.VenueAsset
-	103, // 52: cqc.services.v1.ListVenueAssetsResponse.venue_assets:type_name -> cqc.venues.v1.VenueAsset
-	104, // 53: cqc.services.v1.CreateVenueSymbolResponse.venue_symbol:type_name -> cqc.venues.v1.VenueSymbol
-	104, // 54: cqc.services.v1.GetVenueSymbolResponse.venue_symbol:type_name -> cqc.venues.v1.VenueSymbol
-	104, // 55: cqc.services.v1.ListVenueSymbolsResponse.venue_symbols:type_name -> cqc.venues.v1.VenueSymbol
-	0,   // 56: cqc.services.v1.AssetRegistry.CreateAsset:input_type -> cqc.services.v1.CreateAssetRequest
-	2,   // 57: cqc.services.v1.AssetRegistry.GetAsset:input_type -> cqc.services.v1.GetAssetRequest
-	4,   // 58: cqc.services.v1.AssetRegistry.UpdateAsset:input_type -> cqc.services.v1.UpdateAssetRequest
-	6,   // 59: cqc.services.v1.AssetRegistry.DeleteAsset:input_type -> cqc.services.v1.DeleteAssetRequest
-	8,   // 60: cqc.services.v1.AssetRegistry.ListAssets:input_type -> cqc.services.v1.ListAssetsRequest
-	10,  // 61: cqc.services.v1.AssetRegistry.SearchAssets:input_type -> cqc.services.v1.SearchAssetsRequest
-	12,  // 62: cqc.services.v1.AssetRegistry.CreateAssetDeployment:input_type -> cqc.services.v1.CreateAssetDeploymentRequest
-	14,  // 63: cqc.services.v1.AssetRegistry.GetAssetDeployment:input_type -> cqc.services.v1.GetAssetDeploymentRequest
-	16,  // 64: cqc.services.v1.AssetRegistry.ListAssetDeployments:input_type -> cqc.services.v1.ListAssetDeploymentsRequest
-	18,  // 65: cqc.services.v1.AssetRegistry.CreateAssetIdentifier:input_type -> cqc.services.v1.CreateAssetIdentifierRequest
-	20,  // 66: cqc.services.v1.AssetRegistry.GetAssetIdentifier:input_type -> cqc.services.v1.GetAssetIdentifierRequest
-	22,  // 67: cqc.services.v1.AssetRegistry.ListAssetIdentifiers:input_type -> cqc.services.v1.ListAssetIdentifiersRequest
-	24,  // 68: cqc.services.v1.AssetRegistry.CreateAssetRelationship:input_type -> cqc.services.v1.CreateAssetRelationshipRequest
-	26,  // 69: cqc.services.v1.AssetRegistry.ListAssetRelationships:input_type -> cqc.services.v1.ListAssetRelationshipsRequest
-	28,  // 70: cqc.services.v1.AssetRegistry.CreateAssetGroup:input_type -> cqc.services.v1.CreateAssetGroupRequest
-	30,  // 71: cqc.services.v1.AssetRegistry.GetAssetGroup:input_type -> cqc.services.v1.GetAssetGroupRequest
-	32,  // 72: cqc.services.v1.AssetRegistry.AddAssetToGroup:input_type -> cqc.services.v1.AddAssetToGroupRequest
-	34,  // 73: cqc.services.v1.AssetRegistry.RemoveAssetFromGroup:input_type -> cqc.services.v1.RemoveAssetFromGroupRequest
-	36,  // 74: cqc.services.v1.AssetRegistry.RaiseQualityFlag:input_type -> cqc.services.v1.RaiseQualityFlagRequest
-	38,  // 75: cqc.services.v1.AssetRegistry.ResolveQualityFlag:input_type -> cqc.services.v1.ResolveQualityFlagRequest
-	40,  // 76: cqc.services.v1.AssetRegistry.ListQualityFlags:input_type -> cqc.services.v1.ListQualityFlagsRequest
-	42,  // 77: cqc.services.v1.AssetRegistry.CreateChain:input_type -> cqc.services.v1.CreateChainRequest
-	44,  // 78: cqc.services.v1.AssetRegistry.GetChain:input_type -> cqc.services.v1.GetChainRequest
-	46,  // 79: cqc.services.v1.AssetRegistry.ListChains:input_type -> cqc.services.v1.ListChainsRequest
-	48,  // 80: cqc.services.v1.AssetRegistry.CreateSymbol:input_type -> cqc.services.v1.CreateSymbolRequest
-	50,  // 81: cqc.services.v1.AssetRegistry.GetSymbol:input_type -> cqc.services.v1.GetSymbolRequest
-	52,  // 82: cqc.services.v1.AssetRegistry.UpdateSymbol:input_type -> cqc.services.v1.UpdateSymbolRequest
-	54,  // 83: cqc.services.v1.AssetRegistry.DeleteSymbol:input_type -> cqc.services.v1.DeleteSymbolRequest
-	56,  // 84: cqc.services.v1.AssetRegistry.ListSymbols:input_type -> cqc.services.v1.ListSymbolsRequest
-	58,  // 85: cqc.services.v1.AssetRegistry.SearchSymbols:input_type -> cqc.services.v1.SearchSymbolsRequest
-	60,  // 86: cqc.services.v1.AssetRegistry.CreateSymbolIdentifier:input_type -> cqc.services.v1.CreateSymbolIdentifierRequest
-	62,  // 87: cqc.services.v1.AssetRegistry.GetSymbolIdentifier:input_type -> cqc.services.v1.GetSymbolIdentifierRequest
-	64,  // 88: cqc.services.v1.AssetRegistry.ListSymbolIdentifiers:input_type -> cqc.services.v1.ListSymbolIdentifiersRequest
-	66,  // 89: cqc.services.v1.AssetRegistry.CreateVenue:input_type -> cqc.services.v1.CreateVenueRequest
-	68,  // 90: cqc.services.v1.AssetRegistry.GetVenue:input_type -> cqc.services.v1.GetVenueRequest
-	70,  // 91: cqc.services.v1.AssetRegistry.ListVenues:input_type -> cqc.services.v1.ListVenuesRequest
-	72,  // 92: cqc.services.v1.AssetRegistry.CreateVenueAsset:input_type -> cqc.services.v1.CreateVenueAssetRequest
-	74,  // 93: cqc.services.v1.AssetRegistry.GetVenueAsset:input_type -> cqc.services.v1.GetVenueAssetRequest
-	76,  // 94: cqc.services.v1.AssetRegistry.ListVenueAssets:input_type -> cqc.services.v1.ListVenueAssetsRequest
-	78,  // 95: cqc.services.v1.AssetRegistry.CreateVenueSymbol:input_type -> cqc.services.v1.CreateVenueSymbolRequest
-	80,  // 96: cqc.services.v1.AssetRegistry.GetVenueSymbol:input_type -> cqc.services.v1.GetVenueSymbolRequest
-	82,  // 97: cqc.services.v1.AssetRegistry.ListVenueSymbols:input_type -> cqc.services.v1.ListVenueSymbolsRequest
-	1,   // 98: cqc.services.v1.AssetRegistry.CreateAsset:output_type -> cqc.services.v1.CreateAssetResponse
-	3,   // 99: cqc.services.v1.AssetRegistry.GetAsset:output_type -> cqc.services.v1.GetAssetResponse
-	5,   // 100: cqc.services.v1.AssetRegistry.UpdateAsset:output_type -> cqc.services.v1.UpdateAssetResponse
-	7,   // 101: cqc.services.v1.AssetRegistry.DeleteAsset:output_type -> cqc.services.v1.DeleteAssetResponse
-	9,   // 102: cqc.services.v1.AssetRegistry.ListAssets:output_type -> cqc.services.v1.ListAssetsResponse
-	11,  // 103: cqc.services.v1.AssetRegistry.SearchAssets:output_type -> cqc.services.v1.SearchAssetsResponse
-	13,  // 104: cqc.services.v1.AssetRegistry.CreateAssetDeployment:output_type -> cqc.services.v1.CreateAssetDeploymentResponse
-	15,  // 105: cqc.services.v1.AssetRegistry.GetAssetDeployment:output_type -> cqc.services.v1.GetAssetDeploymentResponse
-	17,  // 106: cqc.services.v1.AssetRegistry.ListAssetDeployments:output_type -> cqc.services.v1.ListAssetDeploymentsResponse
-	19,  // 107: cqc.services.v1.AssetRegistry.CreateAssetIdentifier:output_type -> cqc.services.v1.CreateAssetIdentifierResponse
-	21,  // 108: cqc.services.v1.AssetRegistry.GetAssetIdentifier:output_type -> cqc.services.v1.GetAssetIdentifierResponse
-	23,  // 109: cqc.services.v1.AssetRegistry.ListAssetIdentifiers:output_type -> cqc.services.v1.ListAssetIdentifiersResponse
-	25,  // 110: cqc.services.v1.AssetRegistry.CreateAssetRelationship:output_type -> cqc.services.v1.CreateAssetRelationshipResponse
-	27,  // 111: cqc.services.v1.AssetRegistry.ListAssetRelationships:output_type -> cqc.services.v1.ListAssetRelationshipsResponse
-	29,  // 112: cqc.services.v1.AssetRegistry.CreateAssetGroup:output_type -> cqc.services.v1.CreateAssetGroupResponse
-	31,  // 113: cqc.services.v1.AssetRegistry.GetAssetGroup:output_type -> cqc.services.v1.GetAssetGroupResponse
-	33,  // 114: cqc.services.v1.AssetRegistry.AddAssetToGroup:output_type -> cqc.services.v1.AddAssetToGroupResponse
-	35,  // 115: cqc.services.v1.AssetRegistry.RemoveAssetFromGroup:output_type -> cqc.services.v1.RemoveAssetFromGroupResponse
-	37,  // 116: cqc.services.v1.AssetRegistry.RaiseQualityFlag:output_type -> cqc.services.v1.RaiseQualityFlagResponse
-	39,  // 117: cqc.services.v1.AssetRegistry.ResolveQualityFlag:output_type -> cqc.services.v1.ResolveQualityFlagResponse
-	41,  // 118: cqc.services.v1.AssetRegistry.ListQualityFlags:output_type -> cqc.services.v1.ListQualityFlagsResponse
-	43,  // 119: cqc.services.v1.AssetRegistry.CreateChain:output_type -> cqc.services.v1.CreateChainResponse
-	45,  // 120: cqc.services.v1.AssetRegistry.GetChain:output_type -> cqc.services.v1.GetChainResponse
-	47,  // 121: cqc.services.v1.AssetRegistry.ListChains:output_type -> cqc.services.v1.ListChainsResponse
-	49,  // 122: cqc.services.v1.AssetRegistry.CreateSymbol:output_type -> cqc.services.v1.CreateSymbolResponse
-	51,  // 123: cqc.services.v1.AssetRegistry.GetSymbol:output_type -> cqc.services.v1.GetSymbolResponse
-	53,  // 124: cqc.services.v1.AssetRegistry.UpdateSymbol:output_type -> cqc.services.v1.UpdateSymbolResponse
-	55,  // 125: cqc.services.v1.AssetRegistry.DeleteSymbol:output_type -> cqc.services.v1.DeleteSymbolResponse
-	57,  // 126: cqc.services.v1.AssetRegistry.ListSymbols:output_type -> cqc.services.v1.ListSymbolsResponse
-	59,  // 127: cqc.services.v1.AssetRegistry.SearchSymbols:output_type -> cqc.services.v1.SearchSymbolsResponse
-	61,  // 128: cqc.services.v1.AssetRegistry.CreateSymbolIdentifier:output_type -> cqc.services.v1.CreateSymbolIdentifierResponse
-	63,  // 129: cqc.services.v1.AssetRegistry.GetSymbolIdentifier:output_type -> cqc.services.v1.GetSymbolIdentifierResponse
-	65,  // 130: cqc.services.v1.AssetRegistry.ListSymbolIdentifiers:output_type -> cqc.services.v1.ListSymbolIdentifiersResponse
-	67,  // 131: cqc.services.v1.AssetRegistry.CreateVenue:output_type -> cqc.services.v1.CreateVenueResponse
-	69,  // 132: cqc.services.v1.AssetRegistry.GetVenue:output_type -> cqc.services.v1.GetVenueResponse
-	71,  // 133: cqc.services.v1.AssetRegistry.ListVenues:output_type -> cqc.services.v1.ListVenuesResponse
-	73,  // 134: cqc.services.v1.AssetRegistry.CreateVenueAsset:output_type -> cqc.services.v1.CreateVenueAssetResponse
-	75,  // 135: cqc.services.v1.AssetRegistry.GetVenueAsset:output_type -> cqc.services.v1.GetVenueAssetResponse
-	77,  // 136: cqc.services.v1.AssetRegistry.ListVenueAssets:output_type -> cqc.services.v1.ListVenueAssetsResponse
-	79,  // 137: cqc.services.v1.AssetRegistry.CreateVenueSymbol:output_type -> cqc.services.v1.CreateVenueSymbolResponse
-	81,  // 138: cqc.services.v1.AssetRegistry.GetVenueSymbol:output_type -> cqc.services.v1.GetVenueSymbolResponse
-	83,  // 139: cqc.services.v1.AssetRegistry.ListVenueSymbols:output_type -> cqc.services.v1.ListVenueSymbolsResponse
-	98,  // [98:140] is the sub-list for method output_type
-	56,  // [56:98] is the sub-list for method input_type
-	56,  // [56:56] is the sub-list for extension type_name
-	56,  // [56:56] is the sub-list for extension extendee
-	0,   // [0:56] is the sub-list for field type_name
+	82,  // 0: cqc.services.v1.CreateAssetRequest.asset_type:type_name -> cqc.assets.v1.AssetType
+	83,  // 1: cqc.services.v1.CreateAssetResponse.asset:type_name -> cqc.assets.v1.Asset
+	83,  // 2: cqc.services.v1.GetAssetResponse.asset:type_name -> cqc.assets.v1.Asset
+	82,  // 3: cqc.services.v1.UpdateAssetRequest.asset_type:type_name -> cqc.assets.v1.AssetType
+	83,  // 4: cqc.services.v1.UpdateAssetResponse.asset:type_name -> cqc.assets.v1.Asset
+	82,  // 5: cqc.services.v1.ListAssetsRequest.asset_type:type_name -> cqc.assets.v1.AssetType
+	83,  // 6: cqc.services.v1.ListAssetsResponse.assets:type_name -> cqc.assets.v1.Asset
+	83,  // 7: cqc.services.v1.SearchAssetsResponse.assets:type_name -> cqc.assets.v1.Asset
+	84,  // 8: cqc.services.v1.CreateAssetDeploymentResponse.deployment:type_name -> cqc.assets.v1.AssetDeployment
+	84,  // 9: cqc.services.v1.GetAssetDeploymentResponse.deployment:type_name -> cqc.assets.v1.AssetDeployment
+	84,  // 10: cqc.services.v1.ListAssetDeploymentsResponse.deployments:type_name -> cqc.assets.v1.AssetDeployment
+	85,  // 11: cqc.services.v1.CreateAssetIdentifierRequest.source:type_name -> cqc.assets.v1.DataSource
+	86,  // 12: cqc.services.v1.CreateAssetIdentifierResponse.identifier:type_name -> cqc.assets.v1.AssetIdentifier
+	85,  // 13: cqc.services.v1.GetAssetIdentifierRequest.source:type_name -> cqc.assets.v1.DataSource
+	86,  // 14: cqc.services.v1.GetAssetIdentifierResponse.identifier:type_name -> cqc.assets.v1.AssetIdentifier
+	86,  // 15: cqc.services.v1.ListAssetIdentifiersResponse.identifiers:type_name -> cqc.assets.v1.AssetIdentifier
+	87,  // 16: cqc.services.v1.CreateAssetRelationshipRequest.relationship_type:type_name -> cqc.assets.v1.RelationshipType
+	88,  // 17: cqc.services.v1.CreateAssetRelationshipResponse.relationship:type_name -> cqc.assets.v1.AssetRelationship
+	87,  // 18: cqc.services.v1.ListAssetRelationshipsRequest.relationship_type:type_name -> cqc.assets.v1.RelationshipType
+	88,  // 19: cqc.services.v1.ListAssetRelationshipsResponse.relationships:type_name -> cqc.assets.v1.AssetRelationship
+	89,  // 20: cqc.services.v1.CreateAssetGroupResponse.group:type_name -> cqc.assets.v1.AssetGroup
+	89,  // 21: cqc.services.v1.GetAssetGroupResponse.group:type_name -> cqc.assets.v1.AssetGroup
+	90,  // 22: cqc.services.v1.AddAssetToGroupResponse.member:type_name -> cqc.assets.v1.AssetGroupMember
+	91,  // 23: cqc.services.v1.RaiseQualityFlagRequest.flag_type:type_name -> cqc.assets.v1.FlagType
+	92,  // 24: cqc.services.v1.RaiseQualityFlagRequest.severity:type_name -> cqc.assets.v1.FlagSeverity
+	93,  // 25: cqc.services.v1.RaiseQualityFlagResponse.flag:type_name -> cqc.assets.v1.AssetQualityFlag
+	93,  // 26: cqc.services.v1.ResolveQualityFlagResponse.flag:type_name -> cqc.assets.v1.AssetQualityFlag
+	92,  // 27: cqc.services.v1.ListQualityFlagsRequest.min_severity:type_name -> cqc.assets.v1.FlagSeverity
+	93,  // 28: cqc.services.v1.ListQualityFlagsResponse.flags:type_name -> cqc.assets.v1.AssetQualityFlag
+	94,  // 29: cqc.services.v1.CreateChainResponse.chain:type_name -> cqc.assets.v1.Chain
+	94,  // 30: cqc.services.v1.GetChainResponse.chain:type_name -> cqc.assets.v1.Chain
+	94,  // 31: cqc.services.v1.ListChainsResponse.chains:type_name -> cqc.assets.v1.Chain
+	95,  // 32: cqc.services.v1.GetInstrumentResponse.instrument:type_name -> cqc.markets.v1.Instrument
+	96,  // 33: cqc.services.v1.GetSpotInstrumentResponse.spot_instrument:type_name -> cqc.markets.v1.SpotInstrument
+	97,  // 34: cqc.services.v1.GetPerpContractResponse.perp_contract:type_name -> cqc.markets.v1.PerpContract
+	98,  // 35: cqc.services.v1.GetFutureContractResponse.future_contract:type_name -> cqc.markets.v1.FutureContract
+	99,  // 36: cqc.services.v1.GetOptionSeriesResponse.option_series:type_name -> cqc.markets.v1.OptionSeries
+	100, // 37: cqc.services.v1.GetLendingDepositResponse.lending_deposit:type_name -> cqc.markets.v1.LendingDeposit
+	101, // 38: cqc.services.v1.GetLendingBorrowResponse.lending_borrow:type_name -> cqc.markets.v1.LendingBorrow
+	102, // 39: cqc.services.v1.GetMarketResponse.market:type_name -> cqc.markets.v1.Market
+	103, // 40: cqc.services.v1.GetIdentifierResponse.identifier:type_name -> cqc.identifiers.v1.Identifier
+	103, // 41: cqc.services.v1.ListIdentifiersResponse.identifiers:type_name -> cqc.identifiers.v1.Identifier
+	104, // 42: cqc.services.v1.CreateVenueRequest.venue_type:type_name -> cqc.venues.v1.VenueType
+	105, // 43: cqc.services.v1.CreateVenueResponse.venue:type_name -> cqc.venues.v1.Venue
+	105, // 44: cqc.services.v1.GetVenueResponse.venue:type_name -> cqc.venues.v1.Venue
+	104, // 45: cqc.services.v1.ListVenuesRequest.venue_type:type_name -> cqc.venues.v1.VenueType
+	105, // 46: cqc.services.v1.ListVenuesResponse.venues:type_name -> cqc.venues.v1.Venue
+	106, // 47: cqc.services.v1.CreateVenueAssetResponse.venue_asset:type_name -> cqc.venues.v1.VenueAsset
+	106, // 48: cqc.services.v1.GetVenueAssetResponse.venue_asset:type_name -> cqc.venues.v1.VenueAsset
+	106, // 49: cqc.services.v1.ListVenueAssetsResponse.venue_assets:type_name -> cqc.venues.v1.VenueAsset
+	0,   // 50: cqc.services.v1.AssetRegistry.CreateAsset:input_type -> cqc.services.v1.CreateAssetRequest
+	2,   // 51: cqc.services.v1.AssetRegistry.GetAsset:input_type -> cqc.services.v1.GetAssetRequest
+	4,   // 52: cqc.services.v1.AssetRegistry.UpdateAsset:input_type -> cqc.services.v1.UpdateAssetRequest
+	6,   // 53: cqc.services.v1.AssetRegistry.DeleteAsset:input_type -> cqc.services.v1.DeleteAssetRequest
+	8,   // 54: cqc.services.v1.AssetRegistry.ListAssets:input_type -> cqc.services.v1.ListAssetsRequest
+	10,  // 55: cqc.services.v1.AssetRegistry.SearchAssets:input_type -> cqc.services.v1.SearchAssetsRequest
+	12,  // 56: cqc.services.v1.AssetRegistry.CreateAssetDeployment:input_type -> cqc.services.v1.CreateAssetDeploymentRequest
+	14,  // 57: cqc.services.v1.AssetRegistry.GetAssetDeployment:input_type -> cqc.services.v1.GetAssetDeploymentRequest
+	16,  // 58: cqc.services.v1.AssetRegistry.ListAssetDeployments:input_type -> cqc.services.v1.ListAssetDeploymentsRequest
+	18,  // 59: cqc.services.v1.AssetRegistry.CreateAssetIdentifier:input_type -> cqc.services.v1.CreateAssetIdentifierRequest
+	20,  // 60: cqc.services.v1.AssetRegistry.GetAssetIdentifier:input_type -> cqc.services.v1.GetAssetIdentifierRequest
+	22,  // 61: cqc.services.v1.AssetRegistry.ListAssetIdentifiers:input_type -> cqc.services.v1.ListAssetIdentifiersRequest
+	24,  // 62: cqc.services.v1.AssetRegistry.CreateAssetRelationship:input_type -> cqc.services.v1.CreateAssetRelationshipRequest
+	26,  // 63: cqc.services.v1.AssetRegistry.ListAssetRelationships:input_type -> cqc.services.v1.ListAssetRelationshipsRequest
+	28,  // 64: cqc.services.v1.AssetRegistry.CreateAssetGroup:input_type -> cqc.services.v1.CreateAssetGroupRequest
+	30,  // 65: cqc.services.v1.AssetRegistry.GetAssetGroup:input_type -> cqc.services.v1.GetAssetGroupRequest
+	32,  // 66: cqc.services.v1.AssetRegistry.AddAssetToGroup:input_type -> cqc.services.v1.AddAssetToGroupRequest
+	34,  // 67: cqc.services.v1.AssetRegistry.RemoveAssetFromGroup:input_type -> cqc.services.v1.RemoveAssetFromGroupRequest
+	36,  // 68: cqc.services.v1.AssetRegistry.RaiseQualityFlag:input_type -> cqc.services.v1.RaiseQualityFlagRequest
+	38,  // 69: cqc.services.v1.AssetRegistry.ResolveQualityFlag:input_type -> cqc.services.v1.ResolveQualityFlagRequest
+	40,  // 70: cqc.services.v1.AssetRegistry.ListQualityFlags:input_type -> cqc.services.v1.ListQualityFlagsRequest
+	42,  // 71: cqc.services.v1.AssetRegistry.CreateChain:input_type -> cqc.services.v1.CreateChainRequest
+	44,  // 72: cqc.services.v1.AssetRegistry.GetChain:input_type -> cqc.services.v1.GetChainRequest
+	46,  // 73: cqc.services.v1.AssetRegistry.ListChains:input_type -> cqc.services.v1.ListChainsRequest
+	48,  // 74: cqc.services.v1.AssetRegistry.GetInstrument:input_type -> cqc.services.v1.GetInstrumentRequest
+	50,  // 75: cqc.services.v1.AssetRegistry.GetSpotInstrument:input_type -> cqc.services.v1.GetSpotInstrumentRequest
+	52,  // 76: cqc.services.v1.AssetRegistry.GetPerpContract:input_type -> cqc.services.v1.GetPerpContractRequest
+	54,  // 77: cqc.services.v1.AssetRegistry.GetFutureContract:input_type -> cqc.services.v1.GetFutureContractRequest
+	56,  // 78: cqc.services.v1.AssetRegistry.GetOptionSeries:input_type -> cqc.services.v1.GetOptionSeriesRequest
+	58,  // 79: cqc.services.v1.AssetRegistry.GetLendingDeposit:input_type -> cqc.services.v1.GetLendingDepositRequest
+	60,  // 80: cqc.services.v1.AssetRegistry.GetLendingBorrow:input_type -> cqc.services.v1.GetLendingBorrowRequest
+	62,  // 81: cqc.services.v1.AssetRegistry.GetMarket:input_type -> cqc.services.v1.GetMarketRequest
+	64,  // 82: cqc.services.v1.AssetRegistry.ResolveMarket:input_type -> cqc.services.v1.ResolveMarketRequest
+	66,  // 83: cqc.services.v1.AssetRegistry.GetIdentifier:input_type -> cqc.services.v1.GetIdentifierRequest
+	68,  // 84: cqc.services.v1.AssetRegistry.ListIdentifiers:input_type -> cqc.services.v1.ListIdentifiersRequest
+	70,  // 85: cqc.services.v1.AssetRegistry.CreateVenue:input_type -> cqc.services.v1.CreateVenueRequest
+	72,  // 86: cqc.services.v1.AssetRegistry.GetVenue:input_type -> cqc.services.v1.GetVenueRequest
+	74,  // 87: cqc.services.v1.AssetRegistry.ListVenues:input_type -> cqc.services.v1.ListVenuesRequest
+	76,  // 88: cqc.services.v1.AssetRegistry.CreateVenueAsset:input_type -> cqc.services.v1.CreateVenueAssetRequest
+	78,  // 89: cqc.services.v1.AssetRegistry.GetVenueAsset:input_type -> cqc.services.v1.GetVenueAssetRequest
+	80,  // 90: cqc.services.v1.AssetRegistry.ListVenueAssets:input_type -> cqc.services.v1.ListVenueAssetsRequest
+	1,   // 91: cqc.services.v1.AssetRegistry.CreateAsset:output_type -> cqc.services.v1.CreateAssetResponse
+	3,   // 92: cqc.services.v1.AssetRegistry.GetAsset:output_type -> cqc.services.v1.GetAssetResponse
+	5,   // 93: cqc.services.v1.AssetRegistry.UpdateAsset:output_type -> cqc.services.v1.UpdateAssetResponse
+	7,   // 94: cqc.services.v1.AssetRegistry.DeleteAsset:output_type -> cqc.services.v1.DeleteAssetResponse
+	9,   // 95: cqc.services.v1.AssetRegistry.ListAssets:output_type -> cqc.services.v1.ListAssetsResponse
+	11,  // 96: cqc.services.v1.AssetRegistry.SearchAssets:output_type -> cqc.services.v1.SearchAssetsResponse
+	13,  // 97: cqc.services.v1.AssetRegistry.CreateAssetDeployment:output_type -> cqc.services.v1.CreateAssetDeploymentResponse
+	15,  // 98: cqc.services.v1.AssetRegistry.GetAssetDeployment:output_type -> cqc.services.v1.GetAssetDeploymentResponse
+	17,  // 99: cqc.services.v1.AssetRegistry.ListAssetDeployments:output_type -> cqc.services.v1.ListAssetDeploymentsResponse
+	19,  // 100: cqc.services.v1.AssetRegistry.CreateAssetIdentifier:output_type -> cqc.services.v1.CreateAssetIdentifierResponse
+	21,  // 101: cqc.services.v1.AssetRegistry.GetAssetIdentifier:output_type -> cqc.services.v1.GetAssetIdentifierResponse
+	23,  // 102: cqc.services.v1.AssetRegistry.ListAssetIdentifiers:output_type -> cqc.services.v1.ListAssetIdentifiersResponse
+	25,  // 103: cqc.services.v1.AssetRegistry.CreateAssetRelationship:output_type -> cqc.services.v1.CreateAssetRelationshipResponse
+	27,  // 104: cqc.services.v1.AssetRegistry.ListAssetRelationships:output_type -> cqc.services.v1.ListAssetRelationshipsResponse
+	29,  // 105: cqc.services.v1.AssetRegistry.CreateAssetGroup:output_type -> cqc.services.v1.CreateAssetGroupResponse
+	31,  // 106: cqc.services.v1.AssetRegistry.GetAssetGroup:output_type -> cqc.services.v1.GetAssetGroupResponse
+	33,  // 107: cqc.services.v1.AssetRegistry.AddAssetToGroup:output_type -> cqc.services.v1.AddAssetToGroupResponse
+	35,  // 108: cqc.services.v1.AssetRegistry.RemoveAssetFromGroup:output_type -> cqc.services.v1.RemoveAssetFromGroupResponse
+	37,  // 109: cqc.services.v1.AssetRegistry.RaiseQualityFlag:output_type -> cqc.services.v1.RaiseQualityFlagResponse
+	39,  // 110: cqc.services.v1.AssetRegistry.ResolveQualityFlag:output_type -> cqc.services.v1.ResolveQualityFlagResponse
+	41,  // 111: cqc.services.v1.AssetRegistry.ListQualityFlags:output_type -> cqc.services.v1.ListQualityFlagsResponse
+	43,  // 112: cqc.services.v1.AssetRegistry.CreateChain:output_type -> cqc.services.v1.CreateChainResponse
+	45,  // 113: cqc.services.v1.AssetRegistry.GetChain:output_type -> cqc.services.v1.GetChainResponse
+	47,  // 114: cqc.services.v1.AssetRegistry.ListChains:output_type -> cqc.services.v1.ListChainsResponse
+	49,  // 115: cqc.services.v1.AssetRegistry.GetInstrument:output_type -> cqc.services.v1.GetInstrumentResponse
+	51,  // 116: cqc.services.v1.AssetRegistry.GetSpotInstrument:output_type -> cqc.services.v1.GetSpotInstrumentResponse
+	53,  // 117: cqc.services.v1.AssetRegistry.GetPerpContract:output_type -> cqc.services.v1.GetPerpContractResponse
+	55,  // 118: cqc.services.v1.AssetRegistry.GetFutureContract:output_type -> cqc.services.v1.GetFutureContractResponse
+	57,  // 119: cqc.services.v1.AssetRegistry.GetOptionSeries:output_type -> cqc.services.v1.GetOptionSeriesResponse
+	59,  // 120: cqc.services.v1.AssetRegistry.GetLendingDeposit:output_type -> cqc.services.v1.GetLendingDepositResponse
+	61,  // 121: cqc.services.v1.AssetRegistry.GetLendingBorrow:output_type -> cqc.services.v1.GetLendingBorrowResponse
+	63,  // 122: cqc.services.v1.AssetRegistry.GetMarket:output_type -> cqc.services.v1.GetMarketResponse
+	65,  // 123: cqc.services.v1.AssetRegistry.ResolveMarket:output_type -> cqc.services.v1.ResolveMarketResponse
+	67,  // 124: cqc.services.v1.AssetRegistry.GetIdentifier:output_type -> cqc.services.v1.GetIdentifierResponse
+	69,  // 125: cqc.services.v1.AssetRegistry.ListIdentifiers:output_type -> cqc.services.v1.ListIdentifiersResponse
+	71,  // 126: cqc.services.v1.AssetRegistry.CreateVenue:output_type -> cqc.services.v1.CreateVenueResponse
+	73,  // 127: cqc.services.v1.AssetRegistry.GetVenue:output_type -> cqc.services.v1.GetVenueResponse
+	75,  // 128: cqc.services.v1.AssetRegistry.ListVenues:output_type -> cqc.services.v1.ListVenuesResponse
+	77,  // 129: cqc.services.v1.AssetRegistry.CreateVenueAsset:output_type -> cqc.services.v1.CreateVenueAssetResponse
+	79,  // 130: cqc.services.v1.AssetRegistry.GetVenueAsset:output_type -> cqc.services.v1.GetVenueAssetResponse
+	81,  // 131: cqc.services.v1.AssetRegistry.ListVenueAssets:output_type -> cqc.services.v1.ListVenueAssetsResponse
+	91,  // [91:132] is the sub-list for method output_type
+	50,  // [50:91] is the sub-list for method input_type
+	50,  // [50:50] is the sub-list for extension type_name
+	50,  // [50:50] is the sub-list for extension extendee
+	0,   // [0:50] is the sub-list for field type_name
 }
 
 func init() { file_proto_services_v1_asset_registry_proto_init() }
@@ -5329,33 +4992,33 @@ func file_proto_services_v1_asset_registry_proto_init() {
 	file_proto_services_v1_asset_registry_proto_msgTypes[56].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[57].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[58].OneofWrappers = []any{}
+	file_proto_services_v1_asset_registry_proto_msgTypes[59].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[60].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[61].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[62].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[63].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[64].OneofWrappers = []any{}
+	file_proto_services_v1_asset_registry_proto_msgTypes[65].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[66].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[67].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[68].OneofWrappers = []any{}
-	file_proto_services_v1_asset_registry_proto_msgTypes[69].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[70].OneofWrappers = []any{}
+	file_proto_services_v1_asset_registry_proto_msgTypes[71].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[72].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[73].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[74].OneofWrappers = []any{}
-	file_proto_services_v1_asset_registry_proto_msgTypes[75].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[76].OneofWrappers = []any{}
+	file_proto_services_v1_asset_registry_proto_msgTypes[77].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[78].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[79].OneofWrappers = []any{}
 	file_proto_services_v1_asset_registry_proto_msgTypes[80].OneofWrappers = []any{}
-	file_proto_services_v1_asset_registry_proto_msgTypes[81].OneofWrappers = []any{}
-	file_proto_services_v1_asset_registry_proto_msgTypes[82].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_services_v1_asset_registry_proto_rawDesc), len(file_proto_services_v1_asset_registry_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   84,
+			NumMessages:   82,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

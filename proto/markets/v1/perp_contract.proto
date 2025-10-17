@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// PerpContract represents a perpetual futures contract (e.g., BTC-PERP, ETH-PERP).
+// Has a 1:1 relationship with an Instrument where instrument_type = "PERPETUAL".
+message PerpContract {
+  // Foreign key to Instrument.id (1:1 relationship).
+  optional string instrument_id = 1;
+
+  // Underlying asset identifier (UUID) - the asset this contract tracks.
+  // For BTC-PERP, this is BTC.
+  optional string underlying_asset_id = 2;
+
+  // Whether this is an inverse contract (settled in base asset, not quote).
+  optional bool is_inverse = 3;
+
+  // Whether this is a quanto contract (settled in a third asset).
+  optional bool is_quanto = 4;
+
+  // Contract multiplier as string decimal.
+  // Defines how much of the underlying one contract represents.
+  // Example: "1.0" means 1 contract = 1 BTC
+  optional string contract_multiplier = 5;
+
+  // Additional perp-specific metadata (e.g., funding rate mechanism, index composition).
+  optional google.protobuf.Struct extensions = 6;
+
+  // Timestamp when this perpetual contract was created.
+  optional google.protobuf.Timestamp created_at = 7;
+
+  // Timestamp when this perpetual contract was last updated.
+  optional google.protobuf.Timestamp updated_at = 8;
+}

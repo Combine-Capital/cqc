@@ -18,9 +18,9 @@ message Trade {
   // Unique trade identifier from the venue (if available).
   optional string trade_id = 1;
 
-  // Symbol identifier (UUID) for this trade.
-  // References the canonical symbol from the markets domain.
-  optional string symbol_id = 2;
+  // Market identifier (UUID) for this trade.
+  // References a specific market (instrument listed on a venue).
+  optional string market_id = 2;
 
   // Venue where this trade occurred.
   optional string venue_id = 3;
@@ -76,9 +76,9 @@ enum CandleInterval {
 // Candle represents OHLCV (Open, High, Low, Close, Volume) data for a time period.
 // Candles are used for charting and technical analysis.
 message Candle {
-  // Symbol identifier (UUID) for this candle data.
-  // References the canonical symbol from the markets domain.
-  optional string symbol_id = 1;
+  // Market identifier (UUID) for this candle data.
+  // References a specific market (instrument listed on a venue).
+  optional string market_id = 1;
 
   // Venue where this candle data is from.
   optional string venue_id = 2;

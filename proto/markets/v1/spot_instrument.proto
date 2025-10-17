@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// SpotInstrument represents a spot trading pair (e.g., BTC/USDT).
+// Has a 1:1 relationship with an Instrument where instrument_type = "SPOT".
+message SpotInstrument {
+  // Foreign key to Instrument.id (1:1 relationship).
+  optional string instrument_id = 1;
+
+  // Base asset identifier (UUID) - the asset being bought/sold.
+  // For BTC/USDT, this is BTC.
+  optional string base_asset_id = 2;
+
+  // Quote asset identifier (UUID) - the asset used for pricing.
+  // For BTC/USDT, this is USDT.
+  optional string quote_asset_id = 3;
+
+  // Additional spot-specific metadata.
+  optional google.protobuf.Struct extensions = 4;
+
+  // Timestamp when this spot instrument was created.
+  optional google.protobuf.Timestamp created_at = 5;
+
+  // Timestamp when this spot instrument was last updated.
+  optional google.protobuf.Timestamp updated_at = 6;
+}

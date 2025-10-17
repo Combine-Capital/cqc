@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package cqc.markets.v1;
+
+option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;marketsv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// OptionSeries represents an option contract with specific strike and type.
+// Has a 1:1 relationship with an Instrument where instrument_type = "OPTION".
+message OptionSeries {
+  // Foreign key to Instrument.id (1:1 relationship).
+  optional string instrument_id = 1;
+
+  // Underlying asset identifier (UUID) - the asset this option is on.
+  // For BTC-25DEC24-30000-C, this is BTC.
+  optional string underlying_asset_id = 2;
+
+  // Option expiry timestamp.
+  optional google.protobuf.Timestamp expiry = 3;
+
+  // Strike price as string decimal.
+  // Example: "30000.00" for a $30,000 strike
+  optional string strike_price = 4;
+
+  // Option type (string, not enum).
+  // Examples: "CALL", "PUT"
+  optional string option_type = 5;
+
+  // Exercise style (string, not enum).
+  // Examples: "european", "american"
+  optional string exercise_style = 6;
+
+  // Contract multiplier as string decimal.
+  // Defines how much of the underlying one contract represents.
+  // Example: "1.0" means 1 contract = 1 BTC
+  optional string contract_multiplier = 7;
+
+  // Additional option-specific metadata (e.g., settlement method, greeks calculation method).
+  optional google.protobuf.Struct extensions = 8;
+
+  // Timestamp when this option series was created.
+  optional google.protobuf.Timestamp created_at = 9;
+
+  // Timestamp when this option series was last updated.
+  optional google.protobuf.Timestamp updated_at = 10;
+}

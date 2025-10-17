@@ -6,37 +6,49 @@
 
 ### Critical Distinctions
 
-**Asset vs Symbol vs Venue**
+**Asset vs Instrument vs Market vs Venue**
 - **Asset** = Individual token/coin (BTC, ETH, USDT, WETH)
   - Lives in: `assets/v1/asset.proto`
   - Examples: Bitcoin, Ethereum, USD Coin, Wrapped Ether
   - Properties: symbol, name, type, deployments across chains
   
-- **Symbol** = Trading pair/market (BTC/USDT spot, ETH-PERP, BTC-25OCT24-3000-C)
-  - Lives in: `markets/v1/symbol.proto`
-  - Examples: BTC/USDT spot, ETH/USD perpetual, ETH call option
-  - Properties: base_asset_id, quote_asset_id, type (SPOT/PERPETUAL/FUTURE/OPTION), market specs
+- **Instrument** = Product definition (BTC-PERPETUAL, ETH/USDT spot, BTC-25OCT24-30000-C)
+  - Lives in: `markets/v1/instrument.proto` + subtypes (spot_instrument.proto, perp_contract.proto, etc.)
+  - Examples: BTC perpetual contract, ETH/USDT spot pair, BTC call option at $30k strike
+  - Properties: instrument_type (string), code, created_at
+  - Subtypes: SpotInstrument, PerpContract, FutureContract, OptionSeries, LendingDeposit, LendingBorrow
+  
+- **Market** = Venue-specific listing of an Instrument with trading rules
+  - Lives in: `markets/v1/market.proto`
+  - Examples: "BTC-PERP on Hyperliquid", "ETH/USDT on Binance Spot", "WETH pool on Uniswap V3"
+  - Properties: instrument_id, venue_id, venue_symbol, tick_size, fees, limits, metadata
   
 - **Venue** = Exchange/protocol platform (Binance, Uniswap V3, dYdX)
   - Lives in: `venues/v1/venue.proto`
   - Examples: Binance (CEX), Uniswap V3 on Ethereum (DEX), dYdX (DEX Perpetuals)
   - Properties: venue_id, name, type, API endpoints
 
-**VenueAsset vs VenueSymbol**
-- **VenueAsset** = Asset availability on a venue (which tokens you can trade)
+**Key Design Decisions:**
+- **No enums for instrument types** - Use strings ("SPOT", "PERPETUAL", "FUTURE", "OPTION", "LENDING_DEPOSIT", "LENDING_BORROW") to avoid breaking changes
+- **No enums for option types** - Use strings ("CALL", "PUT") and ("european", "american") for flexibility
+- **All decimals as strings** - Store prices, fees, sizes as strings to preserve precision (e.g., "0.0001" not 0.0001)
+- **Market = Instrument + Venue** - Market represents the venue-specific listing with trading rules, not the product itself
+
+**VenueAsset vs Market**
+- **VenueAsset** = Asset availability on a venue (which tokens you can deposit/withdraw)
   - "Binance lists BTC, ETH, USDT"
   - "Uniswap V3 on Ethereum lists WETH, USDC, DAI"
   
-- **VenueSymbol** = Symbol/market availability on a venue (which trading pairs exist)
-  - "Binance offers BTC/USDT spot market as 'BTCUSDT'"
-  - "Binance offers BTC/USDT perpetual as 'BTCUSDT' in futures"
-  - "dYdX offers ETH/USD perpetual as 'ETH-USD'"
-
-**DataSource vs Venue**
-- **DataSource** = Information provider (CoinGecko, CoinMarketCap, DeFiLlama)
-  - Purpose: Get asset metadata, prices, market cap
-  - AssetIdentifier: Canonical Asset → CoinGecko ID
-  - SymbolIdentifier: Canonical Symbol → Provider ID
+- **Market** = Instrument listing on a venue with trading rules
+  - "Binance offers BTC-PERPETUAL as 'BTCUSDT' in futures section"
+  - "Binance offers ETH/USDT spot pair as 'ETHUSDT'"
+  - "dYdX offers ETH-PERPETUAL as 'ETH-USD'"
+  - Includes: fees, tick_size, lot_size, limits, AMM/lending metadata
+- **Identifier** = External identifier mapping (unified for assets, instruments, markets)
+  - Purpose: Map internal IDs to external data providers (CoinGecko, CoinMarketCap, DeFiLlama)
+  - Examples: "Bitcoin asset → CoinGecko 'bitcoin'", "BTC-PERP instrument → provider ID"
+  - entity_type: "ASSET", "INSTRUMENT", or "MARKET"
+  - Exactly one of asset_id, instrument_id, market_id must be set
   
 - **Venue** = Tradeable platform (Binance, Coinbase, Uniswap)
   - Purpose: Execute orders, deposit, withdraw
@@ -54,38 +66,52 @@
 - AssetDeployment tracks token addresses across chains
 - AssetRelationship maps wrapping/staking/bridging relationships
 
-#### Markets Domain (Trading Pairs/Markets)
-- Define protobuf messages: Symbol, SymbolIdentifier
-- Define protobuf enums: SymbolType (SPOT, PERPETUAL, FUTURE, OPTION, MARGIN), OptionType (CALL, PUT)
-- Symbol represents trading pairs/markets (BTC/USDT spot, ETH-PERP, BTC-25OCT24-3000-C)
-- Symbol includes: base_asset_id, quote_asset_id, settlement_asset_id, tick_size, lot_size, order limits
-- SymbolIdentifier maps canonical symbols to external data provider identifiers
-- Define market data messages: Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics
+#### Markets Domain (Trading Instruments/Markets)
+- Define protobuf messages: Instrument (base product), SpotInstrument, PerpContract, FutureContract, OptionSeries, LendingDeposit, LendingBorrow, Market
+- Use string fields instead of enums: instrument_type ("SPOT", "PERPETUAL", "FUTURE", "OPTION", "LENDING_DEPOSIT", "LENDING_BORROW")
+- Option fields as strings: option_type ("CALL", "PUT"), exercise_style ("european", "american")
+- Market status as string: "active", "suspended", "delisted"
+- All decimal values (prices, fees, sizes) as strings for precision
+- Instrument represents the product (1:1 with subtype tables)
+- Market represents venue-specific listing with: instrument_id, venue_id, venue_symbol, fees, limits, metadata
+- Market metadata includes AMM (pool_address, fee_tier_bps), Lending (reserve_address, ltv), Perp (index_oracle, funding_interval_secs)
+- Define market data messages: Price, OrderBook, Trade, Candle, VWAP, MarketDepth, LiquidityMetrics (all reference market_id)
+
+#### Identifiers Domain (External ID Mappings)
+- Define protobuf message: Identifier (unified mapping for assets, instruments, or markets)
+- entity_type as string: "ASSET", "INSTRUMENT", "MARKET"
+- Exactly one of asset_id, instrument_id, market_id must be set
+- source field identifies external provider (e.g., "coingecko", "coinmarketcap", "venue:binance")
 
 #### Venues Domain (Exchanges/Protocols)
-- Define protobuf messages: Venue, VenueAsset, VenueSymbol, VenueAccount, Balance, Order, ExecutionReport
+- Define protobuf messages: Venue, VenueAsset, VenueAccount, Balance, Order, ExecutionReport
 - Define protobuf enums: VenueType (CEX, DEX, DEX_AGGREGATOR, BRIDGE, LENDING), AccountType, AccountStatus, OrderType, OrderSide, OrderStatus, TimeInForce, BalanceType
 - Venue represents exchange/protocol metadata (Binance, Uniswap V3, dYdX)
-- VenueAsset maps which assets are available on each venue
-- VenueSymbol maps which trading symbols/markets are available on each venue
+- VenueAsset maps which assets are available on each venue for deposit/withdrawal
+- Market (in markets domain) maps which instruments are listed on each venue with trading rules
 - VenueAccount manages user credentials and permissions per venue
 
 #### Portfolio Domain (Position Tracking)
 - Define protobuf messages: Position, Portfolio, Allocation, Exposure, Transaction, PnL
 
 #### Events Domain (Inter-Service Communication)
-- Define event messages: AssetCreated, AssetDeploymentCreated, RelationshipEstablished, SymbolCreated, VenueAssetListed, VenueSymbolListed, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert, QualityFlagRaised
+- Define event messages: AssetCreated, AssetDeploymentCreated, RelationshipEstablished, InstrumentCreated, MarketCreated, VenueAssetListed, VenueMarketListed, VenueMarketDelisted, PriceUpdated, OrderPlaced, PositionChanged, RiskAlert, QualityFlagRaised
 
 #### Service Interfaces
-- AssetRegistry: Manages Assets, Symbols, Chains, Venues, VenueAssets, VenueSymbols, Relationships, Quality Flags
+- AssetRegistry: Manages Assets, Instruments (all subtypes), Markets, Identifiers, Chains, Venues, VenueAssets, Relationships, Quality Flags
+  - New RPCs: GetInstrument, GetSpotInstrument, GetPerpContract, GetFutureContract, GetOptionSeries, GetLendingDeposit, GetLendingBorrow
+  - New RPCs: GetMarket, ResolveMarket (by venue_id + venue_symbol → market_id + instrument_id)
+  - New RPCs: GetIdentifier, ListIdentifiers (by entity_type and entity_id)
 - VenueGateway: Manages VenueAccounts, order execution, balance queries, deposits/withdrawals
-- MarketData: Price feeds, orderbook streams, trade history for Symbols
+- MarketData: Price feeds (using market_id), orderbook streams, trade history for Markets
+  - All requests use market_id instead of symbol_id
+  - Multi-venue aggregation uses instrument_id for product-level views
 - Portfolio: Position tracking, PnL calculation
 - RiskEngine: Risk limits, exposure monitoring
 
 #### Code Generation & Organization
 - Provide Makefile with code generation targets for Go, Python, TypeScript from protobuf definitions
-- Organize protos by versioned domain structure (assets/v1/, markets/v1/, venues/v1/, portfolio/v1/, events/v1/, services/v1/)
+- Organize protos by versioned domain structure (assets/v1/, markets/v1/, identifiers/v1/, venues/v1/, portfolio/v1/, events/v1/, services/v1/)
 - Commit generated code to repository for versioning
 
 ### Post-MVP Scope

@@ -148,9 +148,9 @@ type Trade struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique trade identifier from the venue (if available).
 	TradeId *string `protobuf:"bytes,1,opt,name=trade_id,json=tradeId,proto3,oneof" json:"trade_id,omitempty"`
-	// Symbol identifier (UUID) for this trade.
-	// References the canonical symbol from the markets domain.
-	SymbolId *string `protobuf:"bytes,2,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	// Market identifier (UUID) for this trade.
+	// References a specific market (instrument listed on a venue).
+	MarketId *string `protobuf:"bytes,2,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	// Venue where this trade occurred.
 	VenueId *string `protobuf:"bytes,3,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
 	// Venue-specific symbol representation (e.g., "BTCUSDT" on Binance).
@@ -216,9 +216,9 @@ func (x *Trade) GetTradeId() string {
 	return ""
 }
 
-func (x *Trade) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *Trade) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -311,9 +311,9 @@ func (x *Trade) GetTakerOrderId() string {
 // Candles are used for charting and technical analysis.
 type Candle struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Symbol identifier (UUID) for this candle data.
-	// References the canonical symbol from the markets domain.
-	SymbolId *string `protobuf:"bytes,1,opt,name=symbol_id,json=symbolId,proto3,oneof" json:"symbol_id,omitempty"`
+	// Market identifier (UUID) for this candle data.
+	// References a specific market (instrument listed on a venue).
+	MarketId *string `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	// Venue where this candle data is from.
 	VenueId *string `protobuf:"bytes,2,opt,name=venue_id,json=venueId,proto3,oneof" json:"venue_id,omitempty"`
 	// Venue-specific symbol representation.
@@ -379,9 +379,9 @@ func (*Candle) Descriptor() ([]byte, []int) {
 	return file_proto_markets_v1_trade_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Candle) GetSymbolId() string {
-	if x != nil && x.SymbolId != nil {
-		return *x.SymbolId
+func (x *Candle) GetMarketId() string {
+	if x != nil && x.MarketId != nil {
+		return *x.MarketId
 	}
 	return ""
 }
@@ -498,7 +498,7 @@ const file_proto_markets_v1_trade_proto_rawDesc = "" +
 	"\x1cproto/markets/v1/trade.proto\x12\x0ecqc.markets.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xea\x05\n" +
 	"\x05Trade\x12\x1e\n" +
 	"\btrade_id\x18\x01 \x01(\tH\x00R\atradeId\x88\x01\x01\x12 \n" +
-	"\tsymbol_id\x18\x02 \x01(\tH\x01R\bsymbolId\x88\x01\x01\x12\x1e\n" +
+	"\tmarket_id\x18\x02 \x01(\tH\x01R\bmarketId\x88\x01\x01\x12\x1e\n" +
 	"\bvenue_id\x18\x03 \x01(\tH\x02R\avenueId\x88\x01\x01\x12&\n" +
 	"\fvenue_symbol\x18\x04 \x01(\tH\x03R\vvenueSymbol\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\ttimestamp\x88\x01\x01\x12\x19\n" +
@@ -515,7 +515,7 @@ const file_proto_markets_v1_trade_proto_rawDesc = "" +
 	"\x0etaker_order_id\x18\x0e \x01(\tH\rR\ftakerOrderId\x88\x01\x01B\v\n" +
 	"\t_trade_idB\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
+	"_market_idB\v\n" +
 	"\t_venue_idB\x0f\n" +
 	"\r_venue_symbolB\f\n" +
 	"\n" +
@@ -531,7 +531,7 @@ const file_proto_markets_v1_trade_proto_rawDesc = "" +
 	"\x0f_maker_order_idB\x11\n" +
 	"\x0f_taker_order_id\"\x93\x06\n" +
 	"\x06Candle\x12 \n" +
-	"\tsymbol_id\x18\x01 \x01(\tH\x00R\bsymbolId\x88\x01\x01\x12\x1e\n" +
+	"\tmarket_id\x18\x01 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12\x1e\n" +
 	"\bvenue_id\x18\x02 \x01(\tH\x01R\avenueId\x88\x01\x01\x12&\n" +
 	"\fvenue_symbol\x18\x03 \x01(\tH\x02R\vvenueSymbol\x88\x01\x01\x12=\n" +
 	"\ttimestamp\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\ttimestamp\x88\x01\x01\x12?\n" +
@@ -553,7 +553,7 @@ const file_proto_markets_v1_trade_proto_rawDesc = "" +
 	"\vsell_volume\x18\x10 \x01(\x01H\x0fR\n" +
 	"sellVolume\x88\x01\x01B\f\n" +
 	"\n" +
-	"_symbol_idB\v\n" +
+	"_market_idB\v\n" +
 	"\t_venue_idB\x0f\n" +
 	"\r_venue_symbolB\f\n" +
 	"\n" +

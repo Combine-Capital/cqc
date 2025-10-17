@@ -6,12 +6,12 @@ option go_package = "github.com/Combine-Capital/cqc/gen/go/cqc/markets/v1;market
 
 import "google/protobuf/timestamp.proto";
 
-// Price represents a point-in-time price observation for a trading symbol/market.
+// Price represents a point-in-time price observation for a trading market.
 // Prices can come from various venues (exchanges, AMMs, oracles) and sources.
 message Price {
-  // Symbol identifier (UUID) for which this price is reported.
-  // References the canonical symbol from the markets domain (e.g., BTC/USDT spot, ETH-PERP).
-  optional string symbol_id = 1;
+  // Market identifier (UUID) for which this price is reported.
+  // References a specific market (instrument listed on a venue).
+  optional string market_id = 1;
 
   // Numeric price value in the quote currency.
   // For symbols like BTC/USDT, this is the USDT price of 1 BTC.
@@ -51,9 +51,9 @@ message Price {
 // VWAP represents a Volume-Weighted Average Price over a time period.
 // VWAP is calculated as the sum of (price * volume) divided by total volume.
 message VWAP {
-  // Symbol identifier (UUID) for which this VWAP is calculated.
-  // References the canonical symbol from the markets domain.
-  optional string symbol_id = 1;
+  // Market identifier (UUID) for which this VWAP is calculated.
+  // References a specific market (instrument listed on a venue).
+  optional string market_id = 1;
 
   // Volume-weighted average price value.
   optional double value = 2;

@@ -43,24 +43,23 @@ const (
 	AssetRegistry_CreateChain_FullMethodName             = "/cqc.services.v1.AssetRegistry/CreateChain"
 	AssetRegistry_GetChain_FullMethodName                = "/cqc.services.v1.AssetRegistry/GetChain"
 	AssetRegistry_ListChains_FullMethodName              = "/cqc.services.v1.AssetRegistry/ListChains"
-	AssetRegistry_CreateSymbol_FullMethodName            = "/cqc.services.v1.AssetRegistry/CreateSymbol"
-	AssetRegistry_GetSymbol_FullMethodName               = "/cqc.services.v1.AssetRegistry/GetSymbol"
-	AssetRegistry_UpdateSymbol_FullMethodName            = "/cqc.services.v1.AssetRegistry/UpdateSymbol"
-	AssetRegistry_DeleteSymbol_FullMethodName            = "/cqc.services.v1.AssetRegistry/DeleteSymbol"
-	AssetRegistry_ListSymbols_FullMethodName             = "/cqc.services.v1.AssetRegistry/ListSymbols"
-	AssetRegistry_SearchSymbols_FullMethodName           = "/cqc.services.v1.AssetRegistry/SearchSymbols"
-	AssetRegistry_CreateSymbolIdentifier_FullMethodName  = "/cqc.services.v1.AssetRegistry/CreateSymbolIdentifier"
-	AssetRegistry_GetSymbolIdentifier_FullMethodName     = "/cqc.services.v1.AssetRegistry/GetSymbolIdentifier"
-	AssetRegistry_ListSymbolIdentifiers_FullMethodName   = "/cqc.services.v1.AssetRegistry/ListSymbolIdentifiers"
+	AssetRegistry_GetInstrument_FullMethodName           = "/cqc.services.v1.AssetRegistry/GetInstrument"
+	AssetRegistry_GetSpotInstrument_FullMethodName       = "/cqc.services.v1.AssetRegistry/GetSpotInstrument"
+	AssetRegistry_GetPerpContract_FullMethodName         = "/cqc.services.v1.AssetRegistry/GetPerpContract"
+	AssetRegistry_GetFutureContract_FullMethodName       = "/cqc.services.v1.AssetRegistry/GetFutureContract"
+	AssetRegistry_GetOptionSeries_FullMethodName         = "/cqc.services.v1.AssetRegistry/GetOptionSeries"
+	AssetRegistry_GetLendingDeposit_FullMethodName       = "/cqc.services.v1.AssetRegistry/GetLendingDeposit"
+	AssetRegistry_GetLendingBorrow_FullMethodName        = "/cqc.services.v1.AssetRegistry/GetLendingBorrow"
+	AssetRegistry_GetMarket_FullMethodName               = "/cqc.services.v1.AssetRegistry/GetMarket"
+	AssetRegistry_ResolveMarket_FullMethodName           = "/cqc.services.v1.AssetRegistry/ResolveMarket"
+	AssetRegistry_GetIdentifier_FullMethodName           = "/cqc.services.v1.AssetRegistry/GetIdentifier"
+	AssetRegistry_ListIdentifiers_FullMethodName         = "/cqc.services.v1.AssetRegistry/ListIdentifiers"
 	AssetRegistry_CreateVenue_FullMethodName             = "/cqc.services.v1.AssetRegistry/CreateVenue"
 	AssetRegistry_GetVenue_FullMethodName                = "/cqc.services.v1.AssetRegistry/GetVenue"
 	AssetRegistry_ListVenues_FullMethodName              = "/cqc.services.v1.AssetRegistry/ListVenues"
 	AssetRegistry_CreateVenueAsset_FullMethodName        = "/cqc.services.v1.AssetRegistry/CreateVenueAsset"
 	AssetRegistry_GetVenueAsset_FullMethodName           = "/cqc.services.v1.AssetRegistry/GetVenueAsset"
 	AssetRegistry_ListVenueAssets_FullMethodName         = "/cqc.services.v1.AssetRegistry/ListVenueAssets"
-	AssetRegistry_CreateVenueSymbol_FullMethodName       = "/cqc.services.v1.AssetRegistry/CreateVenueSymbol"
-	AssetRegistry_GetVenueSymbol_FullMethodName          = "/cqc.services.v1.AssetRegistry/GetVenueSymbol"
-	AssetRegistry_ListVenueSymbols_FullMethodName        = "/cqc.services.v1.AssetRegistry/ListVenueSymbols"
 )
 
 // AssetRegistryClient is the client API for AssetRegistry service.
@@ -115,24 +114,28 @@ type AssetRegistryClient interface {
 	GetChain(ctx context.Context, in *GetChainRequest, opts ...grpc.CallOption) (*GetChainResponse, error)
 	// ListChains lists all registered blockchain networks.
 	ListChains(ctx context.Context, in *ListChainsRequest, opts ...grpc.CallOption) (*ListChainsResponse, error)
-	// CreateSymbol creates a new trading symbol/market.
-	CreateSymbol(ctx context.Context, in *CreateSymbolRequest, opts ...grpc.CallOption) (*CreateSymbolResponse, error)
-	// GetSymbol retrieves a specific symbol by ID.
-	GetSymbol(ctx context.Context, in *GetSymbolRequest, opts ...grpc.CallOption) (*GetSymbolResponse, error)
-	// UpdateSymbol updates an existing symbol's metadata.
-	UpdateSymbol(ctx context.Context, in *UpdateSymbolRequest, opts ...grpc.CallOption) (*UpdateSymbolResponse, error)
-	// DeleteSymbol soft-deletes a symbol from the registry.
-	DeleteSymbol(ctx context.Context, in *DeleteSymbolRequest, opts ...grpc.CallOption) (*DeleteSymbolResponse, error)
-	// ListSymbols retrieves a paginated list of symbols with optional filtering.
-	ListSymbols(ctx context.Context, in *ListSymbolsRequest, opts ...grpc.CallOption) (*ListSymbolsResponse, error)
-	// SearchSymbols searches for symbols by name or other criteria.
-	SearchSymbols(ctx context.Context, in *SearchSymbolsRequest, opts ...grpc.CallOption) (*SearchSymbolsResponse, error)
-	// CreateSymbolIdentifier adds an external identifier mapping for a symbol.
-	CreateSymbolIdentifier(ctx context.Context, in *CreateSymbolIdentifierRequest, opts ...grpc.CallOption) (*CreateSymbolIdentifierResponse, error)
-	// GetSymbolIdentifier retrieves a symbol identifier mapping.
-	GetSymbolIdentifier(ctx context.Context, in *GetSymbolIdentifierRequest, opts ...grpc.CallOption) (*GetSymbolIdentifierResponse, error)
-	// ListSymbolIdentifiers lists all identifier mappings for a symbol.
-	ListSymbolIdentifiers(ctx context.Context, in *ListSymbolIdentifiersRequest, opts ...grpc.CallOption) (*ListSymbolIdentifiersResponse, error)
+	// GetInstrument retrieves a specific instrument by ID.
+	GetInstrument(ctx context.Context, in *GetInstrumentRequest, opts ...grpc.CallOption) (*GetInstrumentResponse, error)
+	// GetSpotInstrument retrieves a spot instrument by instrument_id.
+	GetSpotInstrument(ctx context.Context, in *GetSpotInstrumentRequest, opts ...grpc.CallOption) (*GetSpotInstrumentResponse, error)
+	// GetPerpContract retrieves a perpetual contract by instrument_id.
+	GetPerpContract(ctx context.Context, in *GetPerpContractRequest, opts ...grpc.CallOption) (*GetPerpContractResponse, error)
+	// GetFutureContract retrieves a future contract by instrument_id.
+	GetFutureContract(ctx context.Context, in *GetFutureContractRequest, opts ...grpc.CallOption) (*GetFutureContractResponse, error)
+	// GetOptionSeries retrieves an option series by instrument_id.
+	GetOptionSeries(ctx context.Context, in *GetOptionSeriesRequest, opts ...grpc.CallOption) (*GetOptionSeriesResponse, error)
+	// GetLendingDeposit retrieves a lending deposit product by instrument_id.
+	GetLendingDeposit(ctx context.Context, in *GetLendingDepositRequest, opts ...grpc.CallOption) (*GetLendingDepositResponse, error)
+	// GetLendingBorrow retrieves a lending borrow product by instrument_id.
+	GetLendingBorrow(ctx context.Context, in *GetLendingBorrowRequest, opts ...grpc.CallOption) (*GetLendingBorrowResponse, error)
+	// GetMarket retrieves a specific market by market_id.
+	GetMarket(ctx context.Context, in *GetMarketRequest, opts ...grpc.CallOption) (*GetMarketResponse, error)
+	// ResolveMarket resolves a market by venue_id and venue_symbol.
+	ResolveMarket(ctx context.Context, in *ResolveMarketRequest, opts ...grpc.CallOption) (*ResolveMarketResponse, error)
+	// GetIdentifier retrieves a specific identifier by ID.
+	GetIdentifier(ctx context.Context, in *GetIdentifierRequest, opts ...grpc.CallOption) (*GetIdentifierResponse, error)
+	// ListIdentifiers lists all identifiers for a specific entity.
+	ListIdentifiers(ctx context.Context, in *ListIdentifiersRequest, opts ...grpc.CallOption) (*ListIdentifiersResponse, error)
 	// CreateVenue registers a new trading venue.
 	CreateVenue(ctx context.Context, in *CreateVenueRequest, opts ...grpc.CallOption) (*CreateVenueResponse, error)
 	// GetVenue retrieves a specific venue by ID.
@@ -145,12 +148,6 @@ type AssetRegistryClient interface {
 	GetVenueAsset(ctx context.Context, in *GetVenueAssetRequest, opts ...grpc.CallOption) (*GetVenueAssetResponse, error)
 	// ListVenueAssets lists all assets available on a venue or all venues for an asset.
 	ListVenueAssets(ctx context.Context, in *ListVenueAssetsRequest, opts ...grpc.CallOption) (*ListVenueAssetsResponse, error)
-	// CreateVenueSymbol maps a venue's trading symbol to a canonical symbol.
-	CreateVenueSymbol(ctx context.Context, in *CreateVenueSymbolRequest, opts ...grpc.CallOption) (*CreateVenueSymbolResponse, error)
-	// GetVenueSymbol retrieves a venue symbol mapping.
-	GetVenueSymbol(ctx context.Context, in *GetVenueSymbolRequest, opts ...grpc.CallOption) (*GetVenueSymbolResponse, error)
-	// ListVenueSymbols lists all symbol mappings for a venue or symbol.
-	ListVenueSymbols(ctx context.Context, in *ListVenueSymbolsRequest, opts ...grpc.CallOption) (*ListVenueSymbolsResponse, error)
 }
 
 type assetRegistryClient struct {
@@ -377,81 +374,99 @@ func (c *assetRegistryClient) ListChains(ctx context.Context, in *ListChainsRequ
 	return out, nil
 }
 
-func (c *assetRegistryClient) CreateSymbol(ctx context.Context, in *CreateSymbolRequest, opts ...grpc.CallOption) (*CreateSymbolResponse, error) {
-	out := new(CreateSymbolResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_CreateSymbol_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetInstrument(ctx context.Context, in *GetInstrumentRequest, opts ...grpc.CallOption) (*GetInstrumentResponse, error) {
+	out := new(GetInstrumentResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetInstrument_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) GetSymbol(ctx context.Context, in *GetSymbolRequest, opts ...grpc.CallOption) (*GetSymbolResponse, error) {
-	out := new(GetSymbolResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_GetSymbol_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetSpotInstrument(ctx context.Context, in *GetSpotInstrumentRequest, opts ...grpc.CallOption) (*GetSpotInstrumentResponse, error) {
+	out := new(GetSpotInstrumentResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetSpotInstrument_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) UpdateSymbol(ctx context.Context, in *UpdateSymbolRequest, opts ...grpc.CallOption) (*UpdateSymbolResponse, error) {
-	out := new(UpdateSymbolResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_UpdateSymbol_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetPerpContract(ctx context.Context, in *GetPerpContractRequest, opts ...grpc.CallOption) (*GetPerpContractResponse, error) {
+	out := new(GetPerpContractResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetPerpContract_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) DeleteSymbol(ctx context.Context, in *DeleteSymbolRequest, opts ...grpc.CallOption) (*DeleteSymbolResponse, error) {
-	out := new(DeleteSymbolResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_DeleteSymbol_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetFutureContract(ctx context.Context, in *GetFutureContractRequest, opts ...grpc.CallOption) (*GetFutureContractResponse, error) {
+	out := new(GetFutureContractResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetFutureContract_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) ListSymbols(ctx context.Context, in *ListSymbolsRequest, opts ...grpc.CallOption) (*ListSymbolsResponse, error) {
-	out := new(ListSymbolsResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_ListSymbols_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetOptionSeries(ctx context.Context, in *GetOptionSeriesRequest, opts ...grpc.CallOption) (*GetOptionSeriesResponse, error) {
+	out := new(GetOptionSeriesResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetOptionSeries_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) SearchSymbols(ctx context.Context, in *SearchSymbolsRequest, opts ...grpc.CallOption) (*SearchSymbolsResponse, error) {
-	out := new(SearchSymbolsResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_SearchSymbols_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetLendingDeposit(ctx context.Context, in *GetLendingDepositRequest, opts ...grpc.CallOption) (*GetLendingDepositResponse, error) {
+	out := new(GetLendingDepositResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetLendingDeposit_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) CreateSymbolIdentifier(ctx context.Context, in *CreateSymbolIdentifierRequest, opts ...grpc.CallOption) (*CreateSymbolIdentifierResponse, error) {
-	out := new(CreateSymbolIdentifierResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_CreateSymbolIdentifier_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetLendingBorrow(ctx context.Context, in *GetLendingBorrowRequest, opts ...grpc.CallOption) (*GetLendingBorrowResponse, error) {
+	out := new(GetLendingBorrowResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetLendingBorrow_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) GetSymbolIdentifier(ctx context.Context, in *GetSymbolIdentifierRequest, opts ...grpc.CallOption) (*GetSymbolIdentifierResponse, error) {
-	out := new(GetSymbolIdentifierResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_GetSymbolIdentifier_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) GetMarket(ctx context.Context, in *GetMarketRequest, opts ...grpc.CallOption) (*GetMarketResponse, error) {
+	out := new(GetMarketResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetMarket_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *assetRegistryClient) ListSymbolIdentifiers(ctx context.Context, in *ListSymbolIdentifiersRequest, opts ...grpc.CallOption) (*ListSymbolIdentifiersResponse, error) {
-	out := new(ListSymbolIdentifiersResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_ListSymbolIdentifiers_FullMethodName, in, out, opts...)
+func (c *assetRegistryClient) ResolveMarket(ctx context.Context, in *ResolveMarketRequest, opts ...grpc.CallOption) (*ResolveMarketResponse, error) {
+	out := new(ResolveMarketResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_ResolveMarket_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) GetIdentifier(ctx context.Context, in *GetIdentifierRequest, opts ...grpc.CallOption) (*GetIdentifierResponse, error) {
+	out := new(GetIdentifierResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_GetIdentifier_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetRegistryClient) ListIdentifiers(ctx context.Context, in *ListIdentifiersRequest, opts ...grpc.CallOption) (*ListIdentifiersResponse, error) {
+	out := new(ListIdentifiersResponse)
+	err := c.cc.Invoke(ctx, AssetRegistry_ListIdentifiers_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -512,33 +527,6 @@ func (c *assetRegistryClient) ListVenueAssets(ctx context.Context, in *ListVenue
 	return out, nil
 }
 
-func (c *assetRegistryClient) CreateVenueSymbol(ctx context.Context, in *CreateVenueSymbolRequest, opts ...grpc.CallOption) (*CreateVenueSymbolResponse, error) {
-	out := new(CreateVenueSymbolResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_CreateVenueSymbol_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *assetRegistryClient) GetVenueSymbol(ctx context.Context, in *GetVenueSymbolRequest, opts ...grpc.CallOption) (*GetVenueSymbolResponse, error) {
-	out := new(GetVenueSymbolResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_GetVenueSymbol_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *assetRegistryClient) ListVenueSymbols(ctx context.Context, in *ListVenueSymbolsRequest, opts ...grpc.CallOption) (*ListVenueSymbolsResponse, error) {
-	out := new(ListVenueSymbolsResponse)
-	err := c.cc.Invoke(ctx, AssetRegistry_ListVenueSymbols_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // AssetRegistryServer is the server API for AssetRegistry service.
 // All implementations must embed UnimplementedAssetRegistryServer
 // for forward compatibility
@@ -591,24 +579,28 @@ type AssetRegistryServer interface {
 	GetChain(context.Context, *GetChainRequest) (*GetChainResponse, error)
 	// ListChains lists all registered blockchain networks.
 	ListChains(context.Context, *ListChainsRequest) (*ListChainsResponse, error)
-	// CreateSymbol creates a new trading symbol/market.
-	CreateSymbol(context.Context, *CreateSymbolRequest) (*CreateSymbolResponse, error)
-	// GetSymbol retrieves a specific symbol by ID.
-	GetSymbol(context.Context, *GetSymbolRequest) (*GetSymbolResponse, error)
-	// UpdateSymbol updates an existing symbol's metadata.
-	UpdateSymbol(context.Context, *UpdateSymbolRequest) (*UpdateSymbolResponse, error)
-	// DeleteSymbol soft-deletes a symbol from the registry.
-	DeleteSymbol(context.Context, *DeleteSymbolRequest) (*DeleteSymbolResponse, error)
-	// ListSymbols retrieves a paginated list of symbols with optional filtering.
-	ListSymbols(context.Context, *ListSymbolsRequest) (*ListSymbolsResponse, error)
-	// SearchSymbols searches for symbols by name or other criteria.
-	SearchSymbols(context.Context, *SearchSymbolsRequest) (*SearchSymbolsResponse, error)
-	// CreateSymbolIdentifier adds an external identifier mapping for a symbol.
-	CreateSymbolIdentifier(context.Context, *CreateSymbolIdentifierRequest) (*CreateSymbolIdentifierResponse, error)
-	// GetSymbolIdentifier retrieves a symbol identifier mapping.
-	GetSymbolIdentifier(context.Context, *GetSymbolIdentifierRequest) (*GetSymbolIdentifierResponse, error)
-	// ListSymbolIdentifiers lists all identifier mappings for a symbol.
-	ListSymbolIdentifiers(context.Context, *ListSymbolIdentifiersRequest) (*ListSymbolIdentifiersResponse, error)
+	// GetInstrument retrieves a specific instrument by ID.
+	GetInstrument(context.Context, *GetInstrumentRequest) (*GetInstrumentResponse, error)
+	// GetSpotInstrument retrieves a spot instrument by instrument_id.
+	GetSpotInstrument(context.Context, *GetSpotInstrumentRequest) (*GetSpotInstrumentResponse, error)
+	// GetPerpContract retrieves a perpetual contract by instrument_id.
+	GetPerpContract(context.Context, *GetPerpContractRequest) (*GetPerpContractResponse, error)
+	// GetFutureContract retrieves a future contract by instrument_id.
+	GetFutureContract(context.Context, *GetFutureContractRequest) (*GetFutureContractResponse, error)
+	// GetOptionSeries retrieves an option series by instrument_id.
+	GetOptionSeries(context.Context, *GetOptionSeriesRequest) (*GetOptionSeriesResponse, error)
+	// GetLendingDeposit retrieves a lending deposit product by instrument_id.
+	GetLendingDeposit(context.Context, *GetLendingDepositRequest) (*GetLendingDepositResponse, error)
+	// GetLendingBorrow retrieves a lending borrow product by instrument_id.
+	GetLendingBorrow(context.Context, *GetLendingBorrowRequest) (*GetLendingBorrowResponse, error)
+	// GetMarket retrieves a specific market by market_id.
+	GetMarket(context.Context, *GetMarketRequest) (*GetMarketResponse, error)
+	// ResolveMarket resolves a market by venue_id and venue_symbol.
+	ResolveMarket(context.Context, *ResolveMarketRequest) (*ResolveMarketResponse, error)
+	// GetIdentifier retrieves a specific identifier by ID.
+	GetIdentifier(context.Context, *GetIdentifierRequest) (*GetIdentifierResponse, error)
+	// ListIdentifiers lists all identifiers for a specific entity.
+	ListIdentifiers(context.Context, *ListIdentifiersRequest) (*ListIdentifiersResponse, error)
 	// CreateVenue registers a new trading venue.
 	CreateVenue(context.Context, *CreateVenueRequest) (*CreateVenueResponse, error)
 	// GetVenue retrieves a specific venue by ID.
@@ -621,12 +613,6 @@ type AssetRegistryServer interface {
 	GetVenueAsset(context.Context, *GetVenueAssetRequest) (*GetVenueAssetResponse, error)
 	// ListVenueAssets lists all assets available on a venue or all venues for an asset.
 	ListVenueAssets(context.Context, *ListVenueAssetsRequest) (*ListVenueAssetsResponse, error)
-	// CreateVenueSymbol maps a venue's trading symbol to a canonical symbol.
-	CreateVenueSymbol(context.Context, *CreateVenueSymbolRequest) (*CreateVenueSymbolResponse, error)
-	// GetVenueSymbol retrieves a venue symbol mapping.
-	GetVenueSymbol(context.Context, *GetVenueSymbolRequest) (*GetVenueSymbolResponse, error)
-	// ListVenueSymbols lists all symbol mappings for a venue or symbol.
-	ListVenueSymbols(context.Context, *ListVenueSymbolsRequest) (*ListVenueSymbolsResponse, error)
 	mustEmbedUnimplementedAssetRegistryServer()
 }
 
@@ -706,32 +692,38 @@ func (UnimplementedAssetRegistryServer) GetChain(context.Context, *GetChainReque
 func (UnimplementedAssetRegistryServer) ListChains(context.Context, *ListChainsRequest) (*ListChainsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListChains not implemented")
 }
-func (UnimplementedAssetRegistryServer) CreateSymbol(context.Context, *CreateSymbolRequest) (*CreateSymbolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateSymbol not implemented")
+func (UnimplementedAssetRegistryServer) GetInstrument(context.Context, *GetInstrumentRequest) (*GetInstrumentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInstrument not implemented")
 }
-func (UnimplementedAssetRegistryServer) GetSymbol(context.Context, *GetSymbolRequest) (*GetSymbolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSymbol not implemented")
+func (UnimplementedAssetRegistryServer) GetSpotInstrument(context.Context, *GetSpotInstrumentRequest) (*GetSpotInstrumentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSpotInstrument not implemented")
 }
-func (UnimplementedAssetRegistryServer) UpdateSymbol(context.Context, *UpdateSymbolRequest) (*UpdateSymbolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateSymbol not implemented")
+func (UnimplementedAssetRegistryServer) GetPerpContract(context.Context, *GetPerpContractRequest) (*GetPerpContractResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPerpContract not implemented")
 }
-func (UnimplementedAssetRegistryServer) DeleteSymbol(context.Context, *DeleteSymbolRequest) (*DeleteSymbolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteSymbol not implemented")
+func (UnimplementedAssetRegistryServer) GetFutureContract(context.Context, *GetFutureContractRequest) (*GetFutureContractResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFutureContract not implemented")
 }
-func (UnimplementedAssetRegistryServer) ListSymbols(context.Context, *ListSymbolsRequest) (*ListSymbolsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListSymbols not implemented")
+func (UnimplementedAssetRegistryServer) GetOptionSeries(context.Context, *GetOptionSeriesRequest) (*GetOptionSeriesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOptionSeries not implemented")
 }
-func (UnimplementedAssetRegistryServer) SearchSymbols(context.Context, *SearchSymbolsRequest) (*SearchSymbolsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SearchSymbols not implemented")
+func (UnimplementedAssetRegistryServer) GetLendingDeposit(context.Context, *GetLendingDepositRequest) (*GetLendingDepositResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLendingDeposit not implemented")
 }
-func (UnimplementedAssetRegistryServer) CreateSymbolIdentifier(context.Context, *CreateSymbolIdentifierRequest) (*CreateSymbolIdentifierResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateSymbolIdentifier not implemented")
+func (UnimplementedAssetRegistryServer) GetLendingBorrow(context.Context, *GetLendingBorrowRequest) (*GetLendingBorrowResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLendingBorrow not implemented")
 }
-func (UnimplementedAssetRegistryServer) GetSymbolIdentifier(context.Context, *GetSymbolIdentifierRequest) (*GetSymbolIdentifierResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSymbolIdentifier not implemented")
+func (UnimplementedAssetRegistryServer) GetMarket(context.Context, *GetMarketRequest) (*GetMarketResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMarket not implemented")
 }
-func (UnimplementedAssetRegistryServer) ListSymbolIdentifiers(context.Context, *ListSymbolIdentifiersRequest) (*ListSymbolIdentifiersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListSymbolIdentifiers not implemented")
+func (UnimplementedAssetRegistryServer) ResolveMarket(context.Context, *ResolveMarketRequest) (*ResolveMarketResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResolveMarket not implemented")
+}
+func (UnimplementedAssetRegistryServer) GetIdentifier(context.Context, *GetIdentifierRequest) (*GetIdentifierResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIdentifier not implemented")
+}
+func (UnimplementedAssetRegistryServer) ListIdentifiers(context.Context, *ListIdentifiersRequest) (*ListIdentifiersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListIdentifiers not implemented")
 }
 func (UnimplementedAssetRegistryServer) CreateVenue(context.Context, *CreateVenueRequest) (*CreateVenueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateVenue not implemented")
@@ -750,15 +742,6 @@ func (UnimplementedAssetRegistryServer) GetVenueAsset(context.Context, *GetVenue
 }
 func (UnimplementedAssetRegistryServer) ListVenueAssets(context.Context, *ListVenueAssetsRequest) (*ListVenueAssetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVenueAssets not implemented")
-}
-func (UnimplementedAssetRegistryServer) CreateVenueSymbol(context.Context, *CreateVenueSymbolRequest) (*CreateVenueSymbolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateVenueSymbol not implemented")
-}
-func (UnimplementedAssetRegistryServer) GetVenueSymbol(context.Context, *GetVenueSymbolRequest) (*GetVenueSymbolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetVenueSymbol not implemented")
-}
-func (UnimplementedAssetRegistryServer) ListVenueSymbols(context.Context, *ListVenueSymbolsRequest) (*ListVenueSymbolsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListVenueSymbols not implemented")
 }
 func (UnimplementedAssetRegistryServer) mustEmbedUnimplementedAssetRegistryServer() {}
 
@@ -1205,164 +1188,200 @@ func _AssetRegistry_ListChains_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_CreateSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateSymbolRequest)
+func _AssetRegistry_GetInstrument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInstrumentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).CreateSymbol(ctx, in)
+		return srv.(AssetRegistryServer).GetInstrument(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_CreateSymbol_FullMethodName,
+		FullMethod: AssetRegistry_GetInstrument_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).CreateSymbol(ctx, req.(*CreateSymbolRequest))
+		return srv.(AssetRegistryServer).GetInstrument(ctx, req.(*GetInstrumentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_GetSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSymbolRequest)
+func _AssetRegistry_GetSpotInstrument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSpotInstrumentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).GetSymbol(ctx, in)
+		return srv.(AssetRegistryServer).GetSpotInstrument(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_GetSymbol_FullMethodName,
+		FullMethod: AssetRegistry_GetSpotInstrument_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).GetSymbol(ctx, req.(*GetSymbolRequest))
+		return srv.(AssetRegistryServer).GetSpotInstrument(ctx, req.(*GetSpotInstrumentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_UpdateSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateSymbolRequest)
+func _AssetRegistry_GetPerpContract_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPerpContractRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).UpdateSymbol(ctx, in)
+		return srv.(AssetRegistryServer).GetPerpContract(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_UpdateSymbol_FullMethodName,
+		FullMethod: AssetRegistry_GetPerpContract_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).UpdateSymbol(ctx, req.(*UpdateSymbolRequest))
+		return srv.(AssetRegistryServer).GetPerpContract(ctx, req.(*GetPerpContractRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_DeleteSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteSymbolRequest)
+func _AssetRegistry_GetFutureContract_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFutureContractRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).DeleteSymbol(ctx, in)
+		return srv.(AssetRegistryServer).GetFutureContract(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_DeleteSymbol_FullMethodName,
+		FullMethod: AssetRegistry_GetFutureContract_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).DeleteSymbol(ctx, req.(*DeleteSymbolRequest))
+		return srv.(AssetRegistryServer).GetFutureContract(ctx, req.(*GetFutureContractRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_ListSymbols_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListSymbolsRequest)
+func _AssetRegistry_GetOptionSeries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOptionSeriesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).ListSymbols(ctx, in)
+		return srv.(AssetRegistryServer).GetOptionSeries(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_ListSymbols_FullMethodName,
+		FullMethod: AssetRegistry_GetOptionSeries_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).ListSymbols(ctx, req.(*ListSymbolsRequest))
+		return srv.(AssetRegistryServer).GetOptionSeries(ctx, req.(*GetOptionSeriesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_SearchSymbols_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SearchSymbolsRequest)
+func _AssetRegistry_GetLendingDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLendingDepositRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).SearchSymbols(ctx, in)
+		return srv.(AssetRegistryServer).GetLendingDeposit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_SearchSymbols_FullMethodName,
+		FullMethod: AssetRegistry_GetLendingDeposit_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).SearchSymbols(ctx, req.(*SearchSymbolsRequest))
+		return srv.(AssetRegistryServer).GetLendingDeposit(ctx, req.(*GetLendingDepositRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_CreateSymbolIdentifier_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateSymbolIdentifierRequest)
+func _AssetRegistry_GetLendingBorrow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLendingBorrowRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).CreateSymbolIdentifier(ctx, in)
+		return srv.(AssetRegistryServer).GetLendingBorrow(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_CreateSymbolIdentifier_FullMethodName,
+		FullMethod: AssetRegistry_GetLendingBorrow_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).CreateSymbolIdentifier(ctx, req.(*CreateSymbolIdentifierRequest))
+		return srv.(AssetRegistryServer).GetLendingBorrow(ctx, req.(*GetLendingBorrowRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_GetSymbolIdentifier_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSymbolIdentifierRequest)
+func _AssetRegistry_GetMarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMarketRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).GetSymbolIdentifier(ctx, in)
+		return srv.(AssetRegistryServer).GetMarket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_GetSymbolIdentifier_FullMethodName,
+		FullMethod: AssetRegistry_GetMarket_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).GetSymbolIdentifier(ctx, req.(*GetSymbolIdentifierRequest))
+		return srv.(AssetRegistryServer).GetMarket(ctx, req.(*GetMarketRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_ListSymbolIdentifiers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListSymbolIdentifiersRequest)
+func _AssetRegistry_ResolveMarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResolveMarketRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AssetRegistryServer).ListSymbolIdentifiers(ctx, in)
+		return srv.(AssetRegistryServer).ResolveMarket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AssetRegistry_ListSymbolIdentifiers_FullMethodName,
+		FullMethod: AssetRegistry_ResolveMarket_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).ListSymbolIdentifiers(ctx, req.(*ListSymbolIdentifiersRequest))
+		return srv.(AssetRegistryServer).ResolveMarket(ctx, req.(*ResolveMarketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_GetIdentifier_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIdentifierRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).GetIdentifier(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_GetIdentifier_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).GetIdentifier(ctx, req.(*GetIdentifierRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetRegistry_ListIdentifiers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListIdentifiersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetRegistryServer).ListIdentifiers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetRegistry_ListIdentifiers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetRegistryServer).ListIdentifiers(ctx, req.(*ListIdentifiersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1475,60 +1494,6 @@ func _AssetRegistry_ListVenueAssets_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AssetRegistry_CreateVenueSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateVenueSymbolRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AssetRegistryServer).CreateVenueSymbol(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AssetRegistry_CreateVenueSymbol_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).CreateVenueSymbol(ctx, req.(*CreateVenueSymbolRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AssetRegistry_GetVenueSymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetVenueSymbolRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AssetRegistryServer).GetVenueSymbol(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AssetRegistry_GetVenueSymbol_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).GetVenueSymbol(ctx, req.(*GetVenueSymbolRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AssetRegistry_ListVenueSymbols_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListVenueSymbolsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AssetRegistryServer).ListVenueSymbols(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AssetRegistry_ListVenueSymbols_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetRegistryServer).ListVenueSymbols(ctx, req.(*ListVenueSymbolsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // AssetRegistry_ServiceDesc is the grpc.ServiceDesc for AssetRegistry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1633,40 +1598,48 @@ var AssetRegistry_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AssetRegistry_ListChains_Handler,
 		},
 		{
-			MethodName: "CreateSymbol",
-			Handler:    _AssetRegistry_CreateSymbol_Handler,
+			MethodName: "GetInstrument",
+			Handler:    _AssetRegistry_GetInstrument_Handler,
 		},
 		{
-			MethodName: "GetSymbol",
-			Handler:    _AssetRegistry_GetSymbol_Handler,
+			MethodName: "GetSpotInstrument",
+			Handler:    _AssetRegistry_GetSpotInstrument_Handler,
 		},
 		{
-			MethodName: "UpdateSymbol",
-			Handler:    _AssetRegistry_UpdateSymbol_Handler,
+			MethodName: "GetPerpContract",
+			Handler:    _AssetRegistry_GetPerpContract_Handler,
 		},
 		{
-			MethodName: "DeleteSymbol",
-			Handler:    _AssetRegistry_DeleteSymbol_Handler,
+			MethodName: "GetFutureContract",
+			Handler:    _AssetRegistry_GetFutureContract_Handler,
 		},
 		{
-			MethodName: "ListSymbols",
-			Handler:    _AssetRegistry_ListSymbols_Handler,
+			MethodName: "GetOptionSeries",
+			Handler:    _AssetRegistry_GetOptionSeries_Handler,
 		},
 		{
-			MethodName: "SearchSymbols",
-			Handler:    _AssetRegistry_SearchSymbols_Handler,
+			MethodName: "GetLendingDeposit",
+			Handler:    _AssetRegistry_GetLendingDeposit_Handler,
 		},
 		{
-			MethodName: "CreateSymbolIdentifier",
-			Handler:    _AssetRegistry_CreateSymbolIdentifier_Handler,
+			MethodName: "GetLendingBorrow",
+			Handler:    _AssetRegistry_GetLendingBorrow_Handler,
 		},
 		{
-			MethodName: "GetSymbolIdentifier",
-			Handler:    _AssetRegistry_GetSymbolIdentifier_Handler,
+			MethodName: "GetMarket",
+			Handler:    _AssetRegistry_GetMarket_Handler,
 		},
 		{
-			MethodName: "ListSymbolIdentifiers",
-			Handler:    _AssetRegistry_ListSymbolIdentifiers_Handler,
+			MethodName: "ResolveMarket",
+			Handler:    _AssetRegistry_ResolveMarket_Handler,
+		},
+		{
+			MethodName: "GetIdentifier",
+			Handler:    _AssetRegistry_GetIdentifier_Handler,
+		},
+		{
+			MethodName: "ListIdentifiers",
+			Handler:    _AssetRegistry_ListIdentifiers_Handler,
 		},
 		{
 			MethodName: "CreateVenue",
@@ -1691,18 +1664,6 @@ var AssetRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListVenueAssets",
 			Handler:    _AssetRegistry_ListVenueAssets_Handler,
-		},
-		{
-			MethodName: "CreateVenueSymbol",
-			Handler:    _AssetRegistry_CreateVenueSymbol_Handler,
-		},
-		{
-			MethodName: "GetVenueSymbol",
-			Handler:    _AssetRegistry_GetVenueSymbol_Handler,
-		},
-		{
-			MethodName: "ListVenueSymbols",
-			Handler:    _AssetRegistry_ListVenueSymbols_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
